@@ -55,6 +55,12 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
             client.SendOptionsDialog(Mundane, string.Format("You are now a {0}",
                 Convert.ToString(client.Aisling.Path)));
 
+            if (client.Aisling.Path == Class.Priest)
+            {
+                Spell.GiveTo(client.Aisling, "deo saighead");
+                Spell.GiveTo(client.Aisling, "deo saighead lamh");
+            }
+
             client.Aisling.LegendBook.AddLegend(new Legend.LegendItem
             {
                 Category = "Class",

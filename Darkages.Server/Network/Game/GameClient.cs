@@ -289,13 +289,6 @@ namespace Darkages.Network.Game
                 hpChanged = true;
             }
 
-            var HpregenRate = 200 / Aisling.Con * ServerContext.Config.RegenRate * 100 / 100 * 1000;
-            var MpregenRate = 200 / Aisling.Wis * ServerContext.Config.RegenRate * 100 / 100 * 1000;
-
-            if (Aisling.Con > Aisling.ExpLevel + 10)
-                HpRegenTimer.Delay = TimeSpan.FromMilliseconds((1000 + HpregenRate) / 2);
-            if (Aisling.Wis > Aisling.ExpLevel + 10)
-                MpRegenTimer.Delay = TimeSpan.FromMilliseconds((1000 + MpregenRate) / 2);
 
             if (!HpRegenTimer.Disabled)
                 HpRegenTimer.Update(elapsedTime);
@@ -464,15 +457,21 @@ namespace Darkages.Network.Game
 
             for (var i = 0; i < spells_Available.Length; i++)
             {
-                var spell = spells_Available[i];
-                spell.InUse = false;
-                spell.NextAvailableUse = DateTime.UtcNow;
+                var spell    = spells_Available[i];
+                var template = ServerContext.GlobalSpellTemplateCache[spell.Template.Name];
 
-                spell.Lines = spell.Template.BaseLines;
-                spell.Script = ScriptManager.Load<SpellScript>(spell.Template.ScriptKey, spell);
-                Aisling.SpellBook.Set(spell, false);
+                if (template != null)
+                {
+                    spell.Template = template;
+                    spell.InUse = false;
+                    spell.NextAvailableUse = DateTime.UtcNow;
 
-                formats.Add(new ServerFormat17(spell));
+                    spell.Lines = spell.Template.BaseLines;
+                    spell.Script = ScriptManager.Load<SpellScript>(spell.Template.ScriptKey, spell);
+                    Aisling.SpellBook.Set(spell, false);
+
+                    formats.Add(new ServerFormat17(spell));
+                }
             }
 
             foreach (var format in formats)

@@ -131,26 +131,33 @@ namespace Darkages.Network
 
         private void SendFormat(NetworkFormat format)
         {
-            if (format == null)
-                return;
-
-            lock (Writer)
+            try
             {
-                if (!GetPacket(format))
+                if (format == null)
                     return;
 
-                var packet = Writer.ToPacket();
+                lock (Writer)
                 {
-                    if (ServerContext.Config.LogSentPackets)
-                        if (this is GameClient)
-                            Console.WriteLine("{0}: {1}", (this as GameClient)?.Aisling?.Username, packet);
+                    if (!GetPacket(format))
+                        return;
 
-                    if (format.Secured)
-                        Encryption.Transform(packet);
+                    var packet = Writer.ToPacket();
+                    {
+                        if (ServerContext.Config.LogSentPackets)
+                            if (this is GameClient)
+                                Console.WriteLine("{0}: {1}", (this as GameClient)?.Aisling?.Username, packet);
 
-                    var buffer = packet.ToArray();
-                    Socket.Send(buffer);
+                        if (format.Secured)
+                            Encryption.Transform(packet);
+
+                        var buffer = packet.ToArray();
+                        Socket.Send(buffer);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                //ignore
             }
         }
 

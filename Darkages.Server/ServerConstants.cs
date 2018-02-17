@@ -383,6 +383,12 @@ namespace Darkages
 
         [JsonProperty] public int LootTableStackSize = 3;
 
+        [JsonProperty] public int HpGainFactor = 5;
+
+        [JsonProperty] public int MpGainFactor = 5;
+
+        [JsonProperty] public int StatsPerLevel = 2;
+
         public override string ToString()
         {
             return StorageManager.Save(this)

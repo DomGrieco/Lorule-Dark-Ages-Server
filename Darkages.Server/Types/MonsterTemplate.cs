@@ -29,11 +29,9 @@ namespace Darkages.Types
         [Description("Leave empty unless SpawnQualifer = Defined.")]
         public ushort DefinedY { get; set; }
 
-        [Description("Scaling Exponent")] public double Exponent { get; set; }
-
         public LootQualifer LootType { get; set; }
 
-        public MoodQualifer MoodTyle { get; set; }
+        public MoodQualifer MoodType { get; set; }
 
         public SpawnQualifer SpawnType { get; set; }
 
@@ -54,6 +52,8 @@ namespace Darkages.Types
         public int MovementSpeed { get; set; }
 
         public int CastSpeed { get; set; }
+
+        public bool IsBoss { get; set; }
 
         [Description("Monsters spawned will not exceed this.")]
         public int SpawnMax { get; set; }

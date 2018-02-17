@@ -159,6 +159,9 @@
     <Compile Include="Storage\locales\Scripts\Spells\armachd.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Storage\locales\Scripts\Spells\MassElementalSpell.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Systems\Loot\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Systems\Loot\Interfaces\ILootDefinition.cs" />
     <Compile Include="Systems\Loot\Interfaces\ILootDropper.cs" />

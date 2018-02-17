@@ -102,7 +102,7 @@
   "UserDroppedGoldMsg": "noname has dropped some money nearby.",
   "Version": 718,
   "VeryNearByProximity": 5,
-  "WarpAnimationNumber": 400,
+  "WarpAnimationNumber": 214,
   "WarpUpdateTimer": 2.0,
   "WeightIncreaseModifer": 3.0,
   "WisAddedMessage": "Your will increases.",

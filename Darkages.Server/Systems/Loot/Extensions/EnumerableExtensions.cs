@@ -8,7 +8,6 @@ namespace Darkages.Systems.Loot.Extensions
     public static class EnumerableExtensions
     {
         private static readonly Random Random = new Random();
-        private static Dictionary<double, long> GlobalDraws = new Dictionary<double, long>();
 
         static float NextFloat(Random random)
         {
@@ -19,20 +18,24 @@ namespace Darkages.Systems.Loot.Extensions
 
         public static T WeightedChoice<T>(this IEnumerable<T> items, double sum) where T : IWeighable
         {
-            var randomNumber = Random.Next(0, items.Count());
-            var objs = items.ToArray();
-
-            foreach (var item in items)
+            lock (Random)
             {
-                lock (Random)
-                {
-                    short luck   = (short)Math.Abs(NextFloat(Random));
+                var randomNumber = Random.Next(0, items.Count());
+                var objs = items.ToArray();
 
-                    if (luck <= -19000)
+                foreach (var item in items)
+                {
+                    lock (Common.Generator.Random)
                     {
-                        return objs[randomNumber];
+                        short luck = (short)Math.Abs(NextFloat(Common.Generator.Random));
+
+                        if (luck < 0 || luck > 0)
+                        {
+                            return objs[randomNumber];
+                        }
                     }
                 }
+
             }
 
             return default(T);

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Darkages.Systems.Loot.Extensions;
+using Darkages.Systems.Loot.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Darkages.Systems.Loot.Extensions;
-using Darkages.Systems.Loot.Interfaces;
 
 namespace Darkages.Systems.Loot
 {
@@ -62,17 +62,15 @@ namespace Darkages.Systems.Loot
             if (item == null)
                 return null;
 
-            GlobalRolls++;
-
+            var bonus = (Math.Round(GlobalRolls * 0.01, 3));
 
             lock (Common.Generator.Random)
             {
                 var roll = Math.Abs((Common.Generator.Random.NextDouble() * 2.0) - 1.0);
-                if (roll <= item.Weight)
+                if (roll - bonus <= item.Weight || bonus > 0.05)
                 {
-                    Console.WriteLine("Won Roll: {0} - {1} - {2}", item.Name,roll,  GlobalRolls);
+                    GlobalRolls = 0;
 
-                    Console.ForegroundColor = ConsoleColor.Gray;
                     if (item.Name == "Epic")
                     {
                         Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -100,8 +98,6 @@ namespace Darkages.Systems.Loot
                     }
 
 
-
-
                     if (item is ILootTable childTable)
                         return Drop(childTable);
 
@@ -109,6 +105,7 @@ namespace Darkages.Systems.Loot
                 }
             }
 
+            GlobalRolls++;
             return null;
         }
 

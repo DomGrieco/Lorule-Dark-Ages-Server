@@ -270,6 +270,36 @@ namespace Darkages
             GlobalItemTemplateCache["Dirk"].MaxStack = byte.MaxValue;
 
 
+            GlobalSpellTemplateCache["deo saighead lamh"] = new SpellTemplate()
+            {
+                Animation = 128,
+                BaseLines = 0,
+                DamageExponent = 0.01,
+                ElementalProperty = ElementManager.Element.Light,
+                Icon = 179,
+                ScriptKey = "Generic Elemental Mass",
+                MinLines = 0,
+                MaxLines = 9,
+                Prerequisites = new LearningPredicate()
+                {
+                    Spell_Required = "deo saighead",
+                    Spell_Level_Required = 100,
+                    ExpLevel_Required = 14,
+                    Int_Required = 30,
+                    Wis_Required = 15,
+                    Class_Required = Class.Priest,
+                },
+                Name = "deo saighead lamh",
+                ManaCost = 30,
+                LevelRate = 0.02,
+                TierLevel = Tier.Tier2,
+                MaxLevel = 100,
+                NpcKey = "High Priest",
+                Sound = 26,
+                Pane = Pane.Spells,
+                TargetType = SpellTemplate.SpellUseType.NoTarget,
+            };
+
             Console.WriteLine("\n");
         }
     }

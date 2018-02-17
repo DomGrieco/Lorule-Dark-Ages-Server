@@ -150,9 +150,9 @@ namespace Darkages.Types
 
         private static void Levelup(Aisling player)
         {
-            player._MaximumHp += (int)(50 * player.Con * 0.65);
-            player._MaximumMp += (int)(25 * player.Wis * 0.45);
-            player.StatPoints += 2;
+            player._MaximumHp += (int)(ServerContext.Config.HpGainFactor * player.Con * 0.65);
+            player._MaximumMp += (int)(ServerContext.Config.MpGainFactor * player.Wis * 0.45);
+            player.StatPoints += ServerContext.Config.StatsPerLevel;
             player.ExpLevel++;
 
             if (player.ExpLevel > 99)
@@ -235,20 +235,14 @@ namespace Darkages.Types
                     {
                         if (i != null)
                         {
-
                             var rolled_item = Item.Create(this, GlobalItemTemplateCache[i]);
                             var upgrade = DetermineQuality();
                             rolled_item.Upgrades = upgrade?.Upgrade ?? 0;
                             Item.ApplyQuality(rolled_item);
 
-#warning  TODO: remove later. testing roll systems.
-                            if (TestMode)
-                                return;
-
-
                             rolled_item.Cursed = true;
                             rolled_item.AuthenticatedAislings = GetTaggedAislings();
-                            rolled_item.Release(this, this.Position);
+                            rolled_item.Release(this, Position);
 
                             if (rolled_item.Upgrades > 3)
                             {
@@ -394,9 +388,9 @@ namespace Darkages.Types
                 obj.WalkEnabled = true;
 
 
-            if (template.MoodTyle == MoodQualifer.Aggressive)
+            if (template.MoodType == MoodQualifer.Aggressive)
                 obj.Aggressive = true;
-            else if (template.MoodTyle == MoodQualifer.Unpredicable)
+            else if (template.MoodType == MoodQualifer.Unpredicable)
                 lock (Generator.Random)
                 {
                     //this monster has a 50% chance of being aggressive.
@@ -411,11 +405,11 @@ namespace Darkages.Types
                 var tries = 0;
                 var success = false;
 
-                //let monters spawn on anything passable. 
+                //let monsters spawn on anything passable. 
                 while ((map.IsWall(obj, x, y) || map[x, y] != TileContent.Aisling
-                    && map.IsWall(obj, x, y) || map[x, y] != TileContent.Monster
-                    && map.IsWall(obj, x, y) || map[x, y] != TileContent.Mundane
-                    && map.IsWall(obj, x, y) || map[x, y] != TileContent.Wall) && tries <= 256)
+                    && map.IsWall(obj, x, y)  || map[x, y] != TileContent.Monster
+                    && map.IsWall(obj, x, y)  || map[x, y] != TileContent.Mundane
+                    && map.IsWall(obj, x, y)  || map[x, y] != TileContent.Wall) && tries <= 256)
                 {
                     lock (Generator.Random)
                     {
@@ -426,7 +420,7 @@ namespace Darkages.Types
                     tries++;
                 }
 
-                success = (tries < 256);
+                success = (tries < short.MaxValue);
 
                 if (!success)
                 {
@@ -451,11 +445,11 @@ namespace Darkages.Types
                 obj.Serial = Generator.GenerateNumber();
             }
 
-            obj.CurrentMapId = map.ID;
-            obj.CurrentHp = template.MaximumHP;
-            obj.CurrentMp = template.MaximumMP;
-            obj._MaximumHp = template.MaximumHP;
-            obj._MaximumMp = template.MaximumMP;
+            obj.CurrentMapId  = map.ID;
+            obj.CurrentHp     = template.MaximumHP;
+            obj.CurrentMp     = template.MaximumMP;
+            obj._MaximumHp    = template.MaximumHP;
+            obj._MaximumMp    = template.MaximumMP;
             obj.AbandonedDate = DateTime.UtcNow;
 
             lock (Generator.Random)
@@ -470,8 +464,8 @@ namespace Darkages.Types
 
             if (obj.Template.LootType.HasFlag(LootQualifer.Table))
             {
-                obj.LootManager = new LootDropper();
-                obj.LootTable = new LootTable(template.Name);
+                obj.LootManager  = new LootDropper();
+                obj.LootTable    = new LootTable(template.Name);
                 obj.UpgradeTable = new LootTable("Probabilities");
 
                 foreach (var drop in obj.Template.Drops)
