@@ -82,10 +82,6 @@ namespace Darkages.Storage.locales.Scripts.Spells
             }
             else
             {
-                if (!(target is Aisling))
-                    return;
-
-                var client = (target as Aisling).Client;
                 var debuff = Clone(Spell.Template.Debuff);
                 var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
 
@@ -94,15 +90,18 @@ namespace Darkages.Storage.locales.Scripts.Spells
                     {
                         debuff.OnApplied(target, debuff);
 
-                        (target as Aisling).Client
-                            .SendMessage(0x02,
-                                string.Format("{0} Attacks you with {1}.",
-                                    (sprite is Monster
-                                        ? (sprite as Monster).Template.Name
-                                        : (sprite as Mundane).Template.Name) ?? "Monster",
-                                    Spell.Template.Name));
+                        if (target is Aisling)
+                        {
+                            (target as Aisling).Client
+                                .SendMessage(0x02,
+                                    string.Format("{0} Attacks you with {1}.",
+                                        (sprite is Monster
+                                            ? (sprite as Monster).Template.Name
+                                            : (sprite as Mundane).Template.Name) ?? "Monster",
+                                        Spell.Template.Name));
+                        }
 
-                        client.SendAnimation(243, target, sprite);
+                        target.SendAnimation(243, target, sprite);
 
                         var action = new ServerFormat1A
                         {
@@ -113,13 +112,13 @@ namespace Darkages.Storage.locales.Scripts.Spells
 
                         var hpbar = new ServerFormat13
                         {
-                            Serial = client.Aisling.Serial,
+                            Serial = target.Serial,
                             Health = 255,
-                            Sound = 8
+                            Sound = 27
                         };
 
-                        client.Aisling.Show(Scope.NearbyAislings, action);
-                        client.Aisling.Show(Scope.NearbyAislings, hpbar);
+                        sprite.Show(Scope.NearbyAislings, action);
+                        target.Show(Scope.NearbyAislings, hpbar);
                     }
             }
         }

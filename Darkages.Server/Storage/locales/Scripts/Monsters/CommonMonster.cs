@@ -55,6 +55,9 @@ namespace Darkages.Storage.locales.Scripts.Monsters
 
         public override void OnAttacked(GameClient client)
         {
+            if (client == null)
+                return;
+
             if (client.Aisling.Dead)
                 return;
 

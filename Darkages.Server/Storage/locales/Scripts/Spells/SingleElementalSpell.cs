@@ -66,31 +66,30 @@ namespace Darkages.Storage.locales.Scripts.Spells
             }
             else
             {
-                if (!(target is Aisling))
-                    return;
 
-                var client = (target as Aisling).Client;
-
-                var dmg = (int) (sprite.Int * Spell.Template.DamageExponent * Spell.Level) * 100;
+                var dmg = (int)(2.75 * sprite.Int) + (sprite.Int + Spell.Level) * 10 / 100;
                 target.ApplyDamage(sprite, dmg, Spell.Template.ElementalProperty, Spell.Template.Sound);
 
-                (target as Aisling).Client
-                    .SendMessage(0x02, string.Format("{0} Attacks you with {1}.",
-                        (sprite is Monster
-                            ? (sprite as Monster).Template.Name
-                            : (sprite as Mundane).Template.Name) ?? "Monster",
-                        Spell.Template.Name));
+                if (target is Aisling)
+                {
+                    (target as Aisling).Client
+                        .SendMessage(0x02, string.Format("{0} Attacks you with {1}.",
+                            (sprite is Monster
+                                ? (sprite as Monster).Template.Name
+                                : (sprite as Mundane).Template.Name) ?? "Monster",
+                            Spell.Template.Name));
+                }
 
-                client.SendAnimation(Spell.Template.Animation, target, sprite);
+                target.SendAnimation(Spell.Template.Animation, target, sprite);
 
                 var action = new ServerFormat1A
                 {
                     Serial = sprite.Serial,
-                    Number = 0x80,
+                    Number = 1,
                     Speed = 30
                 };
 
-                client.Aisling.Show(Scope.NearbyAislings, action);
+                sprite.Show(Scope.NearbyAislings, action);
             }
         }
 

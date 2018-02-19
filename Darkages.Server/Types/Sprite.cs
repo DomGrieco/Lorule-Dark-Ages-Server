@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using static Darkages.Types.ElementManager;
 
 namespace Darkages.Types
@@ -234,42 +236,46 @@ namespace Darkages.Types
                     RemoveDebuff("sleep");
 
                     var amplifier = ElementTable[
-                        (int) Source.OffenseElement,
-                        (int) DefenseElement];
+                        (int)Source.OffenseElement,
+                        (int)DefenseElement];
 
 
                     dmg = ComputeDmgFromAc(dmg);
 
-
-                    if (dmg <= 0)
-                        dmg = 1;
-
-                    if (CurrentHp > MaximumHp)
-                        CurrentHp = MaximumHp;
-
-                    var dealth = (int) (dmg * amplifier);
-
-                    CurrentHp -= dealth;
-
-                    if (CurrentHp < 0)
-                        CurrentHp = 0;
-
-                    dmgcb?.Invoke(dealth);
-
-                    var hpbar = new ServerFormat13
-                    {
-                        Serial = Serial,
-                        Health = (ushort) ((double) 100 * CurrentHp / MaximumHp),
-                        Sound = sound
-                    };
-
-                    //send hpbar to client
-                    Show(Scope.NearbyAislings, hpbar);
+                    dmg = CompleteDamageApplication(dmg, sound, dmgcb, amplifier);
                 }
             }
 
             (this as Aisling)?.Client.SendStats(StatusFlags.StructB);
             (Source as Aisling)?.Client.SendStats(StatusFlags.StructB);
+        }
+
+        private int CompleteDamageApplication(int dmg, byte sound, Action<int> dmgcb, double amplifier)
+        {
+            if (dmg <= 0)
+                dmg = 1;
+
+            if (CurrentHp > MaximumHp)
+                CurrentHp = MaximumHp;
+
+            var dealth = (int)(dmg * amplifier);
+
+            CurrentHp -= dealth;
+
+            if (CurrentHp < 0)
+                CurrentHp = 0;
+
+            dmgcb?.Invoke(dealth);
+
+            var hpbar = new ServerFormat13
+            {
+                Serial = Serial,
+                Health = (ushort)((double)100 * CurrentHp / MaximumHp),
+                Sound = sound
+            };
+
+            Show(Scope.NearbyAislings, hpbar);
+            return dmg;
         }
 
         /// <summary>
@@ -1149,5 +1155,13 @@ namespace Darkages.Types
         [JsonIgnore] public bool IsConfused => HasDebuff("confused");
 
         #endregion
+
+        public void SendAnimation(ushort Animation, Sprite To, Sprite From, byte speed = 100)
+        {
+            var format = new ServerFormat29((uint)From.Serial, (uint)To.Serial, Animation, 0, speed);
+            {
+                Show(Scope.NearbyAislings, format);
+            }
+        }
     }
 }

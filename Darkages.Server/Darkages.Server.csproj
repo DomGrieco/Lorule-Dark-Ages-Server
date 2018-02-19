@@ -155,6 +155,7 @@
     <Compile Include="Storage\locales\Scripts\Skills\LocatePlayer.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Storage\locales\Scripts\Spells\beagioc.cs" />
     <Compile Include="Storage\locales\Scripts\Spells\Create.cs" />
     <Compile Include="Storage\locales\Scripts\Spells\armachd.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -85,32 +85,32 @@ namespace Darkages.Storage.locales.Scripts.Spells
             }
             else
             {
-                if (!(target is Aisling))
-                    return;
 
-                var client = (target as Aisling).Client;
                 var debuff = Clone(Spell.Template.Debuff);
-                var curses = target.Debuffs.OfType<debuff_sleep>().ToList();
+                var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
 
                 if (curses.Count == 0)
                     if (target.Debuffs.FirstOrDefault(i => i.Name == debuff.Name) == null)
                     {
                         debuff.OnApplied(target, debuff);
 
-                        (target as Aisling).Client
-                            .SendMessage(0x02,
-                                string.Format("{0} Attacks you with {1}.",
-                                    (sprite is Monster
-                                        ? (sprite as Monster).Template.Name
-                                        : (sprite as Mundane).Template.Name) ?? "Monster",
-                                    Spell.Template.Name));
+                        if (target is Aisling)
+                        {
+                            (target as Aisling).Client
+                                .SendMessage(0x02,
+                                    string.Format("{0} Attacks you with {1}.",
+                                        (sprite is Monster
+                                            ? (sprite as Monster).Template.Name
+                                            : (sprite as Mundane).Template.Name) ?? "Monster",
+                                        Spell.Template.Name));
+                        }
 
-                        client.SendAnimation(32, target, sprite);
+                        target.SendAnimation(32, target, sprite);
 
                         var action = new ServerFormat1A
                         {
                             Serial = sprite.Serial,
-                            Number = 0x80,
+                            Number = 1,
                             Speed = 30
                         };
 
@@ -118,11 +118,11 @@ namespace Darkages.Storage.locales.Scripts.Spells
                         {
                             Serial = target.Serial,
                             Health = 255,
-                            Sound = 27
+                            Sound = 8
                         };
 
-                        client.Aisling.Show(Scope.NearbyAislings, action);
-                        client.Aisling.Show(Scope.NearbyAislings, hpbar);
+                        sprite.Show(Scope.NearbyAislings, action);
+                        target.Show(Scope.NearbyAislings, hpbar);
                     }
             }
         }

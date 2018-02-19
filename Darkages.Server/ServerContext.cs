@@ -242,63 +242,89 @@ namespace Darkages
             }
 
 
-            //var s = GlobalSkillTemplateCache["Double Punch"];
-            //s.Prerequisites = new LearningPredicate();
-            //s.Prerequisites.Skill_Level_Required = 30;
-            //s.Prerequisites.Skill_Required = "Assail";
-            //s.Prerequisites.Skill_Tier_Required = 0;
-            //s.Prerequisites.Str_Required = 12;
-            //s.Prerequisites.Dex_Required = 8;
-            //s.Prerequisites.Con_Required = 19;
-            //s.Prerequisites.Class_Required = Class.Monk;
-            //s.Prerequisites.Stage_Required = ClassStage.Class;
-            //s.Prerequisites.ExpLevel_Required = 9;
-            //s.Prerequisites.Gold_Required = 5000;
-            //s.Prerequisites.Items_Required.Add(new ItemPredicate() { Item = "Dirk", AmountRequired = 1 });
+            var spell = new SpellTemplate();
+            spell.Name = "beag ioc";
+            spell.LevelRate = 1.5;
+            spell.ManaCost = 60;
+            spell.Icon = 28;
+            spell.MaxLevel = 100;
+            spell.Pane = Pane.Spells;
+            spell.Sound = 8;
+            spell.Animation = 267;
+            spell.ScriptKey = "beag ioc";
+            spell.TargetType = SpellTemplate.SpellUseType.ChooseTarget;
+            spell.TierLevel = Tier.Tier1;
+            spell.BaseLines = 0;
 
-            //s.NpcKey = "Learn Skills";
-
-            //StorageManager.SKillBucket.Save(s, true);
-
-            foreach (var s in GlobalItemTemplateCache.Values)
-            {
-                s.DropRate = Generator.Random.NextDouble() + (s.LevelRequired * 100 / 100 * 0.01);
-            }
-
-            GlobalItemTemplateCache["Dirk"].Flags |= ItemFlags.Stackable;
-            GlobalItemTemplateCache["Dirk"].CanStack = true;
-            GlobalItemTemplateCache["Dirk"].MaxStack = byte.MaxValue;
+            GlobalSpellTemplateCache["beag ioc"] = spell;
 
 
-            GlobalSpellTemplateCache["deo saighead lamh"] = new SpellTemplate()
-            {
-                Animation = 128,
-                BaseLines = 0,
-                DamageExponent = 0.01,
-                ElementalProperty = ElementManager.Element.Light,
-                Icon = 179,
-                ScriptKey = "Generic Elemental Mass",
-                MinLines = 0,
-                MaxLines = 9,
-                Prerequisites = new LearningPredicate()
-                {
-                    Spell_Required = "deo saighead",
-                    Spell_Level_Required = 100,
-                    ExpLevel_Required = 14,
-                    Int_Required = 30,
-                    Wis_Required = 15,
-                    Class_Required = Class.Priest,
-                },
-                Name = "deo saighead lamh",
-                ManaCost = 30,
-                LevelRate = 0.02,
-                TierLevel = Tier.Tier2,
-                MaxLevel = 100,
-                NpcKey = "High Priest",
-                Sound = 26,
-                Pane = Pane.Spells,
-                TargetType = SpellTemplate.SpellUseType.NoTarget,
-            };
+            var npc = new MundaneTemplate();
+            npc.Name = "Sage Master";
+            npc.ScriptKey = "welcome aisling";
+            npc.Speech.Add("You lost mate?");
+            npc.Speech.Add("You better gear up bud.");
+            npc.Speech.Add("You might end up in someones rape dungeon.");
+            npc.Speech.Add("and by that, i mean mine.");
+            npc.Speech.Add("do you need a ride little boy?");
+            npc.X = 34;
+            npc.Y = 13;
+            npc.Image = 0x415B;
+            npc.Direction = (byte)Direction.South;
+            npc.Level = 99;
+            npc.EnableSpeech = true;
+            npc.QuestKey = "welcome trials 1";
+            npc.AreaID = 101;
+            npc.EnableAttacking = true;
+            npc.EnableWalking = false;
+            npc.EnableTurning = true;
+            npc.EnableCasting = true;
+            npc.Spells = new List<string>() { "deo saighead lamh", "ard cradh", "pramh", "ard sal", "ard srad", "mor dion", "beag ioc fein" };
+            GlobalMundaneTemplateCache["Sage Master"] = npc;
+
+            var npc2 = new MundaneTemplate();
+            npc2.Name = "Arch Wizard";
+            npc2.ScriptKey = "welcome aisling";
+            npc2.Speech.Add("I'll Save you.");
+            npc2.Speech.Add("Stick with me kid.");
+            npc2.Speech.Add("it's a nice night, tonight.");
+            npc2.Speech.Add("Right?");
+            npc2.Speech.Add("Exit this way.");
+            npc2.Speech.Add("Head for Rucession, if i were you.");
+            npc2.X = 49;
+            npc2.Y = 18;
+            npc2.Image = 0x4162;
+            npc2.Direction = (byte)Direction.East;
+            npc2.Level = 99;
+            npc2.EnableSpeech = true;
+            npc2.QuestKey = "welcome trials 2";
+            npc2.AreaID = 101;
+            npc2.EnableAttacking = true;
+            npc2.EnableWalking = false;
+            npc2.EnableTurning = true;
+            npc2.EnableCasting = true;
+            npc2.Spells = new List<string>() { "deo saighead", "mor cradh", "pramh" };
+            GlobalMundaneTemplateCache["Arch Wizard"] = npc2;
+
+
+            var npc3 = new MundaneTemplate();
+            npc3.Name = "Priest";
+            npc3.ScriptKey = "welcome aisling";
+            npc3.X = 38;
+            npc3.Y = 19;
+            npc3.Image = 0x415E;
+            npc3.Direction = (byte)Direction.South;
+            npc3.Level = 99;
+            npc3.QuestKey = "welcome trials 3";
+            npc3.AreaID = 101;
+            npc3.EnableAttacking = true;
+            npc3.EnableWalking = false;
+            npc3.EnableTurning = true;
+            npc3.EnableCasting = true;
+            npc3.Spells = new List<string>() { "beag ioc", "cradh", "final destination" };
+            GlobalMundaneTemplateCache["Priest"] = npc3;
+
+            
 
             Console.WriteLine("\n");
         }

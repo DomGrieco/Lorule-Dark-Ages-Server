@@ -67,47 +67,6 @@ namespace Darkages.Storage.locales.Scripts.Spells
                     client.SendMessage(0x02, "You already cast this.");
                 }
             }
-            else
-            {
-                if (!(target is Aisling))
-                    return;
-
-                var client = (target as Aisling).Client;
-                var buff = Clone(Spell.Template.Debuff);
-
-                if (target.Buffs.FirstOrDefault(i => i.Name.Equals(buff.Name, StringComparison.OrdinalIgnoreCase)) == null)
-                {
-                    buff.OnApplied(target, buff);
-
-                    (target as Aisling).Client
-                        .SendMessage(0x02,
-                            string.Format("{0} Attacks you with {1}.",
-                                (sprite is Monster
-                                    ? (sprite as Monster).Template.Name
-                                    : (sprite as Mundane).Template.Name) ?? "Monster",
-                                Spell.Template.Name));
-
-                    client.SendAnimation(Spell.Template.Animation, target, sprite);
-
-                    var action = new ServerFormat1A
-                    {
-                        Serial = sprite.Serial,
-                        Number = 0x80,
-                        Speed = 30
-                    };
-
-                    var hpbar = new ServerFormat13
-                    {
-                        Serial = client.Aisling.Serial,
-                        Health = 255,
-                        Sound = 1
-                    };
-
-                    client.Aisling.Show(Scope.NearbyAislings, action);
-                    client.Aisling.Show(Scope.NearbyAislings, hpbar);
-
-                }
-            }
         }
     
 
@@ -133,16 +92,12 @@ namespace Darkages.Storage.locales.Scripts.Spells
             }
             else
             {
-                if (!(target is Aisling))
-                    return;
-
-                var client = (target as Aisling).Client;
                 var buff = Clone(Spell.Template.Buff);
 
                 if (sprite.Buffs.FirstOrDefault(i => i.Name == buff.Name) == null)
                 {
                     buff.OnApplied(sprite, buff);
-                    client.SendAnimation(244, sprite, sprite);
+                    sprite.SendAnimation(Spell.Template.Animation, sprite, sprite);
                 }
             }
         }

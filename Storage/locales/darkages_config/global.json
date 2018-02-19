@@ -108,5 +108,8 @@
   "WisAddedMessage": "Your will increases.",
   "WithinRangeProximity": 10.0,
   "YouDroppedGoldMsg": "you dropped some gold.",
-  "LootTableStackSize": 3
+  "LootTableStackSize": 3,
+  "HpGainFactor": 5,
+  "MpGainFactor": 5,
+  "StatsPerLevel": 2
 }

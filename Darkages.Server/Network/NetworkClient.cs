@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
-using Darkages.Common;
-using Darkages.Network.Game;
+﻿using Darkages.Network.Game;
 using Darkages.Network.Object;
 using Darkages.Network.ServerFormats;
 using Darkages.Security;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using static System.Threading.Tasks.Parallel;
 
 namespace Darkages.Network
@@ -33,6 +31,7 @@ namespace Darkages.Network
         public SecurityProvider Encryption { get; set; }
         public byte Ordinal { get; set; }
         public int Serial { get; set; }
+        public bool IsProxy { get; set; }
 
         private static byte P(NetworkPacket value)
         {

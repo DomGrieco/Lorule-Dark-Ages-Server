@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,12 @@ namespace Darkages.Types
         public MundaneTemplate Template { get; set; }
 
         [JsonIgnore] public MundaneScript Script { get; set; }
+
+        [JsonIgnore]
+        public List<SkillScript> SkillScripts = new List<SkillScript>();
+
+        [JsonIgnore]
+        public List<SpellScript> SpellScripts = new List<SpellScript>();
 
         public static void Create(MundaneTemplate template)
         {
@@ -50,15 +57,41 @@ namespace Darkages.Types
             npc.CurrentHp = npc.Template.MaximumHp;
             npc.CurrentMp = npc.Template.MaximumMp;
             npc.Direction = npc.Template.Direction;
+            npc._Int = 255;
 
             npc.Map = ServerContext.GlobalMapCache[npc.CurrentMapId];
             npc.Script = ScriptManager.Load<MundaneScript>(template.ScriptKey, ServerContext.Game, npc);
 
             npc.Template.AttackTimer = new GameServerTimer(TimeSpan.FromMilliseconds(450));
             npc.Template.EnableTurning = false;
-            npc.Template.WalkTimer = new GameServerTimer(TimeSpan.FromSeconds(750));
-            npc.Template.ChatTimer = new GameServerTimer(TimeSpan.FromSeconds(Generator.Random.Next(10, 35)));
-            npc.Template.TurnTimer = new GameServerTimer(TimeSpan.FromSeconds(6));
+            npc.Template.WalkTimer  = new GameServerTimer(TimeSpan.FromSeconds(1));
+            npc.Template.ChatTimer  = new GameServerTimer(TimeSpan.FromSeconds(Generator.Random.Next(10, 35)));
+            npc.Template.TurnTimer  = new GameServerTimer(TimeSpan.FromSeconds(6));
+            npc.Template.SpellTimer = new GameServerTimer(TimeSpan.FromSeconds(0.5));
+
+            if (npc.Template.Spells != null)
+                foreach (var spellscriptstr in npc.Template.Spells)
+                {
+                    if (!ServerContext.GlobalSpellTemplateCache.ContainsKey(spellscriptstr))
+                        continue;
+
+                    var script = ScriptManager.Load<SpellScript>(ServerContext.GlobalSpellTemplateCache[spellscriptstr].ScriptKey,
+                        Spell.Create(1, ServerContext.GlobalSpellTemplateCache[spellscriptstr]));
+
+                    if (script == null)
+                        continue; 
+
+                    npc.SpellScripts.Add(script);
+                }
+
+            if (npc.Template.Skills != null)
+                foreach (var skillscriptstr in npc.Template.Skills)
+                {
+                    var script = ScriptManager.Load<SkillScript>(skillscriptstr,
+                        Skill.Create(1, ServerContext.GlobalSkillTemplateCache[skillscriptstr]));
+
+                    npc.SkillScripts.Add(script);
+                }
 
             npc.AddObject(npc);
         }
@@ -138,6 +171,42 @@ namespace Darkages.Types
 
                         Template.TurnTimer.Reset();
                     }
+                }
+            }
+
+            if (Template.EnableCasting)
+            {
+                Template.SpellTimer.Update(update);
+
+                if (Template.SpellTimer.Elapsed)
+                {
+                    var targets = GetObjects<Monster>(i => i.WithinRangeOf(this))
+                           .OrderBy(i => i.Position.DistanceFrom(Position));
+
+                    foreach (var t in targets) t.Target = this;
+
+                    var target = Target == null ? targets.FirstOrDefault() : Target;
+
+                    if (target?.CurrentHp == 0)
+                        target = null;
+
+                    if (IsFrozen || IsSleeping || IsBlind || IsConfused)
+                        return;
+
+                    Target = target;
+
+                    if (Target != null && Target != null && SpellScripts.Count > 0)
+                    {
+                        var idx = 0;
+                        lock (Generator.Random)
+                        {
+                            idx = Generator.Random.Next(SpellScripts.Count);
+                        }
+
+                        SpellScripts[idx].OnUse(this, Target);
+                    }
+
+                    Template.SpellTimer.Reset();
                 }
             }
 

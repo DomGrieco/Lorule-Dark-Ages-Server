@@ -62,7 +62,7 @@ namespace Darkages.Types
                     server.Name = text[0];
                     server.Description = text[1];
 
-                    reader.ReadByte();
+                    var id = reader.ReadByte();
 
                     Servers.Add(server);
                 }

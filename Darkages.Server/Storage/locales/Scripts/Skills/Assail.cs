@@ -69,6 +69,8 @@ namespace Darkages.Scripting.Scripts.Skills
                         var imp = (Skill.Level * 10 / 100);
                         var dmg = (client.Aisling.Str + client.Aisling.Dex * imp);
 
+                        dmg *= 3;
+
                         i.ApplyDamage(sprite, dmg);
 
                         if (i is Monster) (i as Monster).Target = client.Aisling;

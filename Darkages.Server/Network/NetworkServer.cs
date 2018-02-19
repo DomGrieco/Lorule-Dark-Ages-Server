@@ -131,7 +131,7 @@ namespace Darkages.Network
             }
         }
 
-        public bool AddClient(TClient client)
+        public virtual bool AddClient(TClient client)
         {
             var index = -1;
 

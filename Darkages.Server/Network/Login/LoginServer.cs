@@ -124,6 +124,7 @@ namespace Darkages.Network.Login
             ServerContext.GlobalRedirects.Add(redirect);
 
             client.SendMessageBox(0x00, "\0");
+
             client.Send(new ServerFormat03
             {
                 EndPoint = new IPEndPoint(Address, ServerContext.DefaultPort),
@@ -162,11 +163,6 @@ namespace Darkages.Network.Login
                 Hash = Notification.Hash
             });
             ServerContext.GlobalRedirects.Remove(redirect);
-
-            client.SendPacket(new byte[]
-            {
-                0x19, 0x00, 0xFF, 0x31
-            });
         }
 
         /// <summary>
@@ -232,12 +228,12 @@ namespace Darkages.Network.Login
                 });
             }
 
-            if (format.Type == 0x01)
-                client.Send(new ServerFormat56
-                {
-                    Size = MServerTable.Size,
-                    Data = MServerTable.Data
-                });
+            //if (format.Type == 0x00)
+            //    client.Send(new ServerFormat56
+            //    {
+            //        Size = MServerTable.Size,
+            //        Data = MServerTable.Data,                    
+            //    });
         }
 
         protected override void Format68Handler(LoginClient client, ClientFormat68 format)
@@ -259,6 +255,11 @@ namespace Darkages.Network.Login
                 {
                     Type = 0x01
                 });
+        }
+
+        public override bool AddClient(LoginClient client)
+        {
+            return base.AddClient(client);
         }
 
         public override void ClientConnected(LoginClient client)

@@ -81,16 +81,12 @@ namespace Darkages.Storage.locales.Scripts.Spells
             }
             else
             {
-                if (!(target is Aisling))
-                    return;
-
-                var client = (target as Aisling).Client;
                 var buff = Clone(Spell.Template.Buff);
 
                 if (sprite.Buffs.FirstOrDefault(i => i.Name == buff.Name) == null)
                 {
                     buff.OnApplied(sprite, buff);
-                    client.SendAnimation(244, sprite, sprite);
+                    sprite.SendAnimation(244, sprite, sprite);
                 }
             }
         }

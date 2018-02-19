@@ -78,10 +78,18 @@ namespace Darkages.Network
 
         public override void Read(NetworkPacket packet, NetworkFormat format)
         {
-            if (format.Secured) Encryption.Transform(packet);
+            if (format.Secured)
+                Encryption.Transform(packet);
 
             Reader.Packet = packet;
             format.Serialize(Reader);
+
+            if (format.Command == 0x7E)
+            {
+                SendMessageBox(0x00, "baram");
+            }
+
+            Console.WriteLine("Client Proxy: {0}", format.Command);
         }
 
         private void ServerDataReceived(NetworkPacket packet)

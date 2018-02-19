@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Darkages.Network.ServerFormats;
@@ -40,7 +41,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
         {
             if (sprite is Aisling)
             {
-                var d   = sprite.Int * Spell.Level / 100;
+                var d = sprite.Int * Spell.Level / 100;
                 var dmg = (int)(sprite.Int * d);
 
                 target.ApplyDamage(sprite, dmg, Spell.Template.ElementalProperty, Spell.Template.Sound);
@@ -77,14 +78,14 @@ namespace Darkages.Storage.locales.Scripts.Spells
 
         public override void OnUse(Sprite sprite, Sprite target)
         {
-            if (sprite.CurrentMp - Spell.Template.ManaCost > 0)
-                sprite.CurrentMp -= Spell.Template.ManaCost;
-
-            if (sprite.CurrentMp < 0)
-                sprite.CurrentMp = 0;
-
-            //Task.Factory?.StartNew(() =>
+            if (sprite is Aisling)
             {
+                if (sprite.CurrentMp - Spell.Template.ManaCost > 0)
+                    sprite.CurrentMp -= Spell.Template.ManaCost;
+
+                if (sprite.CurrentMp < 0)
+                    sprite.CurrentMp = 0;
+
                 var targets = GetObjects(i => i.WithinRangeOf(sprite), Get.Aislings | Get.Monsters | Get.Mundanes);
                 var client = (sprite as Aisling).Client;
                 client.TrainSpell(Spell);
@@ -135,7 +136,43 @@ namespace Darkages.Storage.locales.Scripts.Spells
                     (sprite as Aisling)
                         .Client
                         .SendStats(StatusFlags.StructB);
-            }//);
+            }
+            else
+            {
+                var targets = GetObjects(i => i.WithinRangeOf(sprite), Get.Monsters);
+
+                foreach (var t in targets)
+                {
+                    if (t.Serial == sprite.Serial)
+                        continue;
+
+                    if (t.CurrentHp == 0)
+                        continue;
+
+                    var dmg = (int)(sprite.Int * Spell.Template.DamageExponent) * (5 + Spell.Level * 10 / 100);
+
+                    t.ApplyDamage(sprite, dmg, Spell.Template.ElementalProperty, Spell.Template.Sound);
+                    t.SendAnimation(Spell.Template.Animation, t, sprite);
+
+                    var action = new ServerFormat1A
+                    {
+                        Serial = sprite.Serial,
+                        Number = 0x80,
+                        Speed = 30
+                    };
+
+
+                    var hpbar = new ServerFormat13
+                    {
+                        Serial = t.Serial,
+                        Health = (ushort)(100 * t.CurrentHp / t.MaximumHp),
+                        Sound = Spell.Template.Sound
+                    };
+
+                    t.Show(Scope.NearbyAislings, hpbar);
+                    sprite.Show(Scope.NearbyAislings, action);
+                }
+            }
         }
     }
 }

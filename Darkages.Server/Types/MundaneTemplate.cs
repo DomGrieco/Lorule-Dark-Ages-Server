@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Darkages.Network.Game;
 using Newtonsoft.Json;
@@ -7,13 +8,17 @@ namespace Darkages.Types
 {
     public class MundaneTemplate : Template
     {
+        public bool EnableCasting { get; set; }
+        public List<string> Spells { get; set; }
+        public List<string> Skills { get; set; }
+
         public MundaneTemplate()
         {
             Speech = new Collection<string>();
         }
 
-        public short Image { get; set; }
-        public byte Level { get; set; }
+        public short  Image { get; set; }
+        public byte   Level { get; set; }
         public string ScriptKey { get; set; }
 
         public bool EnableWalking { get; set; }
@@ -28,6 +33,8 @@ namespace Darkages.Types
         [Browsable(false)] [JsonIgnore] public GameServerTimer AttackTimer { get; set; }
 
         [Browsable(false)] [JsonIgnore] public GameServerTimer WalkTimer { get; set; }
+
+        [Browsable(false)] [JsonIgnore] public GameServerTimer SpellTimer { get; set; }
 
         public Collection<string> Speech { get; set; }
 

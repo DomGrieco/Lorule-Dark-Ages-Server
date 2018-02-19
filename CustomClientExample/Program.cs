@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Threading;
 using Darkages.Network;
+using Darkages.Network.ClientFormats;
 using Darkages.Network.ServerFormats;
 
 namespace CustomClientExample
@@ -12,7 +13,7 @@ namespace CustomClientExample
 
         private static void Main(string[] args)
         {
-            client.Connect("127.0.0.1", 2610, out var error);
+            client.Connect("34.214.199.67", 2610, out var error);
 
             if (error != SocketError.Success)
             {
@@ -29,6 +30,16 @@ namespace CustomClientExample
         public override void Format7EHandler(ServerFormat7E format)
         {
             Console.WriteLine(format.Text);
+        }
+
+        public override void Format00Handler(ServerFormat00 format)
+        {
+
+        }
+
+        public override void Format10Handler(ServerFormat10 format)
+        {
+
         }
     }
 }

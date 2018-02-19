@@ -73,10 +73,6 @@ namespace Darkages.Storage.locales.Scripts.Spells
             }
             else
             {
-                if (!(target is Aisling))
-                    return;
-
-                var client = (target as Aisling).Client;
                 sprite.CurrentHp = sprite.MaximumHp;
 
                 var hpbar = new ServerFormat13
@@ -86,8 +82,8 @@ namespace Darkages.Storage.locales.Scripts.Spells
                     Sound = 8
                 };
 
-                client.SendAnimation(0x04, sprite, sprite);
-                client.Aisling.Show(Scope.NearbyAislings, hpbar);
+                sprite.SendAnimation(0x04, sprite, sprite);
+                sprite.Show(Scope.NearbyAislings, hpbar);
             }
         }
     }
