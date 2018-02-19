@@ -15,15 +15,14 @@ A Darkages Server Project - For client **7.18** Only. (Customized Client will be
 
 
 ## Project Design Overview.
-- Json based storage and cache
-- ~~SingleInstance~~ Object Manager Service
-- Configurable From UI
+- JSON storage management
+- JSON content templates
+- Object Manager Service
 - Scriptable Storage System/Content
 - Component driven design pattern.
-- Component Proxy Service to support server transitions and multiple servers.
 
 ## Server Development Status:
-- Server is currently about ~~94%~~ 95% percent completed until it is content ready.
+- Server is currently about 96% percent completed until it is content ready.
 - Expect Glithes! Help by testing and reporting them!
 
 ## Working Features
@@ -53,7 +52,7 @@ A Darkages Server Project - For client **7.18** Only. (Customized Client will be
 - [ ] ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Meta Database (Will be Last to Do.)
 
 
-## Progress Map 22/01/2018
+## Progress Map 17/02/2018
 - Exchanging Is Up Next.
 
 ## Building & Compiling
