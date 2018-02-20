@@ -22,7 +22,8 @@ namespace Darkages.Storage.locales.Scripts.Monsters
                     var script = ScriptManager.Load<SpellScript>(spellscriptstr,
                         Spell.Create(1, ServerContext.GlobalSpellTemplateCache[spellscriptstr]));
 
-                    SpellScripts.Add(script);
+                    if (script != null)
+                        SpellScripts.Add(script);
                 }
 
             if (Monster.Template.SkillScripts != null)
@@ -31,7 +32,8 @@ namespace Darkages.Storage.locales.Scripts.Monsters
                     var script = ScriptManager.Load<SkillScript>(skillscriptstr,
                         Skill.Create(1, ServerContext.GlobalSkillTemplateCache[skillscriptstr]));
 
-                    SkillScripts.Add(script);
+                    if (script != null)
+                        SkillScripts.Add(script);
                 }
         }
 

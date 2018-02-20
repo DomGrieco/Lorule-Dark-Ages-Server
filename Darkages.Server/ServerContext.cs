@@ -241,6 +241,44 @@ namespace Darkages
                 CacheCommunityAssets();
             }
 
+            var w = new WarpTemplate();
+            w.WarpType = WarpType.Map;
+            w.LevelRequired = 3;
+            w.Name = "To Lost Wilderness";
+            w.To = new Warp()
+            {
+                AreaID = 101,
+                Location = new Position(46, 22),
+            };
+            w.WarpRadius = 0;
+            w.ActivationMapId = 99;
+            w.Activations = new List<Warp>();
+
+            w.Activations.Add(new Warp()
+            {
+                AreaID = 99,
+                Location = new Position(43, 99),
+                PortalKey = 0
+            });
+            w.Activations.Add(new Warp()
+            {
+                AreaID = 99,
+                Location = new Position(42, 99),
+                PortalKey = 0
+            });
+            w.Activations.Add(new Warp()
+            {
+                AreaID = 99,
+                Location = new Position(44, 99),
+                PortalKey = 0
+            });
+
+
+
+            StorageManager.WarpBucket.Save(w);
+
+            GlobalWarpTemplateCache.Add(w);
+
 
             var spell = new SpellTemplate();
             spell.Name = "beag ioc";

@@ -5,7 +5,7 @@
     "$values": []
   },
   "ID": 152,
-  "Image": 0x40B7,
+  "Image": 0x4098,
   "ScriptName": "Common Monster",
   "DefinedX": 33,
   "DefinedY": 13,
@@ -17,7 +17,7 @@
   "SpawnType": 1,
   "ElementType": 2,
   "PathQualifer": 1,
-  "Level": 4,
+  "Level": 14,
   "MaximumHP": 0,
   "MaximumMP": 0,
   "SpawnerID": 0,
@@ -27,11 +27,11 @@
   "CastSpeed": 4000,
   "ArmorClass": 0,
   "MagicResist": 0,
-  "SpawnMax": 6500,
+  "SpawnMax": 1500,
   "SpawnRate": 0,
   "SpawnSize": 100,
-  "AttackSpeed": 1000,
-  "IgnoreCollision": true,
+  "AttackSpeed": 1500,
+  "IgnoreCollision": false,
   "ImageVarience": 0,
   "SpawnOnlyOnActiveMaps": false,
   "UpdateMapWide": false,
@@ -39,7 +39,8 @@
   "SpellScripts": {
     "$type": "System.Collections.ObjectModel.Collection`1[[System.String, mscorlib]], mscorlib",
     "$values": [
-      "beag cradh"
+      "beag cradh",
+      "deo saighead",
     ]
   },
   "DefenseElement": 1,
@@ -48,9 +49,8 @@
  "Drops": {
     "$type": "System.Collections.ObjectModel.Collection`1[[System.String, mscorlib]], mscorlib",
     "$values": [
-	"Eppe",
-        "Black Death",
-	"Light Belt"
+	"Holy Diana",
+	"Magus Diana",
     ]
   },
 }
