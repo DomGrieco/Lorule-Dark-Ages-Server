@@ -2,8 +2,10 @@
 using Darkages.Types;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Darkages.Network.Game.Components
 {
@@ -11,7 +13,7 @@ namespace Darkages.Network.Game.Components
     {
         private readonly GameServerTimer _timer;
 
-        public readonly BlockingCollection<Spawn> SpawnQueue = new BlockingCollection<Spawn>();
+        public readonly Queue<Spawn> SpawnQueue = new Queue<Spawn>();
 
         public MonolithComponent(GameServer server)
             : base(server)
@@ -28,15 +30,22 @@ namespace Darkages.Network.Game.Components
                 if (SpawnQueue.Count > 0)
                     ConsumeSpawns();
 
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
         }
 
         private void ConsumeSpawns()
         {
-            foreach (var spawnObj in SpawnQueue.GetConsumingEnumerable())
+            Spawn spawn;
+
+            lock (SpawnQueue)
             {
-                SpawnOn(spawnObj.Template, spawnObj.Map);
+                spawn = SpawnQueue.Dequeue();
+            }
+
+            if (spawn != null)
+            {
+                SpawnOn(spawn.Template, spawn.Map);
             }
         }
 
@@ -71,9 +80,9 @@ namespace Darkages.Network.Game.Components
                                 Map = map
                             };
 
-                            if (!SpawnQueue.TryAdd(spawn))
+                            lock (SpawnQueue)
                             {
-
+                                SpawnQueue.Enqueue(spawn);
                             }
                         }
                     }
@@ -81,22 +90,30 @@ namespace Darkages.Network.Game.Components
             }
         }
 
-        public void SpawnOn(MonsterTemplate template, Area map)
+        public async void SpawnOn(MonsterTemplate template, Area map)
         {
             var count = GetObjects<Monster>(i => i.Template.Name == template.Name).Length;
 
-            if (count < template.SpawnMax)
+            if (count < Math.Abs(template.SpawnMax))
+            {
                 if ((template.SpawnType & SpawnQualifer.Random) == SpawnQualifer.Random)
-                    CreateFromTemplate(template, map, count);
+                    await CreateFromTemplate(template, map, template.SpawnSize);
                 else if ((template.SpawnType & SpawnQualifer.Defined) == SpawnQualifer.Defined)
-                    CreateFromTemplate(template, map, count);
+                    await CreateFromTemplate(template, map, template.SpawnSize);
+            }
+
         }
 
 
-        public bool CreateFromTemplate(MonsterTemplate template, Area map, int count)
+        public async Task<bool> CreateFromTemplate(MonsterTemplate template, Area map, int count)
         {
-            var newObj = Monster.Create(template as MonsterTemplate, map);
-            AddObject(newObj);
+            await Task.Run(() =>
+            {
+                var newObj = Monster.Create(template as MonsterTemplate, map);
+                AddObject(newObj);
+
+                return true;
+            });
 
             return false;
         }
