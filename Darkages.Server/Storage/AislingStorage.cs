@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Transactions;
 using Newtonsoft.Json;
 
 namespace Darkages.Storage
@@ -29,9 +31,20 @@ namespace Darkages.Storage
 
         public void Save(Aisling obj)
         {
-            var path = Path.Combine(StoragePath, string.Format("{0}.json", obj.Username.ToLower()));
-            var objString = JsonConvert.SerializeObject(obj, StorageManager.Settings);
-            File.WriteAllText(path, objString);
+            try
+            {
+                var path = Path.Combine(StoragePath, string.Format("{0}.json", obj.Username.ToLower()));
+                var objString = JsonConvert.SerializeObject(obj, StorageManager.Settings);
+
+                File.WriteAllText(path, objString);
+            }
+            catch (Exception)
+            {
+                /* Ignore */
+            }
+            finally
+            {
+            }
         }
     }
 }

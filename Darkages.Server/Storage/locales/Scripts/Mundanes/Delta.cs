@@ -100,13 +100,23 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
                     Icon = (byte)LegendIcon.Victory,
                     Value = "Scratched Delta's Back."
                 });
+                quest.ExpRewards.Add(1000);
+                quest.ExpRewards.Add(2000);
+                quest.ExpRewards.Add(5000);
+                quest.ExpRewards.Add(5000);
+                quest.ExpRewards.Add(5000);
+                quest.ExpRewards.Add(5000);
+                quest.ExpRewards.Add(5000);
+                quest.ExpRewards.Add(5000);
+                quest.ExpRewards.Add(5000);
 
                 quest.SpellRewards.Add(ServerContext.GlobalSpellTemplateCache["beag ioc fein"]);
 
                 client.Aisling.Quests.Add(quest);
-            }
 
+            }
             quest.QuestStages = new List<QuestStep<Template>>();
+
 
             var q1 = new QuestStep<Template> { Type = QuestType.Accept };
             var q2 = new QuestStep<Template> { Type = QuestType.HasItem };
@@ -120,6 +130,7 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
 
             quest.QuestStages.Add(q1);
             quest.QuestStages.Add(q2);
+
 
             if (!quest.Started)
             {

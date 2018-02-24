@@ -92,7 +92,6 @@ namespace Darkages.Storage.locales.Scripts.Global
                 client.Aisling.Direction = 0;
                 client.Aisling.CurrentMapId = ServerContext.Config.DeathMap;
                 client.Aisling.AreaID = ServerContext.Config.DeathMap;
-                client.Aisling.Map = ServerContext.GlobalMapCache[ServerContext.Config.DeathMap];
                 client.EnterArea();
             }
             else
@@ -103,7 +102,6 @@ namespace Darkages.Storage.locales.Scripts.Global
                 client.Aisling.AreaID = ServerContext.Config.StartingMap;
                 client.Aisling.X = ServerContext.Config.StartingPosition.X;
                 client.Aisling.Y = ServerContext.Config.StartingPosition.Y;
-                client.Aisling.Map = ServerContext.GlobalMapCache[ServerContext.Config.StartingMap];
                 client.EnterArea();
             }
         }

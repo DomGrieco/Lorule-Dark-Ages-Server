@@ -17,6 +17,7 @@
         {
             writer.Write(Size);
             writer.Write(Data);
+            writer.Write(0x02);
         }
     }
 }

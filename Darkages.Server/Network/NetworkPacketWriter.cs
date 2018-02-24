@@ -29,6 +29,11 @@ namespace Darkages.Network
             Position += value.Length;
         }
 
+        public void Write(sbyte value)
+        {
+            buffer[Position++] = (byte)value;
+        }
+
         public void Write(short value)
         {
             Write(
@@ -106,11 +111,6 @@ namespace Darkages.Network
         public NetworkPacket ToPacket()
         {
             return new NetworkPacket(buffer, 0, Position);
-        }
-
-        internal void WriteStringA(object p)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Darkages.Types
     {
         public List<ItemTemplate> ItemRewards = new List<ItemTemplate>();
         public List<Legend.LegendItem> LegendRewards = new List<Legend.LegendItem>();
+
         public List<QuestStep<Template>> QuestStages = new List<QuestStep<Template>>();
 
         public List<SkillTemplate> SkillRewards = new List<SkillTemplate>();
@@ -32,7 +33,7 @@ namespace Darkages.Types
         public DateTime TimeStarted { get; set; }
         public DateTime TimeCompleted { get; set; }
 
-        public uint ExpReward { get; set; }
+        public List<uint> ExpRewards = new List<uint>();
         public uint GoldReward { get; set; }
         public int StageIndex { get; set; }
 
@@ -42,6 +43,10 @@ namespace Darkages.Types
 
         public void OnCompleted(Aisling user)
         {
+            Rewarded = true;
+            Completed = true;
+            TimeCompleted = DateTime.Now;
+
             user.SendAnimation(22, user, user);
 
             var completeStages = QuestStages.Where(i => i.StepComplete).SelectMany(i => i.Prerequisites);
@@ -57,15 +62,9 @@ namespace Darkages.Types
                             user.Inventory.RemoveRange(user.Client, obj, step.Amount);
                 }
 
-
-            Completed = true;
-            TimeCompleted = DateTime.Now;
-
             foreach (var items in SkillRewards)
                 if (!Skill.GiveTo(user.Client, items.Name))
                 {
-                    Completed = false;
-                    return;
                 }
                 
 
@@ -73,8 +72,6 @@ namespace Darkages.Types
             foreach (var items in SpellRewards)
                     if (!Spell.GiveTo(user, items.Name))
                     {
-                        Completed = false;
-                        return;
                     }
 
             foreach (var items in ItemRewards)
@@ -94,8 +91,8 @@ namespace Darkages.Types
                 });
 
 
-            if (ExpReward > 0)
-                Monster.DistributeExperience(user, ExpReward, ExpReward, 0);
+            if (ExpRewards.Count > 0)
+                ExpRewards.ForEach(i => Monster.DistributeExperience(user, i, i, 0));
 
 
             if (GoldReward > 0)
@@ -105,8 +102,6 @@ namespace Darkages.Types
             }
 
             user.Client.SendStats(StatusFlags.All);
-
-            Rewarded = true;
         }
 
         public void UpdateQuest(Aisling user)
@@ -174,6 +169,7 @@ namespace Darkages.Types
 
     public class QuestStep<T>
     {
+        [JsonIgnore]
         public List<QuestRequirement> Prerequisites
             = new List<QuestRequirement>();
 

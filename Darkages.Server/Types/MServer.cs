@@ -34,5 +34,8 @@ namespace Darkages.Types
         [XmlElement("Name")] public string Name { get; set; }
 
         [XmlElement("Desc")] public string Description { get; set; }
+
+        [XmlElement("ID")] public byte ID { get; set; }
+
     }
 }

@@ -26,8 +26,10 @@ namespace Darkages.Types
 
         public virtual void OnApplied(Sprite Affected, Debuff debuff)
         {
-            Display(Affected);
-            Affected.Debuffs.Add(debuff);
+            if (Affected.Debuffs.TryAdd(debuff.Name, debuff))
+            {
+                Display(Affected);
+            }
         }
 
         public virtual void OnDurationUpdate(Sprite Affected, Debuff buff)
@@ -37,12 +39,13 @@ namespace Darkages.Types
 
         public virtual void OnEnded(Sprite Affected, Debuff debuff)
         {
-            if (Affected is Aisling)
-                (Affected as Aisling)
-                    .Client
-                    .Send(new ServerFormat3A(Icon, byte.MinValue));
-
-            Affected.Debuffs.Remove(debuff);
+            if (Affected.Debuffs.TryRemove(debuff.Name, out var removed))
+            {
+                if (Affected is Aisling)
+                    (Affected as Aisling)
+                        .Client
+                        .Send(new ServerFormat3A(Icon, byte.MinValue));
+            }
         }
 
         internal void Update(Sprite Affected, TimeSpan elapsedTime)

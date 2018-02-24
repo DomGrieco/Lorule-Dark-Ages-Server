@@ -16,14 +16,14 @@ namespace Darkages
     {
         [JsonIgnore] private static readonly byte[] sotp = File.ReadAllBytes("sotp.dat");
 
-        [Browsable(false)] public ushort Hash;
+        [JsonIgnore] [Browsable(false)] public ushort Hash;
 
         [JsonIgnore] [Browsable(false)] private TileContent[,] Tile;
 
         [JsonIgnore] [Browsable(false)] private readonly GameServerTimer WarpTimer =
             new GameServerTimer(TimeSpan.FromSeconds(ServerContext.Config.WarpUpdateTimer));
 
-        [Browsable(false)] public byte[] Data { get; set; }
+        [JsonIgnore] [Browsable(false)] public byte[] Data { get; set; }
 
         public int Music { get; set; }
 
@@ -223,7 +223,7 @@ namespace Darkages
                     obj.UpdateBuffs(elapsedTime);
                     obj.UpdateDebuffs(elapsedTime);
 
-                    ServerContext.Game.ObjectPulseController?.OnObjectUpdate(obj);
+                    //ServerContext.Game.ObjectPulseController?.OnObjectUpdate(obj);
                     obj.LastUpdated = DateTime.UtcNow;
                 }
             }

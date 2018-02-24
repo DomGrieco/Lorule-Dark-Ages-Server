@@ -112,7 +112,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
 
                     lock (rand)
                     {
-                        if (rand.Next(0, 100) > t.Mr + (int)(t.Position.DistanceFrom(sprite.Position) * 10))
+                        if (rand.Next(sprite.Hit * 5, 100) > t.Mr + (int)(t.Position.DistanceFrom(sprite.Position) * 10))
                         {
                             OnSuccess(sprite, t);
 
@@ -128,7 +128,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
                             OnFailed(sprite, t);
                     }
 
-                    Thread.Yield();
+
                 }
 
                 client.SendMessage(0x02, string.Format("you cast {0}", Spell.Template.Name));

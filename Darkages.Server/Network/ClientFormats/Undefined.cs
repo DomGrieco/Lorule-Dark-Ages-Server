@@ -296,9 +296,9 @@
     {
     }
 
-    public class ClientFormat66
-    {
-    }
+    //public class ClientFormat66
+    //{
+    //}
 
     public class ClientFormat67
     {

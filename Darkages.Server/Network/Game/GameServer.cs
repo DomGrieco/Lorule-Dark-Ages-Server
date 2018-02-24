@@ -31,7 +31,7 @@ namespace Darkages.Network.Game
             Frames = ServerContext.Config.FRAMES;
 
             ServerUpdateSpan = TimeSpan.FromSeconds(1.0 / Frames);
-            ClientUpdateSpan = TimeSpan.FromSeconds(1.0 / Frames / 2);
+            ClientUpdateSpan = TimeSpan.FromSeconds(1.0 / Frames);
 
             InitializeGameServer();
         }

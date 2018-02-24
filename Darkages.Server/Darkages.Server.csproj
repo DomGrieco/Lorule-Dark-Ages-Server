@@ -61,6 +61,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -122,6 +123,7 @@
     <Compile Include="Network\ClientFormats\ClientFormat4E.cs" />
     <Compile Include="Network\ClientFormats\ClientFormat4F.cs" />
     <Compile Include="Network\ClientFormats\ClientFormat57.cs" />
+    <Compile Include="Network\ClientFormats\ClientFormat66.cs" />
     <Compile Include="Network\ClientFormats\ClientFormat68.cs" />
     <Compile Include="Network\ClientFormats\ClientFormat75.cs" />
     <Compile Include="Network\ClientFormats\ClientFormat79.cs" />
@@ -145,6 +147,9 @@
     <Compile Include="Storage\locales\buffs\buff_armor.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Storage\locales\debuffs\debuff_morfasnadur.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Storage\locales\debuffs\debuff_fasnadur.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -157,14 +162,24 @@
     <Compile Include="Storage\locales\Scripts\Monsters\TowerDefense.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Storage\locales\Scripts\Mundanes\Delta.cs" />
-    <Compile Include="Storage\locales\Scripts\Mundanes\TowerDefenseHandler.cs" />
+    <Compile Include="Storage\locales\Scripts\Mundanes\Delta.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Storage\locales\Scripts\Mundanes\TowerDefenseHandler.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Storage\locales\Scripts\Skills\Clobber.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Storage\locales\Scripts\Skills\LocatePlayer.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Storage\locales\Scripts\Spells\beagioc.cs" />
     <Compile Include="Storage\locales\Scripts\Spells\Create.cs" />
     <Compile Include="Storage\locales\Scripts\Spells\armachd.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Storage\locales\Scripts\Spells\morfasnadur.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Storage\locales\Scripts\Spells\MassElementalSpell.cs">
@@ -319,7 +334,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Storage\locales\Scripts\Mundanes\BarrenLord.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Storage\locales\Scripts\Mundanes\Benson.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -328,9 +343,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Storage\locales\Scripts\Mundanes\ClassChooser.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Storage\locales\Scripts\Mundanes\UserHelper.cs" />
+    <Compile Include="Storage\locales\Scripts\Mundanes\UserHelper.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Storage\locales\Scripts\Skills\Unstuck.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -348,10 +365,10 @@
     <Compile Include="Types\Dialog.cs" />
     <Compile Include="Types\DialogSequence.cs" />
     <Compile Include="Storage\locales\Scripts\Mundanes\GrandMaster01.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Storage\locales\Scripts\Mundanes\LearkSkills.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Storage\locales\Scripts\Mundanes\shop1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -494,7 +511,7 @@
     <Content Include="include\Newtonsoft.Json.xml" />
     <Content Include="include\zlib.net.dll" />
     <Content Include="MServerTable.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Notification.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

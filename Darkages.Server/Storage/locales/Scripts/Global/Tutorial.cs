@@ -69,8 +69,16 @@ namespace Darkages.Storage.locales.Scripts.Global
                 Icon = (byte)LegendIcon.Community,
                 Value = "A Spiritual Awakening"
             });
-            quest.ExpReward  = 50;
-            quest.GoldReward = 1000;
+            quest.ExpRewards.Add(50);
+            quest.ExpRewards.Add(100);
+            quest.ExpRewards.Add(100);
+            quest.ExpRewards.Add(100);
+            quest.ExpRewards.Add(100);
+            quest.ExpRewards.Add(100);
+            quest.ExpRewards.Add(100);
+            quest.ExpRewards.Add(100);
+
+            quest.GoldReward = 2500;
             quest.ItemRewards.Add(ServerContext.GlobalItemTemplateCache[client.Aisling.Gender == Gender.Male ? "Shirt" : "Blouse"]);
 
             client.Aisling.Quests.Add(quest);

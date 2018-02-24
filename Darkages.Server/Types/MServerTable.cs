@@ -78,11 +78,11 @@ namespace Darkages.Types
 
                 foreach (var server in Servers)
                 {
-                    writer.Write(server.Guid);
+                    writer.Write((byte)server.Guid);
                     writer.Write(server.Address);
-                    writer.Write(server.Port);
+                    writer.Write((ushort)server.Port);
                     writer.Write(server.Name + ";" + server.Description);
-                    writer.Write(byte.MinValue);
+                    writer.Write((byte)server.ID);
                 }
             }
         }

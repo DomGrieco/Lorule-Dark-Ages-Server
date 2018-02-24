@@ -5,6 +5,7 @@ using Darkages.Network.Object;
 using Darkages.Network.ServerFormats;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -46,19 +47,20 @@ namespace Darkages.Types
                 Content = TileContent.None;
 
             Amplified = 0;
-            Buffs = new List<Buff>();
-            Debuffs = new List<Debuff>();
+
+            Buffs   = new ConcurrentDictionary<string, Buff>();
+            Debuffs = new ConcurrentDictionary<string, Debuff>();
         }
 
         [JsonIgnore] public GameClient Client { get; set; }
 
-        [JsonIgnore] public Area Map { get; set; }
+        [JsonIgnore] public Area Map => ServerContext.GlobalMapCache[CurrentMapId] ?? null;
 
         [JsonIgnore] public TileContent Content { get; set; }
 
-        public List<Debuff> Debuffs { get; set; }
+        public ConcurrentDictionary<string, Debuff> Debuffs { get; set; }
 
-        public List<Buff> Buffs { get; set; }
+        public ConcurrentDictionary<string, Buff> Buffs { get; set; }
 
         public int Serial { get; set; }
 
@@ -93,7 +95,7 @@ namespace Darkages.Types
             if (Buffs == null || Buffs.Count == 0)
                 return false;
 
-            return Buffs.Any(i => i.Has(buff));
+            return Buffs.ContainsKey(buff);
         }
 
         public bool HasDebuff(string debuff)
@@ -101,38 +103,28 @@ namespace Darkages.Types
             if (Debuffs == null || Debuffs.Count == 0)
                 return false;
 
-            return Debuffs.Any(i => i.Has(debuff));
+            return Debuffs.ContainsKey(debuff);
         }
 
         public bool RemoveBuff(string buff)
         {
             if (HasBuff(buff))
             {
-                var idx = Buffs.FindIndex(i => i.Has(buff));
-                var buffobj = Buffs[idx];
-
-                lock (Buffs)
-                {
-                    buffobj.OnEnded(this, buffobj);
-                }
+                var buffobj = Buffs[buff];
+                buffobj?.OnEnded(this, buffobj);
 
                 return true;
             }
 
             return false;
         }
-
+    
         public bool RemoveDebuff(string debuff)
         {
             if (HasDebuff(debuff))
             {
-                var idx = Debuffs.FindIndex(i => i.Has(debuff));
-                var buffobj = Debuffs[idx];
-
-                lock (Debuffs)
-                {
-                    buffobj.OnEnded(this, buffobj);
-                }
+                var buffobj = Debuffs[debuff];
+                buffobj?.OnEnded(this, buffobj);
 
                 return true;
             }
@@ -142,14 +134,14 @@ namespace Darkages.Types
 
         public void RemoveAllBuffs()
         {
-            for (var i = 0; i < Buffs.Count; i++)
-                RemoveBuff(Buffs[i].Name);
+            foreach (var buff in Buffs)
+                RemoveBuff(buff.Key);
         }
 
         public void RemoveAllDebuffs()
         {
-            for (var i = 0; i < Debuffs.Count; i++)
-                RemoveDebuff(Debuffs[i].Name);
+            foreach (var debuff in Debuffs)
+                RemoveDebuff(debuff.Key);
         }
 
         public void RemoveBuffsAndDebuffs()
@@ -174,6 +166,16 @@ namespace Darkages.Types
             byte sound = 1,
             Action<int> dmgcb = null)
         {
+            if (!this.WithinRangeOf(Source))
+                return;
+
+            if (!(this is Aisling))
+            {
+                if (AislingsNearby().Length == 0)
+                    return;
+            }
+
+
             if (!Attackable)
                 return;
 
@@ -243,7 +245,9 @@ namespace Darkages.Types
                     var amplifier = 1.00;
 
                     amplifier = CalcaluteElementalAmplifier(Source.OffenseElement, amplifier);
-                    amplifier *= Amplified == 1 ? 3.50 : 1.00;
+                    amplifier *= 
+                          Amplified == 1 ? ServerContext.Config.FasNadurStrength    :
+                          Amplified == 2 ? ServerContext.Config.MorFasNadurStrength : 1.00;
 
                     dmg = ComputeDmgFromAc(dmg);
                     dmg = CompleteDamageApplication(dmg, sound, dmgcb, amplifier);
@@ -339,13 +343,6 @@ namespace Darkages.Types
             if (CurrentHp < 0)
                 CurrentHp = 0;
 
-            if (this is Aisling)
-            {
-                (this as Aisling).Client.Say(dealth.ToString(), 0);
-            }
-
-            dmgcb?.Invoke(dealth);
-
             var hpbar = new ServerFormat13
             {
                 Serial = Serial,
@@ -354,6 +351,9 @@ namespace Darkages.Types
             };
 
             Show(Scope.NearbyAislings, hpbar);
+            {
+                dmgcb?.Invoke(dealth);
+            }
             return dmg;
         }
 
@@ -551,8 +551,6 @@ namespace Darkages.Types
 
             var accumulator = Math.Abs(hi) + Math.Abs(lo) / 10;
             dmg = dmg * accumulator / 100;
-
-            Console.WriteLine(dmg + " " + before);
 
             return dmg;
         }
@@ -833,7 +831,7 @@ namespace Darkages.Types
 
             lock (Buffs)
             {
-                buff_Copy = new List<Buff>(Buffs).ToArray();
+                buff_Copy = new List<Buff>(Buffs.Values).ToArray();
             }
 
             for (var i = 0; i < buff_Copy.Length; i++)
@@ -846,7 +844,7 @@ namespace Darkages.Types
 
             lock (Debuffs)
             {
-                debuff_Copy = new List<Debuff>(Debuffs).ToArray();
+                debuff_Copy = new List<Debuff>(Debuffs.Values).ToArray();
             }
 
             for (var i = 0; i < debuff_Copy.Length; i++)
@@ -984,6 +982,8 @@ namespace Darkages.Types
             var savedX = X;
             var savedY = Y;
 
+
+
             if (Direction == 0)
             {
                 if (Map.IsWall(this, X, Y - 1))
@@ -1092,6 +1092,21 @@ namespace Darkages.Types
             X = X.Clamp(X, Map.Cols - 1);
             Y = Y.Clamp(Y, Map.Rows - 1);
 
+
+            if (Content != TileContent.Aisling)
+            {
+                var obj = AislingsNearby().OrderBy(i => 
+                    Position.DistanceFrom(i.Position))
+                    .FirstOrDefault();
+
+                if (obj != null)
+                {
+                    if (obj.X == X && obj.Y == Y || savedX == X && savedY == Y)
+                        return false;
+
+                }
+            }
+
             CompleteWalk(savedX, savedY);
             ServerContext.Game.ObjectPulseController?.OnObjectUpdate(this);
 
@@ -1174,8 +1189,6 @@ namespace Darkages.Types
 
         public byte _Dex { get; set; }
 
-        public sbyte _Ac { get; set; }
-
         public byte _Mr { get; set; }
 
         public byte _Dmg { get; set; }
@@ -1192,7 +1205,7 @@ namespace Darkages.Types
 
         [JsonIgnore] public byte Dex => (byte) (_Dex + BonusDex);
 
-        [JsonIgnore] public byte Ac => (byte) (_Ac + BonusAc);
+        [JsonIgnore] public int  Ac => BonusAc;
 
         [JsonIgnore] public byte Mr => (byte) (_Mr + BonusMr);
 
@@ -1212,7 +1225,7 @@ namespace Darkages.Types
 
         [JsonIgnore] public byte BonusMr { get; set; }
 
-        [JsonIgnore] public sbyte BonusAc { get; set; }
+        [JsonIgnore] public int BonusAc { get; set; }
 
         [JsonIgnore] public byte BonusHit { get; set; }
 

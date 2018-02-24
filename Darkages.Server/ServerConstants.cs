@@ -391,6 +391,10 @@ namespace Darkages
 
         [JsonProperty] public string NoManaMessage = "Your will is too weak.";
 
+        [JsonProperty] public double FasNadurStrength = 3.00;
+
+        [JsonProperty] public double MorFasNadurStrength = 4.50;
+
         public override string ToString()
         {
             return StorageManager.Save(this)

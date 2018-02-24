@@ -56,7 +56,7 @@ namespace Darkages.Storage.locales.Scripts.Skills
                     target.RemoveDebuff("sleep");
                     target.RemoveDebuff("frozen");
 
-                    if (target.Debuffs.FirstOrDefault(n => n.Name == debuff.Name) == null)
+                    if (!target.HasDebuff(debuff.Name))
                     {
                         Apply(client, debuff, target);
                         return;
@@ -107,7 +107,7 @@ namespace Darkages.Storage.locales.Scripts.Skills
                 {
                     var debuff = Clone(Skill.Template.Debuff);
 
-                    if (target.Debuffs.FirstOrDefault(n => n.Name == debuff.Name) == null)
+                    if (!target.HasDebuff(debuff.Name))
                         Apply((target as Aisling)?.Client, debuff, target);
                 }
             }

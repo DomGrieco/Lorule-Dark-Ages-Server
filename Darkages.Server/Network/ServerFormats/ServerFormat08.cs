@@ -85,7 +85,7 @@ namespace Darkages.Network.ServerFormats
                 writer.Write((byte) Aisling.DefenseElement); // element def
                 writer.Write((byte) (Aisling.Mr / 10));
                 writer.Write(byte.MinValue);
-                writer.Write(Aisling.Ac);
+                writer.Write((sbyte)Aisling.Ac);
                 writer.Write(Aisling.Dmg);
                 writer.Write(Aisling.Hit);
             }

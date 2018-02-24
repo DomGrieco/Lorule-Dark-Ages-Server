@@ -42,7 +42,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
 
                 if (curses.Count == 0)
                 {
-                    if (target.Debuffs.FirstOrDefault(i => i.Name == debuff.Name) == null)
+                    if (!target.HasDebuff(debuff.Name))
                     {
                         debuff.OnApplied(target, debuff);
 
@@ -66,7 +66,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
                         {
                             Serial = client.Aisling.Serial,
                             Health = 255,
-                            Sound = 8
+                            Sound = 27
                         };
 
                         client.Aisling.Show(Scope.NearbyAislings, action);
@@ -86,7 +86,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
                 var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
 
                 if (curses.Count == 0)
-                    if (target.Debuffs.FirstOrDefault(i => i.Name == debuff.Name) == null)
+                    if (!target.HasDebuff(debuff.Name))
                     {
                         debuff.OnApplied(target, debuff);
 

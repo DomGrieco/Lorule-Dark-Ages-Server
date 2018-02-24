@@ -44,7 +44,6 @@ namespace Darkages
 
                 DestinationMap = ServerContext.Config.TransitionZone;
                 var targetMap = ServerContext.GlobalMapCache[DestinationMap];
-                client.Aisling.Map = targetMap;
                 client.Aisling.X = X >= 0 ? X : ServerContext.Config.TransitionPointX;
                 client.Aisling.Y = Y >= 0 ? Y : ServerContext.Config.TransitionPointY;
                 client.Aisling.AreaID = DestinationMap;
@@ -61,7 +60,6 @@ namespace Darkages
                 if (client.Aisling.AreaID != DestinationMap)
                 {
                     client.LeaveArea(true, false);
-                    client.Aisling.Map = targetMap;
                     client.Aisling.X = X >= 0 ? X : ServerContext.Config.TransitionPointX;
                     client.Aisling.Y = Y >= 0 ? Y : ServerContext.Config.TransitionPointY;
                     client.Aisling.AreaID = DestinationMap;

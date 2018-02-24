@@ -77,32 +77,40 @@ namespace Darkages.Storage.locales.Scripts.Spells
                 var action = new ServerFormat1A
                 {
                     Serial = sprite.Serial,
-                    Number = 1,
+                    Number = 80,
                     Speed = 30
                 };
 
-                foreach (var s in sprite.AislingsNearby())
+                var nearby = target.GetObjects(i => i.CurrentMapId == sprite.CurrentMapId && 
+                                    i.CurrentHp != i.MaximumHp, Get.Aislings);
+
+                if (nearby.Length > 0)
                 {
-                    if (s == null || !s.LoggedIn)
-                        continue;
-
-                    if (s.CurrentHp >= s.MaximumHp || s.Target != null)
-                        continue;
-
-                    s.CurrentHp = s.MaximumHp;
-
-                    var hpbar = new ServerFormat13
+                    foreach (var s in nearby)
                     {
-                        Serial = s.Serial,
-                        Health = (ushort)(100 * s.CurrentHp / s.MaximumHp),
-                        Sound = 8
-                    };
+                        target = s;
 
-                    s.SendAnimation(0x04, s, sprite);
-                    s.Show(Scope.NearbyAislings, hpbar);
-                    s.Client.SendStats(StatusFlags.StructB);
+                        target.CurrentHp += (200 * ((Spell.Level + sprite.Wis) + 26));
+                        if (target.CurrentHp > target.MaximumHp)
+                            target.CurrentHp = target.MaximumHp;
+
+                        var hpbar = new ServerFormat13
+                        {
+                            Serial = target.Serial,
+                            Health = (ushort)(100 * target.CurrentHp / target.MaximumHp),
+                            Sound = 8
+                        };
+
+                        target.Show(Scope.NearbyAislings, hpbar);
+                        sprite.Show(Scope.NearbyAislings, action);
+                        target.SendAnimation(4, target, sprite);
+
+                        if (target is Aisling)
+                        {
+                            (target as Aisling).Client.SendStats(StatusFlags.StructB);
+                        }
+                    }
                 }
-                sprite.Show(Scope.NearbyAislings, action);
             }
         }
     }

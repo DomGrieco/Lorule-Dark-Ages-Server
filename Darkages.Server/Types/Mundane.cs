@@ -58,8 +58,8 @@ namespace Darkages.Types
             npc.CurrentMp = npc.Template.MaximumMp;
             npc.Direction = npc.Template.Direction;
             npc._Int = 255;
+            npc.CurrentMapId = npc.Template.AreaID;
 
-            npc.Map = ServerContext.GlobalMapCache[npc.CurrentMapId];
             npc.Script = ScriptManager.Load<MundaneScript>(template.ScriptKey, ServerContext.Game, npc);
 
             npc.Template.AttackTimer = new GameServerTimer(TimeSpan.FromMilliseconds(450));

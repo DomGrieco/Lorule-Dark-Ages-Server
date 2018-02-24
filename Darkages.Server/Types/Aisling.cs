@@ -20,8 +20,10 @@ namespace Darkages
         [JsonIgnore]
         public bool HadDeathExperience { get; set; }
 
+        [JsonIgnore]
         public CursedSachel Remains { get; set; }
 
+        [JsonIgnore]
         public List<Sprite> ViewableObjects
         {
             get
@@ -142,8 +144,10 @@ namespace Darkages
 
         [JsonIgnore] public List<Aisling> PartyMembers => GroupParty?.Members;
 
-
+        [JsonIgnore]
         public PortalSession PortalSession { get; set; }
+
+        [JsonIgnore]
         public Position LastPosition { get; set; }
 
         [JsonIgnore]
@@ -178,7 +182,6 @@ namespace Darkages
                 var targetMap = ServerContext.GlobalMapCache[DestinationMap];
 
                 Client.LeaveArea(true, false);
-                Client.Aisling.Map = targetMap;
                 Client.Aisling.X = ServerContext.Config.TransitionPointX;
                 Client.Aisling.Y = ServerContext.Config.TransitionPointY;
                 Client.Aisling.AreaID = DestinationMap;
@@ -280,12 +283,11 @@ namespace Darkages
                 CurrentMp = 30,
                 _MaximumHp = 60,
                 _MaximumMp = 30,
-                _Ac = ServerContext.Config.BaseAC,
                 _Str = 3,
                 _Int = 3,
                 _Wis = 3,
                 _Con = 3,
-                _Dex = 3,
+                _Dex = 3,                
 
                 GamePoints = 0,
                 GoldPoints = 1000,
@@ -361,9 +363,6 @@ namespace Darkages
                 });
             }
 
-            if (ServerContext.GlobalMapCache.ContainsKey(result.AreaID))
-                result.Map = ServerContext.GlobalMapCache[result.AreaID];
-
             return result;
         }
 
@@ -373,11 +372,26 @@ namespace Darkages
         /// </summary>
         public void Remove(bool update = false, bool delete = true)
         {
-            if (Map != null) Map.Update(X, Y, TileContent.None);
+            if (Map != null)
+            {
+                Map.Update(X, Y, TileContent.None);
+                ServerContext.GlobalMapCache[Map.ID].Update(X, Y, TileContent.None);
+            }
 
-            if (update) Show(Scope.NearbyAislingsExludingSelf, new ServerFormat0E(Serial));
+            if (update)
+                Show(Scope.NearbyAislingsExludingSelf, new ServerFormat0E(Serial));
 
-            if (delete) DelObject(this);
+            try
+            {
+                var objs = GetObjects(i => i.WithinRangeOf(this) && i.Target != null && i.Target.Serial == Serial, Get.Monsters | Get.Mundanes);
+                for (int i = 0; i < objs.Length; i++)
+                    objs[i].Target = null;
+            }
+            finally
+            {
+                if (delete)
+                    DelObject(this);
+            }
         }
 
         public bool HasSkill<T>(SkillScope scope) where T : Template, new()

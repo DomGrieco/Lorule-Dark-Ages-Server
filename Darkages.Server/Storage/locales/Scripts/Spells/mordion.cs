@@ -33,7 +33,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
 
                 client.TrainSpell(Spell);
 
-                if (sprite.Buffs.FirstOrDefault(i => i.Name == buff.Name) == null)
+                if (!sprite.HasBuff(buff.Name))
                 {
                     buff.OnApplied(sprite, buff);
 
@@ -89,7 +89,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
             {
                 var buff = Clone(Spell.Template.Buff);
 
-                if (sprite.Buffs.FirstOrDefault(i => i.Name == buff.Name) == null)
+                if (!sprite.HasBuff(buff.Name))
                 {
                     buff.OnApplied(sprite, buff);
                     target.SendAnimation(244, sprite, sprite);

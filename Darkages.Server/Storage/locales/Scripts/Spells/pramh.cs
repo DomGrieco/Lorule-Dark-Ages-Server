@@ -48,7 +48,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
 
                 target.RemoveDebuff("frozen");
 
-                if (target.Debuffs.FirstOrDefault(i => i.Name == debuff.Name) == null)
+                if (!target.HasDebuff(debuff.Name))
                 {
                     debuff.OnApplied(target, debuff);
 
@@ -90,7 +90,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
                 var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
 
                 if (curses.Count == 0)
-                    if (target.Debuffs.FirstOrDefault(i => i.Name == debuff.Name) == null)
+                    if (!target.HasDebuff(debuff.Name))
                     {
                         debuff.OnApplied(target, debuff);
 

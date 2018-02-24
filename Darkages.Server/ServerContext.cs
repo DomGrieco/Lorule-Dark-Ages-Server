@@ -314,6 +314,23 @@ namespace Darkages
 
             GlobalSpellTemplateCache["fas nadur"] = spell2;
 
+            var spell3 = new SpellTemplate();
+            spell3.Name = "mor fas nadur";
+            spell3.LevelRate = 0.01;
+            spell3.ManaCost = 10;
+            spell3.Icon = 119;
+            spell3.MaxLevel = 70;
+            spell3.Pane = Pane.Spells;
+            spell3.Sound = 20;
+            spell3.Animation = 126;
+            spell3.ScriptKey = "mor fas nadur";
+            spell3.TargetType = SpellTemplate.SpellUseType.ChooseTarget;
+            spell3.TierLevel = Tier.Tier1;
+            spell3.BaseLines = 4;
+            spell3.Debuff = new debuff_morfasnadur();
+
+            GlobalSpellTemplateCache["mor fas nadur"] = spell3;
+
             var npc = new MundaneTemplate();
             npc.Name = "Sage Master";
             npc.ScriptKey = "welcome aisling";
@@ -363,7 +380,7 @@ namespace Darkages
 
 
             var npc3 = new MundaneTemplate();
-            npc3.Name = "Priest";
+            npc3.Name = "Ascended Priest";
             npc3.ScriptKey = "welcome aisling";
             npc3.X = 38;
             npc3.Y = 19;
@@ -376,8 +393,8 @@ namespace Darkages
             npc3.EnableWalking = false;
             npc3.EnableTurning = true;
             npc3.EnableCasting = true;
-            npc3.Spells = new List<string>() { "beag ioc", "cradh", "final destination" };
-            GlobalMundaneTemplateCache["Priest"] = npc3;
+            npc3.Spells = new List<string>() { "beag ioc", "armachd", "beag ioc", "mor strioch pian gar" };
+            GlobalMundaneTemplateCache["Ascended Priest"] = npc3;
 
             
 

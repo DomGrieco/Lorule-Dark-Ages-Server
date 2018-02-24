@@ -243,8 +243,8 @@ namespace Darkages.Types
 
                 if (client.Aisling.BonusAc < -70)
                     client.Aisling.BonusAc = -70;
-                if (client.Aisling.BonusAc > 70)
-                    client.Aisling.BonusAc = 70;
+                if (client.Aisling.BonusAc > 140)
+                    client.Aisling.BonusAc = 140;
 
 
                 client.SendMessage(0x03, string.Format("E: {0}, AC: {1}", Template.Name, client.Aisling.Ac));
@@ -430,8 +430,8 @@ namespace Darkages.Types
 
                 if (client.Aisling.BonusAc < -70)
                     client.Aisling.BonusAc = -70;
-                if (client.Aisling.BonusAc > 70)
-                    client.Aisling.BonusAc = 70;
+                if (client.Aisling.BonusAc > 140)
+                    client.Aisling.BonusAc = 140;
 
                 client.SendMessage(0x03, string.Format("E: {0}, AC: {1}", Template.Name, client.Aisling.Ac));
                 client.SendStats(StatusFlags.StructD);
@@ -669,7 +669,6 @@ namespace Darkages.Types
             };
 
             obj.AuthenticatedAislings = null;
-            obj.Map = Owner.Map;
 
             if (obj.Color == 0)
                 obj.Color = (byte)ServerContext.Config.DefaultItemColor;
@@ -802,7 +801,6 @@ namespace Darkages.Types
                 Cursed = false;
             }
 
-            Map = owner.Map;
             AddObject(this);
 
             if (owner is Aisling)

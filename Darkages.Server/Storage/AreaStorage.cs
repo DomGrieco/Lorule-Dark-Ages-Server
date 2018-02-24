@@ -51,6 +51,10 @@ namespace Darkages.Storage
             foreach (var area in area_names)
             {
                 var mapObj = StorageManager.AreaBucket.Load(Path.GetFileNameWithoutExtension(area));
+
+                if (mapObj == null)
+                    continue;
+
                 var mapFile = Directory.GetFiles($@"{ServerContext.StoragePath}\maps", $"lod{mapObj.Number}.map",
                     SearchOption.TopDirectoryOnly).FirstOrDefault();
 
@@ -58,12 +62,11 @@ namespace Darkages.Storage
                 {
                     mapObj.Data = File.ReadAllBytes(mapFile);
                     mapObj.Hash = Crc16Provider.ComputeChecksum(mapObj.Data);
-                    StorageManager.AreaBucket.Save(mapObj);
+                    {
+                        StorageManager.AreaBucket.Save(mapObj);
+                    }
 
-                    //mapObj.Script = ScriptManager.Load<MapScript>(mapObj.ScriptKey, mapObj);
                     mapObj.OnLoaded();
-
-
                     ServerContext.GlobalMapCache[mapObj.Number] = mapObj;
                 }
             }

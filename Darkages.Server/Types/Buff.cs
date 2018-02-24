@@ -29,9 +29,10 @@ namespace Darkages.Types
 
         public virtual void OnApplied(Sprite Affected, Buff buff)
         {
-            Display(Affected);
-
-            Affected.Buffs.Add(buff);
+            if (Affected.Buffs.TryAdd(buff.Name, buff))
+            {
+                Display(Affected);
+            }
         }
 
         public void Display(Sprite Affected)
@@ -64,12 +65,13 @@ namespace Darkages.Types
 
         public virtual void OnEnded(Sprite Affected, Buff buff)
         {
-            if (Affected is Aisling)
-                (Affected as Aisling)
-                    .Client
-                    .Send(new ServerFormat3A(Icon, byte.MinValue));
-
-            Affected.Buffs.Remove(buff);
+            if (Affected.Buffs.TryRemove(buff.Name, out var removed))
+            {
+                if (Affected is Aisling)
+                    (Affected as Aisling)
+                        .Client
+                        .Send(new ServerFormat3A(Icon, byte.MinValue));
+            }
         }
 
         internal void Update(Sprite Affected, TimeSpan elapsedTime)

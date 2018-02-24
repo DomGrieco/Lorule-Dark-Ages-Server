@@ -12,8 +12,7 @@
         public override void Serialize(NetworkPacketReader reader)
         {
             Type = reader.ReadByte();
-
-            if (Type == 0x00)
+            if (reader.CanRead)
                 Slot = reader.ReadByte();
         }
 

@@ -220,6 +220,10 @@ namespace Darkages.Network
                     //ignore   
                 }
             }
+            else
+            {
+                Console.WriteLine("Unknown Packet: {0}", packet.ToString());
+            }
         }
 
         public virtual void ClientDisconnected(TClient client)

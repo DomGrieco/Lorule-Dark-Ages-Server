@@ -356,7 +356,6 @@ namespace Darkages.Types
 
             var obj = new Monster();
             obj.Template = template;
-            obj.Map = map;
             obj.CastTimer = new GameServerTimer(TimeSpan.FromMilliseconds(template.CastSpeed));
             obj.BashTimer = new GameServerTimer(TimeSpan.FromMilliseconds(template.AttackSpeed));
             obj.WalkTimer = new GameServerTimer(TimeSpan.FromMilliseconds(template.MovementSpeed));
@@ -371,8 +370,8 @@ namespace Darkages.Types
 
 
             //=E4 / 0.1 * E6 
-            obj.Template.MaximumHP = (int)(obj.Template.Level / 0.1 * 3);
-            obj.Template.MaximumMP = (int)(obj.Template.Level / 0.1 * 2);
+            obj.Template.MaximumHP = (int)(obj.Template.Level / 0.1 * 35);
+            obj.Template.MaximumMP = (int)(obj.Template.Level / 0.1 * 25);
 
             //calculate what ac to give depending on level.
             obj.BonusAc = (sbyte)(70 - 101 / 70 * template.Level);

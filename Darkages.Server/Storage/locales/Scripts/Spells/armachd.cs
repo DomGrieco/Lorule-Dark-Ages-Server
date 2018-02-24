@@ -32,7 +32,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
 
                 var buff = Clone(Spell.Template.Buff);
 
-                if (target.Buffs.FirstOrDefault(i => i.Name.Equals(buff.Name, StringComparison.OrdinalIgnoreCase)) == null)
+                if (!target.HasBuff(buff.Name))
                 {
                     buff.OnApplied(target, buff);
 
@@ -100,8 +100,9 @@ namespace Darkages.Storage.locales.Scripts.Spells
             {
                 var buff = Clone(Spell.Template.Buff);
 
-                if (sprite.Buffs.FirstOrDefault(i => i.Name == buff.Name) == null)
+                if (!sprite.HasBuff(buff.Name))
                 {
+
                     buff.OnApplied(sprite, buff);
                     sprite.SendAnimation(Spell.Template.Animation, sprite, sprite);
                 }

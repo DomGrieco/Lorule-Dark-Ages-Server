@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using Darkages.Network.ClientFormats;
 using Darkages.Network.ServerFormats;
@@ -29,13 +30,6 @@ namespace Darkages.Network.Login
                 client.Send(new ServerFormat00
                 {
                     Type = 0x00,
-                    Hash = MServerTable.Hash,
-                    Parameters = client.Encryption.Parameters
-                });
-            else
-                client.Send(new ServerFormat00
-                {
-                    Type = 0x01,
                     Hash = MServerTable.Hash,
                     Parameters = client.Encryption.Parameters
                 });
@@ -207,6 +201,11 @@ namespace Darkages.Network.Login
             });
         }
 
+        protected override void Format66Handler(LoginClient client, ClientFormat66 format)
+        {
+
+        }
+
         protected override void Format57Handler(LoginClient client, ClientFormat57 format)
         {
             if (format.Type == 0x00)
@@ -223,17 +222,18 @@ namespace Darkages.Network.Login
 
                 client.Send(new ServerFormat03
                 {
-                    EndPoint = new IPEndPoint(Address, 2610),
+                    EndPoint = new IPEndPoint(MServerTable.Servers[0].Address, MServerTable.Servers[0].Port),
                     Redirect = redirect
                 });
             }
-
-            //if (format.Type == 0x00)
-            //    client.Send(new ServerFormat56
-            //    {
-            //        Size = MServerTable.Size,
-            //        Data = MServerTable.Data,                    
-            //    });
+            else
+            {
+                client.Send(new ServerFormat56
+                {
+                    Size = MServerTable.Size,
+                    Data = MServerTable.Data,
+                });
+            }
         }
 
         protected override void Format68Handler(LoginClient client, ClientFormat68 format)

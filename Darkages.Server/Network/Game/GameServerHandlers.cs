@@ -119,11 +119,9 @@ namespace Darkages.Network.Game
             client.Aisling.Client = client;
             client.Aisling.LoggedIn = false;
             client.Aisling.LastLogged = new DateTime();
-            client.Aisling.Map = ServerContext.GlobalMapCache[client.Aisling.AreaID];
             client.Aisling.CurrentMapId = client.Aisling.Map.ID;
             client.Aisling.Client.ShouldUpdateMap = true;
             client.Aisling.AreaID = client.Aisling.CurrentMapId;
-            client.Aisling._Ac = ServerContext.Config.BaseAC;
             client.Aisling.EquipmentManager.Client = client;
             client.Aisling.CurrentWeight = 0;
             client.Aisling.MaximumWeight = (int)(client.Aisling._Str * ServerContext.Config.WeightIncreaseModifer);

@@ -2,6 +2,7 @@
 using Darkages.Network.ServerFormats;
 using Darkages.Scripting;
 using Darkages.Storage;
+using Darkages.Storage.locales.debuffs;
 using Darkages.Storage.locales.Scripts.Global;
 using Darkages.Types;
 using System;
@@ -185,7 +186,6 @@ namespace Darkages.Network.Game
                 return;
 
             LeaveArea(true);
-            Aisling.Map = area;
             Aisling.X = position.X;
             Aisling.Y = position.Y;
             Aisling.CurrentMapId = area.ID;
@@ -289,11 +289,8 @@ namespace Darkages.Network.Game
             }
 
 
-            if (!HpRegenTimer.Disabled)
-                HpRegenTimer.Update(elapsedTime);
-
-            if (!MpRegenTimer.Disabled)
-                MpRegenTimer.Update(elapsedTime);
+            HpRegenTimer.Update(elapsedTime);
+            MpRegenTimer.Update(elapsedTime);
 
             #region Hp Regen
 
@@ -301,14 +298,18 @@ namespace Darkages.Network.Game
             {
                 HpRegenTimer.Reset();
 
-                if (Aisling.CurrentHp < Aisling.MaximumHp)
+                if (!HpRegenTimer.Disabled && Aisling.LoggedIn)
                 {
-                    hpChanged = true;
+                    if (Aisling.CurrentHp < Aisling.MaximumHp)
+                    {
+                        hpChanged = true;
 
-                    var hpRegenSeed = (Aisling.Con - Aisling.ExpLevel).Clamp(0, 10) * 0.01;
-                    var hpRegenAmount = Aisling.MaximumHp * (hpRegenSeed + 0.10);
+                        var hpRegenSeed   =  (Math.Abs(Aisling.Con - Aisling.ExpLevel)).Clamp(0, 10) * 0.01;
+                        var hpRegenAmount = Aisling.MaximumHp * (hpRegenSeed + 0.10);
 
-                    Aisling.CurrentHp = (Aisling.CurrentHp + (int) hpRegenAmount).Clamp(0, Aisling.MaximumHp);
+
+                        Aisling.CurrentHp = (Aisling.CurrentHp + (int)hpRegenAmount).Clamp(0, Aisling.MaximumHp);
+                    }
                 }
             }
 
@@ -319,21 +320,23 @@ namespace Darkages.Network.Game
             if (MpRegenTimer.Elapsed)
             {
                 MpRegenTimer.Reset();
-
-                if (Aisling.CurrentMp < Aisling.MaximumMp)
+                if (!MpRegenTimer.Disabled && Aisling.LoggedIn)
                 {
-                    mpChanged = true;
+                    if (Aisling.CurrentMp < Aisling.MaximumMp)
+                    {
+                        mpChanged = true;
 
-                    var mpRegenSeed = (Aisling.Wis - Aisling.ExpLevel).Clamp(0, 10) * 0.01;
-                    var mpRegenAmount = Aisling.MaximumMp * (mpRegenSeed + 0.10);
+                        var mpRegenSeed    = (Math.Abs(Aisling.Wis - Aisling.ExpLevel)).Clamp(0, 10) * 0.01;
+                        var mpRegenAmount  = Aisling.MaximumMp * (mpRegenSeed + 0.10);
 
-                    Aisling.CurrentMp = (Aisling.CurrentMp + (int) mpRegenAmount).Clamp(0, Aisling.MaximumMp);
+                        Aisling.CurrentMp  = (Aisling.CurrentMp + (int)mpRegenAmount).Clamp(0, Aisling.MaximumMp);
+                    }
                 }
             }
 
             #endregion
 
-            if (!IsDead() && Aisling?.CurrentHp > 0)
+            if (!IsDead())
             {
                 if (!Aisling.LoggedIn)
                     return;
@@ -345,10 +348,12 @@ namespace Darkages.Network.Game
 
         public bool Load()
         {
+            LastSave = DateTime.UtcNow;
             LastPingResponse = DateTime.UtcNow;
             BoardOpened = DateTime.UtcNow;
             Aisling.PortalSession = null;
             Aisling.LastMapId = short.MaxValue;
+            Aisling.BonusAc = ServerContext.Config.BaseAC;
 
             if (Aisling == null || Aisling.AreaID == 0)
                 return false;
@@ -383,8 +388,8 @@ namespace Darkages.Network.Game
 
         private void SetupRegenTimers()
         {
-            var HpregenRate = 200 / Aisling.Con * ServerContext.Config.RegenRate * 100 / 100 * 1000;
-            var MpregenRate = 200 / Aisling.Wis * ServerContext.Config.RegenRate * 100 / 100 * 1000;
+            var HpregenRate = Aisling.Con * ServerContext.Config.RegenRate * 100 / 100 * 1000;
+            var MpregenRate = Aisling.Wis * ServerContext.Config.RegenRate * 100 / 100 * 1000;
 
             HpRegenTimer = new GameServerTimer(
                 TimeSpan.FromMilliseconds(1000 + HpregenRate));
@@ -394,11 +399,21 @@ namespace Darkages.Network.Game
 
         private void InitSpellBar()
         {
-            for (var i = 0; i < Aisling.Buffs.Count; i++)
-                Aisling.Buffs[i].Display(Aisling);
+            foreach (var buff in Aisling.Buffs.Select(i => i.Value))
+            {
+                buff.OnApplied(Aisling, buff);
+                {
+                    buff.Display(Aisling);
+                }
+            }
 
-            for (var i = 0; i < Aisling.Debuffs.Count; i++)
-                Aisling.Debuffs[i].Display(Aisling);
+            foreach (var debuff in Aisling.Debuffs.Select(i => i.Value))
+            {
+                debuff.OnApplied(Aisling, debuff);
+                {
+                    debuff.Display(Aisling);
+                }
+            }
         }
 
         private void LoadEquipment()
@@ -412,9 +427,7 @@ namespace Darkages.Network.Game
                 if (equipment == null || equipment.Item == null || equipment.Item.Template == null)
                     continue;
 
-
-                equipment.Item.Script =
-                    ScriptManager.Load<ItemScript>(equipment.Item.Template.ScriptName, equipment.Item);
+                equipment.Item.Script = ScriptManager.Load<ItemScript>(equipment.Item.Template.ScriptName, equipment.Item);
                 equipment.Item.Script?.Equipped(Aisling, (byte) equipment.Slot);
 
                 if (Aisling.CurrentWeight <= Aisling.MaximumWeight)

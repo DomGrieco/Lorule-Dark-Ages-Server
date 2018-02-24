@@ -188,7 +188,7 @@ namespace Darkages.Network.Game.Components
         private void MonsterMediator(Area area = null)
         {
             var objects = area != null
-                ? GetObjects(n => n != null && n.CurrentMapId == area.ID, Get.Monsters)
+                ? GetObjects(n => n != null && n.CurrentMapId == area.ID && n.CurrentHp == 0, Get.Monsters)
                 : GetObjects(n => n != null, Get.Monsters);
 
             if (objects != null)
