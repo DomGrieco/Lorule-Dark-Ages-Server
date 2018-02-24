@@ -9,6 +9,7 @@ using Darkages.Network.Game;
 using Darkages.Network.Login;
 using Darkages.Network.Object;
 using Darkages.Storage;
+using Darkages.Storage.locales.debuffs;
 using Darkages.Types;
 
 namespace Darkages
@@ -243,7 +244,7 @@ namespace Darkages
 
             var w = new WarpTemplate();
             w.WarpType = WarpType.Map;
-            w.LevelRequired = 3;
+            w.LevelRequired = 1;
             w.Name = "To Lost Wilderness";
             w.To = new Warp()
             {
@@ -296,6 +297,22 @@ namespace Darkages
 
             GlobalSpellTemplateCache["beag ioc"] = spell;
 
+            var spell2 = new SpellTemplate();
+            spell2.Name = "fas nadur";
+            spell2.LevelRate = 0.01;
+            spell2.ManaCost = 10;
+            spell2.Icon = 119;
+            spell2.MaxLevel = 70;
+            spell2.Pane = Pane.Spells;
+            spell2.Sound = 20;
+            spell2.Animation = 126;
+            spell2.ScriptKey = "fas nadur";
+            spell2.TargetType = SpellTemplate.SpellUseType.ChooseTarget;
+            spell2.TierLevel = Tier.Tier1;
+            spell2.BaseLines = 4;
+            spell2.Debuff = new debuff_fasnadur();
+
+            GlobalSpellTemplateCache["fas nadur"] = spell2;
 
             var npc = new MundaneTemplate();
             npc.Name = "Sage Master";

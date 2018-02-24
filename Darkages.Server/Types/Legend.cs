@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Darkages.Types
 {
@@ -8,7 +9,10 @@ namespace Darkages.Types
 
         public void AddLegend(LegendItem legend)
         {
-            if (!LegendMarks.Contains(legend)) LegendMarks.Add(legend);
+            if (!LegendMarks.Contains(legend))
+            {
+                LegendMarks.Add(legend);
+            }
         }
 
         public void Remove(LegendItem legend)

@@ -60,14 +60,20 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
                 Spell.GiveTo(client.Aisling, "deo saighead");
                 Spell.GiveTo(client.Aisling, "deo saighead lamh");
             }
+            if (client.Aisling.Path == Class.Wizard)
+            {
+                Spell.GiveTo(client.Aisling, "fas nadur");
+                Spell.GiveTo(client.Aisling, "beag srad");
+                Spell.GiveTo(client.Aisling, "beag sal");
+                Spell.GiveTo(client.Aisling, "mor strioch pian gar");
+            }
 
             client.Aisling.LegendBook.AddLegend(new Legend.LegendItem
             {
                 Category = "Class",
-                Color = 0x03,
-                Icon = 0x01,
-                Value = string.Format("Walks the path of the {0} - {1}", Convert.ToString(client.Aisling.Path),
-                    DateTime.UtcNow.ToShortDateString())
+                Color = (byte)LegendColor.Blue,
+                Icon = (byte)LegendIcon.Victory,
+                Value = string.Format("Walks the path of the {0} ", Convert.ToString(client.Aisling.Path))
             });
         }
     }

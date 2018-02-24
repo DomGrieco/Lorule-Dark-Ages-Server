@@ -77,12 +77,18 @@ namespace Darkages.Types
             if (slot <= 0)
                 return false;
 
+            if (client.Aisling.SkillBook.Has(skillTemplate))
+                return false;
+
             var skill = Create(slot, skillTemplate);
             skill.Script = ScriptManager.Load<SkillScript>(skill.Template.ScriptName, skill);
-            client.Aisling.SkillBook.Assign(skill);
-            client.Aisling.SkillBook.Set(skill, false);
-            client.Send(new ServerFormat2C(skill.Slot, skill.Icon, skill.Name));
-
+            {
+                skill.Level = 1;
+                client.Aisling.SkillBook.Assign(skill);
+                client.Aisling.SkillBook.Set(skill, false);
+                client.Send(new ServerFormat2C(skill.Slot, skill.Icon, skill.Name));
+                client.Aisling.SendAnimation(22, client.Aisling, client.Aisling);
+            }
             return true;
         }
 
@@ -90,13 +96,15 @@ namespace Darkages.Types
         {
             var skillTemplate = ServerContext.GlobalSkillTemplateCache[args];
             var skill = Create(slot, skillTemplate);
-            skill.Script = ScriptManager.Load<SkillScript>(skill.Template.ScriptName, skill);
-            aisling.SkillBook.Assign(skill);
-
+            {
+                skill.Level = 1;
+                skill.Script = ScriptManager.Load<SkillScript>(skill.Template.ScriptName, skill);
+                aisling.SkillBook.Assign(skill);
+            }
             return true;
         }
 
-        public static bool GiveTo(Aisling aisling, string args)
+        public static bool GiveTo(Aisling aisling, string args, int level = 100)
         {
             var skillTemplate = ServerContext.GlobalSkillTemplateCache[args];
             var slot = aisling.SkillBook.FindEmpty();
@@ -105,7 +113,7 @@ namespace Darkages.Types
                 return false;
 
             var skill = Create(slot, skillTemplate);
-            skill.Level = 1;
+            skill.Level = level;
             skill.Script = ScriptManager.Load<SkillScript>(skill.Template.ScriptName, skill);
             aisling.SkillBook.Assign(skill);
 

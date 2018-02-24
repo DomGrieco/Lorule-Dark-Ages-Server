@@ -114,6 +114,8 @@ namespace Darkages
 
         [JsonIgnore] public bool Invisible => Flags == AislingFlags.Invisible;
 
+        public Dictionary<string, int> MonsterKillCounters = new Dictionary<string, int>();
+
         public byte Blind { get; set; }
 
         public byte HeadAccessory1 { get; set; }
@@ -238,6 +240,16 @@ namespace Darkages
             spell.InUse = false;
         }
 
+        public bool HasKilled(Template templateContext, int number)
+        {
+            if (MonsterKillCounters.ContainsKey(templateContext.Name))
+            {
+                return MonsterKillCounters[templateContext.Name] >= number;
+            }
+
+            return false;
+        }
+
         public static Aisling Create()
         {
             var result = new Aisling
@@ -295,38 +307,40 @@ namespace Darkages
                 Inventory = new Inventory(),
                 EquipmentManager = new EquipmentManager(null),
                 NameColor = 1,
-                BootColor = 0
+                BootColor = 0,
+                Amplified = 0
             };
 
-            Skill.GiveTo(result, "Assail");
-
-            //foreach (var skill in ServerContext.GlobalSkillTemplateCache.Keys)
-            //{
-            //    if (ServerContext.GlobalSkillTemplateCache[skill].Pane == Pane.Tools)
-            //        continue;
-
-            //    Skill.GiveTo(result, skill);
-            //}
-
-
-            //foreach (var skill in ServerContext.GlobalSkillTemplateCache.Keys)
-            //{
-            //    if (ServerContext.GlobalSkillTemplateCache[skill].Pane == Pane.Tools)
-            //    {
-            //        Skill.GiveTo(result, skill, (byte)(72 + idx));
-            //        idx++;
-            //    }
-            //}
-
-            //foreach (var spell in ServerContext.GlobalSpellTemplateCache.Keys)
-            //{
-            //    if (ServerContext.GlobalSpellTemplateCache[spell].Pane == Pane.Tools)
-            //        continue;
-
-            //    Spell.GiveTo(result, spell);
-            //}
+            //Skill.GiveTo(result, "Assail");
 
             int idx = 1;
+            foreach (var skill in ServerContext.GlobalSkillTemplateCache.Keys)
+            {
+                if (ServerContext.GlobalSkillTemplateCache[skill].Pane == Pane.Tools)
+                    continue;
+
+                Skill.GiveTo(result, skill);
+            }
+
+
+            foreach (var skill in ServerContext.GlobalSkillTemplateCache.Keys)
+            {
+                if (ServerContext.GlobalSkillTemplateCache[skill].Pane == Pane.Tools)
+                {
+                    Skill.GiveTo(result, skill, (byte)(72 + idx));
+                    idx++;
+                }
+            }
+
+            foreach (var spell in ServerContext.GlobalSpellTemplateCache.Keys)
+            {
+                if (ServerContext.GlobalSpellTemplateCache[spell].Pane == Pane.Tools)
+                    continue;
+
+                Spell.GiveTo(result, spell);
+            }
+
+            idx = 1;
             foreach (var spell in ServerContext.GlobalSpellTemplateCache.Keys)
             {
                 if (ServerContext.GlobalSpellTemplateCache[spell].Pane == Pane.Tools)
@@ -336,13 +350,16 @@ namespace Darkages
                 }
             }
 
-            result.LegendBook.AddLegend(new Legend.LegendItem
+            if (DateTime.UtcNow.Year <= 2019)
             {
-                Category = "Event",
-                Color = (byte) LegendColor.Green,
-                Icon = (byte) LegendIcon.Victory,
-                Value = string.Format("Lorule: VIP {0}", DateTime.UtcNow.ToShortDateString())
-            });
+                result.LegendBook.AddLegend(new Legend.LegendItem
+                {
+                    Category = "Event",
+                    Color = (byte)LegendColor.Green,
+                    Icon = (byte)LegendIcon.Victory,
+                    Value = string.Format("Aisling Age of Aquarius")
+                });
+            }
 
             if (ServerContext.GlobalMapCache.ContainsKey(result.AreaID))
                 result.Map = ServerContext.GlobalMapCache[result.AreaID];

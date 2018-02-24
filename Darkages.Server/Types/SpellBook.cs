@@ -65,6 +65,21 @@ namespace Darkages.Types
             return copy;
         }
 
+        public bool Has(Spell s)
+        {
+            return Spells.Where(i => i.Value != null).Select(i => i.Value.Template)
+                .FirstOrDefault(i => i.Name.Equals(s.Template.Name)) != null;
+        }
+
+        public bool Has(SpellTemplate s)
+        {
+            var obj = Spells.Where(i => i.Value != null).Select(i => i.Value.Template)
+                .FirstOrDefault(i => i.Name.Equals(s.Name));
+
+            return obj != null;
+        }
+
+
         public int FindEmpty()
         {
             for (var i = 0; i < Length; i++)

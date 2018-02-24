@@ -71,7 +71,7 @@ namespace Darkages.Network.ServerFormats
                 packet.Write(legend.Icon);
                 packet.Write(legend.Color);
                 packet.WriteStringA(legend.Category);
-                packet.WriteStringA(legend.Value);
+                packet.WriteStringA(legend.Value + string.Format(" - {0}", DateTime.UtcNow.ToShortDateString()));
             }
 
             packet.Write((byte) 0x00);

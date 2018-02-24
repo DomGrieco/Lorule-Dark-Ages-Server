@@ -82,10 +82,20 @@ namespace Darkages.Storage.locales.Scripts.Spells
             {
                 if (sprite.CurrentMp - Spell.Template.ManaCost > 0)
                     sprite.CurrentMp -= Spell.Template.ManaCost;
+                else
+                {
+                    if (sprite is Aisling)
+                    {
+                        (sprite as Aisling).Client.SendMessage(0x02, ServerContext.Config.NoManaMessage);
+                    }
+                    return;
+
+                }
 
                 if (sprite.CurrentMp < 0)
+                {
                     sprite.CurrentMp = 0;
-
+                }
                 var targets = GetObjects(i => i.WithinRangeOf(sprite), Get.Aislings | Get.Monsters | Get.Mundanes);
                 var client = (sprite as Aisling).Client;
                 client.TrainSpell(Spell);

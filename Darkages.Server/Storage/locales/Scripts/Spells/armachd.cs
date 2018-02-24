@@ -85,8 +85,14 @@ namespace Darkages.Storage.locales.Scripts.Spells
                 }
                 else
                 {
-                    client.SendMessage(0x02, "your will is to weak.");
+                    if (sprite is Aisling)
+                    {
+                        (sprite as Aisling).Client.SendMessage(0x02, ServerContext.Config.NoManaMessage);
+                    }
+                    return;
+
                 }
+
 
                 client.SendStats(StatusFlags.StructB);
             }

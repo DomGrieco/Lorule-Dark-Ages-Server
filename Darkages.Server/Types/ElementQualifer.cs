@@ -2,10 +2,10 @@
 
 namespace Darkages.Types
 {
-    [Flags]
     public enum ElementQualifer
     {
-        Random = 1,
+        None    = 0,
+        Random  = 1,
         Defined = 2
     }
 }

@@ -268,8 +268,7 @@ namespace Darkages.Network.Game
         private void UpdateGlobalScripts(TimeSpan elapsedTime)
         {
             foreach (var globalscript in GlobalScripts)
-                if (globalscript != null && !(Aisling.Username.ToLower() == "godmode"))
-                    globalscript.Update(elapsedTime);
+                    globalscript?.Update(elapsedTime);
         }
 
         private void Regeneration(TimeSpan elapsedTime)
@@ -379,6 +378,7 @@ namespace Darkages.Network.Game
         private void LoadGlobalScripts()
         {
             GlobalScripts.Add(ScriptManager.Load<GrimReaper>("Grim Reaper", this));
+            GlobalScripts.Add(ScriptManager.Load<Tutorial>("Tutorial", this));
         }
 
         private void SetupRegenTimers()
@@ -600,6 +600,18 @@ namespace Darkages.Network.Game
                 0x19, 0x00, 0xFF,
                 (byte) Aisling.Map.Music
             });
+        }
+
+        public void SendSound(byte sound, Scope scope = Scope.Self)
+        {
+            var empty = new ServerFormat13
+            {
+                Serial = Aisling.Serial,
+                Health = byte.MaxValue,
+                Sound  = sound
+            };
+
+            Aisling.Show(scope, empty);
         }
 
         public void Insert()

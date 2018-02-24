@@ -1,4 +1,6 @@
-﻿namespace Darkages.Network.ServerFormats
+﻿using System;
+
+namespace Darkages.Network.ServerFormats
 {
     public class ServerFormat34 : NetworkFormat
     {
@@ -41,7 +43,7 @@
                 writer.Write(mark.Icon);
                 writer.Write(mark.Color);
                 writer.WriteStringA(mark.Category);
-                writer.WriteStringA(mark.Value);
+                writer.WriteStringA(mark.Value + string.Format(" - {0}", DateTime.UtcNow.ToShortDateString()));
             }
 
             writer.Write((ushort) (Aisling.PictureData.Length + Aisling.ProfileMessage.Length + 4));

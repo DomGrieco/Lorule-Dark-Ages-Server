@@ -88,6 +88,8 @@ namespace Darkages.Types
             if (player.Client.Aisling == null)
                 return;
 
+            UpdateCounters(player);
+
             if (!TestingMode)
             {
                 GenerateExperience(player);
@@ -98,6 +100,16 @@ namespace Darkages.Types
 
             Rewarded = true;
             player.UpdateStats();
+        }
+
+        private void UpdateCounters(Aisling player)
+        {
+            if (!player.MonsterKillCounters.ContainsKey(Template.Name))
+                player.MonsterKillCounters[Template.Name] = 1;
+            else
+            {
+                player.MonsterKillCounters[Template.Name]++;
+            }
         }
 
         private void GenerateExperience(Aisling player)
@@ -114,21 +126,33 @@ namespace Darkages.Types
                 expGained = (expGained / player.GroupParty.Length);
             }
 
-            DistributeExperience(player, expGained, expToAward);
-
-            foreach (var party in player.PartyMembers.Where(i => i.Serial != player.Serial))
-            {
-                if (party.WithinRangeOf(player))
-                    DistributeExperience(party, expGained, expToAward);
-            }
-        }
-
-        private void DistributeExperience(Aisling player, double expGained, double expToAward)
-        {
             var p = player.ExpLevel - Template.Level;
 
             if (p / 10 > 0)
-                expGained = 1;
+            { 
+                expGained  /= 10;
+                expToAward /= 10;
+            }
+
+            DistributeExperience(player, expGained, expToAward, p);
+
+            foreach (var party in player.PartyMembers.Where(i => i.Serial != player.Serial))
+            {
+                p = player.ExpLevel - Template.Level;
+
+                if (p / 10 > 0)
+                {
+                    expGained  /= 10;
+                    expToAward /= 10;
+                }
+
+                if (party.WithinRangeOf(player))
+                    DistributeExperience(party, expGained, expToAward, p);
+            }
+        }
+
+        public static void DistributeExperience(Aisling player, double expGained, double expToAward, double p)
+        {
 
 
             if (p < 0)
@@ -360,7 +384,7 @@ namespace Darkages.Types
             obj.OffenseElement = ElementManager.Element.None;
 
 
-            if (obj.Template.ElementType == ElementQualifer.Random && obj.Template.Level > 3)
+            if (obj.Template.ElementType == ElementQualifer.Random)
             {
                 obj.DefenseElement = RandomEnumValue<ElementManager.Element>();
                 obj.OffenseElement = RandomEnumValue<ElementManager.Element>();

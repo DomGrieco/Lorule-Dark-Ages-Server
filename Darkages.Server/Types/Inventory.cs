@@ -87,6 +87,14 @@ namespace Darkages.Types
             return items.Sum(i => i.Stacks);
         }
 
+        public int HasCount(Template templateContext)
+        {
+            var items = Items.Where(i => i.Value != null && i.Value.Template.Name == templateContext.Name)
+                .Select(i => i.Value).ToList();
+
+            return items.Count;
+        }
+
         public void UpdateWeight(Aisling owner, Item item)
         {
             owner.CurrentWeight -= item.Template.CarryWeight;

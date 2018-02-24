@@ -14,7 +14,7 @@ namespace Darkages.Security
 
         public SecurityParameters()
         {
-            Seed = (byte) Generator.Random.Next(0, 9);
+            Seed = (byte)Generator.Random.Next(0, 9);
             Salt = Generator.GenerateString(9).ToByteArray();
         }
 

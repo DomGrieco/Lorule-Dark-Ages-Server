@@ -13,15 +13,15 @@ namespace Darkages.Types
         Gossip = 2,
         Boss = 3,
         Legend = 4,
-        Accept = 255
+        HasItem = 5,
+        Accept = 255,
     }
 
     public class Quest
     {
         public List<ItemTemplate> ItemRewards = new List<ItemTemplate>();
         public List<Legend.LegendItem> LegendRewards = new List<Legend.LegendItem>();
-
-        [JsonIgnore] public List<QuestStep<Template>> QuestStages = new List<QuestStep<Template>>();
+        public List<QuestStep<Template>> QuestStages = new List<QuestStep<Template>>();
 
         public List<SkillTemplate> SkillRewards = new List<SkillTemplate>();
         public List<SpellTemplate> SpellRewards = new List<SpellTemplate>();
@@ -42,6 +42,8 @@ namespace Darkages.Types
 
         public void OnCompleted(Aisling user)
         {
+            user.SendAnimation(22, user, user);
+
             var completeStages = QuestStages.Where(i => i.StepComplete).SelectMany(i => i.Prerequisites);
 
             foreach (var step in completeStages)
@@ -65,6 +67,22 @@ namespace Darkages.Types
                     Completed = false;
                     return;
                 }
+                
+
+
+            foreach (var items in SpellRewards)
+                    if (!Spell.GiveTo(user, items.Name))
+                    {
+                        Completed = false;
+                        return;
+                    }
+
+            foreach (var items in ItemRewards)
+            {
+                var obj = Item.Create(user, items);
+                obj.GiveTo(user, true);
+                user.Client.SendMessage(0x02, string.Format("You received {0}.", obj.DisplayName));
+            }
 
             foreach (var legends in LegendRewards)
                 user.LegendBook.AddLegend(new Legend.LegendItem
@@ -74,6 +92,19 @@ namespace Darkages.Types
                     Icon = legends.Icon,
                     Value = legends.Value
                 });
+
+
+            if (ExpReward > 0)
+                Monster.DistributeExperience(user, ExpReward, ExpReward, 0);
+
+
+            if (GoldReward > 0)
+            {
+                user.GoldPoints += (int)GoldReward;
+                user.Client.SendMessage(0x02, string.Format("You found {0} gold.", GoldReward));
+            }
+
+            user.Client.SendStats(StatusFlags.All);
 
             Rewarded = true;
         }
@@ -87,8 +118,10 @@ namespace Darkages.Types
         }
 
 
-        public void HandleQuest(GameClient client, Dialog menu)
+        public void HandleQuest(GameClient client, Dialog menu = null)
         {
+            client.SendSound(128);
+
             var valid = false;
 
             foreach (var stage in QuestStages)
@@ -98,12 +131,23 @@ namespace Darkages.Types
                 stage.StepComplete = valid;
             }
 
-            if (valid)
+            if (menu == null)
+            {
+                if (valid && !Rewarded)
+                {
+                    OnCompleted(client.Aisling);
+                    return;
+                }
+            }
+
+            if (menu != null && valid)
+            {
                 if (menu.CanMoveNext)
                 {
                     menu.MoveNext(client);
                     menu.Invoke(client);
                 }
+            }
         }
     }
 
@@ -117,7 +161,12 @@ namespace Darkages.Types
 
         public bool IsMet(Aisling user, Func<Predicate<Template>, bool> predicate)
         {
-            if (Type == QuestType.ItemHandIn) return predicate(i => user.Inventory.Has(TemplateContext) >= Amount);
+            if (Type == QuestType.ItemHandIn)
+                return predicate(i => user.Inventory.Has(TemplateContext) >= Amount);
+            if (Type == QuestType.KillCount)
+                return predicate(i => user.HasKilled(TemplateContext, Amount));
+            if (Type == QuestType.HasItem)
+                return predicate(i => user.Inventory.HasCount(TemplateContext) >= Amount);
 
             return false;
         }
@@ -125,7 +174,7 @@ namespace Darkages.Types
 
     public class QuestStep<T>
     {
-        [JsonIgnore] public List<QuestRequirement> Prerequisites
+        public List<QuestRequirement> Prerequisites
             = new List<QuestRequirement>();
 
         public QuestType Type { get; set; }

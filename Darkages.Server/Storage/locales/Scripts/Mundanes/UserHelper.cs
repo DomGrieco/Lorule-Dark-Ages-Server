@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Darkages.Common;
 using Darkages.Network.Game;
 using Darkages.Network.ServerFormats;
 using Darkages.Scripting;
@@ -54,7 +55,9 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
 
                             if (warp != null)
                             {
-                                client.WarpTo(warp);
+                                client.TransitionToMap(warp.ActivationMapId, 
+                                    warp.Activations.RandomElement()?.Location ??
+                                    warp.Activations.FirstOrDefault().Location);
                             }
                             else
                             {

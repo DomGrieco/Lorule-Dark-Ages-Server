@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,6 +8,19 @@ namespace Darkages.Common
 {
     public static class Extensions
     {
+        private readonly static Random rng = new Random();
+
+        public static T RandomElement<T>(this IList<T> list)
+        {
+            return list[rng.Next(list.Count)];
+        }
+
+        public static T RandomElement<T>(this T[] array)
+        {
+            return array[rng.Next(array.Length)];
+        }
+        
+
         private static readonly DateTime dateTime = new DateTime(1970, 1, 1).ToLocalTime();
         private static readonly Encoding encoding = Encoding.GetEncoding(949);
 

@@ -62,6 +62,15 @@ namespace Darkages.Storage.locales.Scripts.Spells
                     client.SendMessage(0x02, "you cast " + Spell.Template.Name + ".");
                     client.SendStats(StatusFlags.All);
                 }
+                else
+                {
+                    if (sprite is Aisling)
+                    {
+                        (sprite as Aisling).Client.SendMessage(0x02, ServerContext.Config.NoManaMessage);
+                    }
+                    return;
+
+                }
             }
             else
             {

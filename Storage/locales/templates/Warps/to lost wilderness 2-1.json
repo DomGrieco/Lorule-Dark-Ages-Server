@@ -1,6 +1,6 @@
 {
   "$type": "Darkages.Types.WarpTemplate, Darkages.Server",
-  "LevelRequired": 3,
+  "LevelRequired": 1,
   "WarpRadius": 0,
   "Activations": {
     "$type": "System.Collections.Generic.List`1[[Darkages.Types.Warp, Darkages.Server]], mscorlib",

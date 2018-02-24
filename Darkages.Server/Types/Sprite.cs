@@ -45,6 +45,7 @@ namespace Darkages.Types
             if (this is Item)
                 Content = TileContent.None;
 
+            Amplified = 0;
             Buffs = new List<Buff>();
             Debuffs = new List<Debuff>();
         }
@@ -72,6 +73,8 @@ namespace Darkages.Types
         public Element OffenseElement { get; set; }
 
         public Element DefenseElement { get; set; }
+
+        public int Amplified { get; set; }
 
         [JsonIgnore] public Sprite Target { get; set; }
 
@@ -160,9 +163,10 @@ namespace Darkages.Types
             Element element,
             byte sound = 1)
         {
-            var s = Clone(source);
-            s.OffenseElement = element;
-            ApplyDamage(source, dmg, false, sound);
+            var saved = source.OffenseElement;
+            source.OffenseElement = element;
+            ApplyDamage(source, dmg, false, sound, null);
+            source.OffenseElement = saved;
         }
 
         public void ApplyDamage(Sprite Source, int dmg,
@@ -235,19 +239,89 @@ namespace Darkages.Types
 
                     RemoveDebuff("sleep");
 
-                    var amplifier = ElementTable[
-                        (int)Source.OffenseElement,
-                        (int)DefenseElement];
 
+                    var amplifier = 1.00;
+
+                    amplifier = CalcaluteElementalAmplifier(Source.OffenseElement, amplifier);
+                    amplifier *= Amplified == 1 ? 3.50 : 1.00;
 
                     dmg = ComputeDmgFromAc(dmg);
-
                     dmg = CompleteDamageApplication(dmg, sound, dmgcb, amplifier);
                 }
             }
 
             (this as Aisling)?.Client.SendStats(StatusFlags.StructB);
             (Source as Aisling)?.Client.SendStats(StatusFlags.StructB);
+        }
+
+        private double CalcaluteElementalAmplifier(Element element, double amplifier)
+        {
+            //Fire -> Wind
+            if (element == Element.Fire)
+            {
+                if (DefenseElement == Element.Wind)
+                    amplifier = 2.50;
+                else
+                    amplifier = 1.00;
+            }
+
+            //Wind -> Earth
+            if (element == Element.Wind)
+            {
+                if (DefenseElement == Element.Earth)
+                    amplifier = 2.50;
+                else
+                    amplifier = 1.00;
+            }
+
+            //Water -> Fire
+            if (element == Element.Water)
+            {
+                if (DefenseElement == Element.Fire)
+                    amplifier = 2.50;
+                else
+                    amplifier = 1.00;
+            }
+
+            //Earth -> Water
+            if (element == Element.Earth)
+            {
+                if (DefenseElement == Element.Water)
+                    amplifier = 2.50;
+                else
+                    amplifier = 1.00;
+            }
+
+            //Dark -> All
+            if (element == Element.Dark)
+            {
+                if (DefenseElement != Element.Dark)
+                    amplifier = 2.75;
+                else
+                    amplifier = 1.00;
+            }
+
+            //Light -> All
+            if (element == Element.Light)
+            {
+                if (DefenseElement != Element.Light)
+                    amplifier = 3.50;
+                else
+                    amplifier = 1.00;
+            }
+
+
+            //Counter
+            if (element == DefenseElement)
+            {
+                if (DefenseElement == Element.None && element != Element.None)
+                    amplifier = 2.50;
+                else
+                    amplifier = 1.00;
+            }
+
+
+            return amplifier;
         }
 
         private int CompleteDamageApplication(int dmg, byte sound, Action<int> dmgcb, double amplifier)
@@ -258,12 +332,17 @@ namespace Darkages.Types
             if (CurrentHp > MaximumHp)
                 CurrentHp = MaximumHp;
 
-            var dealth = (int)(dmg * amplifier);
+            var dealth = (int)(Math.Abs(dmg * amplifier));
 
             CurrentHp -= dealth;
 
             if (CurrentHp < 0)
                 CurrentHp = 0;
+
+            if (this is Aisling)
+            {
+                (this as Aisling).Client.Say(dealth.ToString(), 0);
+            }
 
             dmgcb?.Invoke(dealth);
 
@@ -299,10 +378,11 @@ namespace Darkages.Types
         /// </summary>
         public void Show<T>(Scope op, T format, Sprite[] definer = null) where T : NetworkFormat
         {
+
             switch (op)
             {
                 case Scope.Self:
-                    Client.Send(format);
+                    Client?.Send(format);
                     break;
                 case Scope.NearbyAislingsExludingSelf:
                     foreach (var gc in GetObjects<Aisling>(that => WithinRangeOf(that)))
@@ -464,11 +544,15 @@ namespace Darkages.Types
 
         private int ComputeDmgFromAc(int dmg)
         {
+            var before = dmg;
+
             var hi = Ac + 95 - 100;
             var lo = Ac - 95 - 100;
 
             var accumulator = Math.Abs(hi) + Math.Abs(lo) / 10;
             dmg = dmg * accumulator / 100;
+
+            Console.WriteLine(dmg + " " + before);
 
             return dmg;
         }

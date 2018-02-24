@@ -114,8 +114,19 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
                     break;
 
                 case 0x0014:
-                    client.SendOptionsDialog(Mundane, "All done, now go away.");
-                    break;
+                    {
+                        var gear = client.Aisling.EquipmentManager.Equipment.Where(i => i.Value != null).Select(i => i.Value.Item);
+
+
+                        foreach (var item in client.Aisling.Inventory.Items
+                            .Where(i => i.Value != null).Select(i => i.Value)
+                            .Concat(gear).Where(i => i != null && i.Template.Flags.HasFlag(ItemFlags.Repairable)))
+                        {
+                            item.Durability = item.Template.MaxDurability;
+                        }
+
+                        client.SendOptionsDialog(Mundane, "All done, now go away.");
+                    } break;
 
                 case 0x0015:
                     client.SendOptionsDialog(Mundane, "well then. i will see you later.");

@@ -389,6 +389,8 @@ namespace Darkages
 
         [JsonProperty] public int StatsPerLevel = 2;
 
+        [JsonProperty] public string NoManaMessage = "Your will is too weak.";
+
         public override string ToString()
         {
             return StorageManager.Save(this)

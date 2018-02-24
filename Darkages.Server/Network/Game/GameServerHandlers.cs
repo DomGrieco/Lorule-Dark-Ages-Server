@@ -1323,6 +1323,7 @@ namespace Darkages.Network.Game
                         Template = ServerContext.GlobalMundaneTemplateCache[ServerContext.Config.HelperMenuTemplateKey]
                     });
 
+                    client.SendSound(12);
                     helper.OnResponse(this, client, format.Step, format.Args);
                 }
             }
@@ -1349,6 +1350,7 @@ namespace Darkages.Network.Game
                 return;
             }
 
+            client.SendSound(12);
             client.DlgSession?.Callback?.Invoke(this, client, format.Step, string.Empty);
         }
 

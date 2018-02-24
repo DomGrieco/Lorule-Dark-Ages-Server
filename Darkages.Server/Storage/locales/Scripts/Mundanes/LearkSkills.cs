@@ -47,7 +47,7 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
                         {
                             client.CloseDialog();
                             client.SendMessage(0x02, "Nothing available to learn right now.");
-                           // return;
+                            return;
                         }
                     }
 
