@@ -64,6 +64,7 @@ namespace Darkages
                     client.Aisling.Y = Y >= 0 ? Y : ServerContext.Config.TransitionPointY;
                     client.Aisling.AreaID = DestinationMap;
                     client.Aisling.CurrentMapId = DestinationMap;
+
                     client.EnterArea();
                     client.Refresh();
                 }

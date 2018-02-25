@@ -179,6 +179,9 @@
     <Compile Include="Storage\locales\Scripts\Spells\armachd.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Storage\locales\Scripts\Spells\aoe_Spells.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Storage\locales\Scripts\Spells\morfasnadur.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -188,6 +191,7 @@
     <Compile Include="Storage\locales\Scripts\Spells\fasnadur.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Storage\locales\Scripts\Spells\wizard_Spells.cs" />
     <Compile Include="Systems\Loot\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Systems\Loot\Interfaces\ILootDefinition.cs" />
     <Compile Include="Systems\Loot\Interfaces\ILootDropper.cs" />

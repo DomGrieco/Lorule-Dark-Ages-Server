@@ -4,6 +4,7 @@
     {
         Aggressive,
         Unpredicable,
-        Neutral
+        Neutral,
+        VeryAggressive
     }
 }

@@ -25,6 +25,12 @@ namespace Darkages.Storage.locales.Scripts.Spells
             {
                 var client = (sprite as Aisling).Client;
 
+                if (target.HasDebuff("mor fas nadur") || target.HasDebuff("fas nadur"))
+                {
+                    client.SendMessage(0x02, "You have already casted that spell.");
+                    return;
+                }
+
                 client.TrainSpell(Spell);
 
                 var debuff = Clone(Spell.Template.Debuff);
@@ -67,10 +73,17 @@ namespace Darkages.Storage.locales.Scripts.Spells
             else
             {
 
-                var debuff = Clone(Spell.Template.Debuff);
-                var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
 
-                if (curses.Count == 0)
+                if (target.HasDebuff("mor fas nadur") || target.HasDebuff("fas nadur"))
+                { 
+                    if (sprite is Aisling)
+                        (sprite as Aisling).Client.SendMessage(0x02, "You have already casted that spell.");
+
+                    return;
+                }
+
+                var debuff = Clone(Spell.Template.Debuff);
+
                     if (!target.HasDebuff(debuff.Name))
                     {
                         debuff.OnApplied(target, debuff);

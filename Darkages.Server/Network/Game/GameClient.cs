@@ -233,8 +233,6 @@ namespace Darkages.Network.Game
 
             #endregion
 
-            Server?.ObjectPulseController?.OnObjectUpdate(Aisling);
-
             UpdateGlobalScripts(elapsedTime);
 
             Regeneration(elapsedTime);
@@ -647,6 +645,7 @@ namespace Darkages.Network.Game
                 SendMusic();
             }
 
+
             if (ShouldUpdateMap)
             {
                 Aisling.ViewFrustrum.Clear();
@@ -662,7 +661,11 @@ namespace Darkages.Network.Game
                 if (obj is Aisling)
                     continue;
 
-                obj.ShowTo(Aisling);
+                if (Aisling.View(obj))
+                {
+                    obj.ShowTo(Aisling);
+                }
+
             }
         }
 

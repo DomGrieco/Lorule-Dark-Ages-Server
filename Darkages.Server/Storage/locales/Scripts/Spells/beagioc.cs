@@ -56,7 +56,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
                     }
 
                     sprite.Client.SendStats(StatusFlags.StructB);
-                    target.Client.SendAnimation(0x04, target, client.Aisling);
+                    target.Client.SendAnimation(Spell.Template.Animation, target, client.Aisling);
 
                     client.Aisling.Show(Scope.NearbyAislings, action);
                     client.SendMessage(0x02, "you cast " + Spell.Template.Name + ".");
@@ -81,36 +81,62 @@ namespace Darkages.Storage.locales.Scripts.Spells
                     Speed = 30
                 };
 
-                var nearby = target.GetObjects(i => i.CurrentMapId == sprite.CurrentMapId && 
+
+                if (sprite is Mundane)
+                {
+                    var nearby = target.GetObjects(i => i.CurrentMapId == sprite.CurrentMapId &&
                                     i.CurrentHp != i.MaximumHp, Get.Aislings);
 
-                if (nearby.Length > 0)
-                {
-                    foreach (var s in nearby)
+                    if (nearby.Length > 0)
                     {
-                        target = s;
-
-                        target.CurrentHp += (200 * ((Spell.Level + sprite.Wis) + 26));
-                        if (target.CurrentHp > target.MaximumHp)
-                            target.CurrentHp = target.MaximumHp;
-
-                        var hpbar = new ServerFormat13
+                        foreach (var s in nearby)
                         {
-                            Serial = target.Serial,
-                            Health = (ushort)(100 * target.CurrentHp / target.MaximumHp),
-                            Sound = 8
-                        };
+                            target = s;
 
-                        target.Show(Scope.NearbyAislings, hpbar);
-                        sprite.Show(Scope.NearbyAislings, action);
-                        target.SendAnimation(4, target, sprite);
+                            target.CurrentHp += (200 * ((Spell.Level + sprite.Wis) + 26));
+                            if (target.CurrentHp > target.MaximumHp)
+                                target.CurrentHp = target.MaximumHp;
 
-                        if (target is Aisling)
-                        {
-                            (target as Aisling).Client.SendStats(StatusFlags.StructB);
+                            var hpbar = new ServerFormat13
+                            {
+                                Serial = target.Serial,
+                                Health = (ushort)(100 * target.CurrentHp / target.MaximumHp),
+                                Sound = 8
+                            };
+
+                            target.Show(Scope.NearbyAislings, hpbar);
+                            sprite.Show(Scope.NearbyAislings, action);
+                            target.SendAnimation(Spell.Template.Animation, target, target);
+
+                            if (target is Aisling)
+                            {
+                                (target as Aisling).Client.SendStats(StatusFlags.StructB);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    target.CurrentHp += (200 * ((Spell.Level + sprite.Wis) + 26));
+                    if (target.CurrentHp > target.MaximumHp)
+                        target.CurrentHp = target.MaximumHp;
+
+                    var hpbar = new ServerFormat13
+                    {
+                        Serial = target.Serial,
+                        Health = (ushort)(100 * target.CurrentHp / target.MaximumHp),
+                        Sound = 8
+                    };
+
+                    target.Show(Scope.NearbyAislings, hpbar);
+                    sprite.Show(Scope.NearbyAislings, action);
+                    target.SendAnimation(Spell.Template.Animation, target, sprite);
+
+                    if (target is Aisling)
+                    {
+                        (target as Aisling).Client.SendStats(StatusFlags.StructB);
+                    }
+                }                
             }
         }
     }

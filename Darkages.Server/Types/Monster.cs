@@ -298,17 +298,6 @@ namespace Darkages.Types
             return tagged;
         }
 
-        public void Attack()
-        {
-            var target = Target;
-
-            if (target == null)
-                return;
-
-            AppendTags(target);
-            Attack(target);
-        }
-
         public void AppendTags(Sprite target)
         {
             TaggedAislings = new ConcurrentDictionary<int, Sprite>();

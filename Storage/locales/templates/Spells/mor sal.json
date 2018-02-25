@@ -11,7 +11,7 @@
   "BaseLines": 2,
   "LevelRate": 0.1,
   "Sound": 79,
-  "Animation": 9,
+  "Animation": 10,
   "DamageExponent": 0.05,
   "ElementalProperty": 2,
   "Name": "mor sal"

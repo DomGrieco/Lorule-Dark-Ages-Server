@@ -38,7 +38,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
                 client.TrainSpell(Spell);
 
                 var debuff = Clone(Spell.Template.Debuff);
-                var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
+                var curses = target.Debuffs.Values.OfType<debuff_cursed>().ToList();
 
                 if (curses.Count == 0)
                 {
@@ -83,7 +83,7 @@ namespace Darkages.Storage.locales.Scripts.Spells
             else
             {
                 var debuff = Clone(Spell.Template.Debuff);
-                var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
+                var curses = target.Debuffs.Values.OfType<debuff_cursed>().ToList();
 
                 if (curses.Count == 0)
                     if (!target.HasDebuff(debuff.Name))

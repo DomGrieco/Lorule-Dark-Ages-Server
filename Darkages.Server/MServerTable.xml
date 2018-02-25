@@ -4,17 +4,9 @@
       <Addr>127.0.0.1</Addr>
       <Port>2610</Port>
       <Guid>1</Guid>
-      <Name>1 Lorule</Name>
-      <Desc>Online</Desc>
+      <Name>Dark Ages</Name>
+      <Desc>Lorule Server</Desc>
       <ID>1</ID>
-    </MServer>
-    <MServer>
-      <Addr>34.214.199.67</Addr>
-      <Port>2610</Port>
-      <Guid>2</Guid>
-      <Name> Lorule</Name>
-      <Desc>Test Server - darkages.creatorlink.net</Desc>
-      <ID>2</ID>
     </MServer>    
   </Servers>
 </MServerTable>

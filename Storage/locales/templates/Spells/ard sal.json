@@ -11,7 +11,7 @@
   "BaseLines": 3,
   "LevelRate": 0.03,
   "Sound": 79,
-  "Animation": 9,
+  "Animation": 11,
   "DamageExponent": 0.1,
   "ElementalProperty": 2,
   "Name": "ard sal"

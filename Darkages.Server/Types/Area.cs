@@ -80,8 +80,6 @@ namespace Darkages
             {
                 if (((Aisling) obj).Flags.HasFlag(AislingFlags.GM)) return false;
 
-                SetWarps();
-
                 if (this[x, y] == TileContent.Warp)
                     return false;
 
@@ -197,7 +195,6 @@ namespace Darkages
                 if (nearby.Length == 0)
                     continue;
 
-
                 foreach (var warpObj in warp.Activations)
                 foreach (var obj in nearby)
                     if (obj.Position.WithinSquare(warpObj.Location, 10))
@@ -215,7 +212,9 @@ namespace Darkages
                 var nearby = GetObjects<Aisling>(i => i.WithinRangeOf(obj) && i.CurrentMapId == ID).Length;
 
                 if (nearby == 0 && !obj.Template.UpdateMapWide)
+                {
                     continue;
+                }
 
                 if (obj != null && obj.Map != null && obj.Script != null)
                 {
@@ -223,7 +222,6 @@ namespace Darkages
                     obj.UpdateBuffs(elapsedTime);
                     obj.UpdateDebuffs(elapsedTime);
 
-                    //ServerContext.Game.ObjectPulseController?.OnObjectUpdate(obj);
                     obj.LastUpdated = DateTime.UtcNow;
                 }
             }
@@ -233,14 +231,20 @@ namespace Darkages
         {
             foreach (var obj in GetObjects(i => i.CurrentMapId == ID, Get.Items | Get.Money))
             {
-                var nearby = GetObjects<Aisling>(i => i.WithinRangeOf(obj) && i.CurrentMapId == ID).Length;
+                var nearby = GetObjects<Aisling>(i => i.WithinRangeOf(obj) && i.CurrentMapId == ID);
 
-                if (nearby == 0)
+                if (nearby.Length == 0)
                     continue;
 
                 if (obj != null)
                 {
-                    ServerContext.Game.ObjectPulseController?.OnObjectUpdate(obj);
+
+                    foreach (var nb in nearby)
+                    {
+                        if (!nb.InsideView(obj))
+                            obj.ShowTo(nb);
+                    }
+
                     obj.LastUpdated = DateTime.UtcNow;
 
                     if (obj is Item)
@@ -266,16 +270,22 @@ namespace Darkages
                 if (obj == null)
                     continue;
 
-                var nearby = GetObjects<Aisling>(i => i.WithinRangeOf(obj) && i.CurrentMapId == ID).Length;
+                var nearby = GetObjects<Aisling>(i => i.WithinRangeOf(obj) && i.CurrentMapId == ID);
 
-                if (nearby == 0)
+                if (nearby.Length == 0)
                     continue;
+
+                foreach (var nb in nearby)
+                {
+                    if (!nb.InsideView(obj))
+                        obj.ShowTo(nb);
+                }
 
                 obj.UpdateBuffs(elapsedTime);
                 obj.UpdateDebuffs(elapsedTime);
                 obj.Update(elapsedTime);
 
-                ServerContext.Game.ObjectPulseController?.OnObjectUpdate(obj);
+                //ServerContext.Game.ObjectPulseController?.OnObjectUpdate(obj);
                 obj.LastUpdated = DateTime.UtcNow;
             }
         }

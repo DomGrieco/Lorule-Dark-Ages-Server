@@ -2,7 +2,7 @@
   "$type": "Darkages.Types.SkillTemplate, Darkages.Server",
   "ID": 4,
   "Status": 0,
-  "Icon": 35,
+  "Icon": 29,
   "ScriptName": "Locate Player",
   "Exponent": 0.0,
   "Coponent": 0.0,

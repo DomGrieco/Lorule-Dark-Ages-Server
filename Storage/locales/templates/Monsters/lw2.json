@@ -30,7 +30,7 @@
   "SpawnMax": 512,
   "SpawnRate": 1,
   "SpawnSize": 22,
-  "AttackSpeed": 1000,
+  "AttackSpeed": 1600,
   "IgnoreCollision": false,
   "ImageVarience": 4,
   "SpawnOnlyOnActiveMaps": false,
@@ -42,6 +42,8 @@
       "armachd",
       "beag cradh",
       "deo saighead",
+      "beag sal",
+      "beag srad",
     ]
   },
   "DefenseElement": 1,

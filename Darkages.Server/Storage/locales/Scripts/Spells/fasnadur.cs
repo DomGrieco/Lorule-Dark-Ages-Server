@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
-using Darkages.Network.ServerFormats;
+﻿using Darkages.Network.ServerFormats;
 using Darkages.Scripting;
 using Darkages.Storage.locales.debuffs;
 using Darkages.Types;
+using System.Linq;
 
 namespace Darkages.Storage.locales.Scripts.Spells
 {
@@ -24,6 +23,12 @@ namespace Darkages.Storage.locales.Scripts.Spells
             if (sprite is Aisling)
             {
                 var client = (sprite as Aisling).Client;
+
+                if (target.HasDebuff("mor fas nadur") | target.HasDebuff("fas nadur"))
+                {
+                    client.SendMessage(0x02, "You have already casted that spell.");
+                    return;
+                }
 
                 client.TrainSpell(Spell);
 
@@ -68,10 +73,13 @@ namespace Darkages.Storage.locales.Scripts.Spells
             {
 
                 var debuff = Clone(Spell.Template.Debuff);
-                var curses = target.Debuffs.OfType<debuff_cursed>().ToList();
 
-                if (curses.Count == 0)
-                    if (!target.HasDebuff(debuff.Name))
+                if (target.HasDebuff("mor fas nadur") || target.HasDebuff("fas nadur"))
+                {
+                    return;
+                }
+
+                if (!target.HasDebuff(debuff.Name))
                     {
                         debuff.OnApplied(target, debuff);
 

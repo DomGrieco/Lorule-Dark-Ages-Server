@@ -2,7 +2,7 @@
   "$type": "Darkages.Types.SkillTemplate, Darkages.Server",
   "ID": 0,
   "Status": 0,
-  "Icon": 51,
+  "Icon": 76,
   "ScriptName": "Unstuck",
   "Exponent": 0.0,
   "Coponent": 0.0,

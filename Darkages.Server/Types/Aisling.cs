@@ -191,10 +191,15 @@ namespace Darkages
             }
         }
 
-        public void View(Sprite obj)
+        public bool View(Sprite obj)
         {
             if (!InsideView(obj))
+            {
                 ViewFrustrum.TryAdd(obj.Serial, obj);
+                return true;
+            }
+
+            return false;
         }
 
         public void CastSpell(Spell spell)

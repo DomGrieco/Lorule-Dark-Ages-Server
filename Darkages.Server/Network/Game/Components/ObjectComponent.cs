@@ -67,7 +67,7 @@ namespace Darkages.Network.Game.Components
             UpdateMonsterViewFrustrum(obj);
         }
 
-        private static void UpdateOutOfRangeObjects(Sprite obj)
+        public void UpdateOutOfRangeObjects(Sprite obj)
         {
             var distantObjs = obj.GetObjects(i => !i.WithinRangeOf(obj)
                                                   && obj.CurrentMapId == i.CurrentMapId,
@@ -89,7 +89,7 @@ namespace Darkages.Network.Game.Components
             }
         }
 
-        private static void UpdateMonsterViewFrustrum(Sprite obj)
+        public void UpdateMonsterViewFrustrum(Sprite obj)
         {
             //get aislings in range of this object that is not already.
             var nearByAislings = obj.GetObjects<Aisling>(i => i.WithinRangeOf(obj));

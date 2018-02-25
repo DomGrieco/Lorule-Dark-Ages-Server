@@ -16,6 +16,8 @@ namespace Darkages.Scripting
         [JsonIgnore]
         public string Arguments { get; set; }
 
+        public bool IsScriptDefault { get; set; }
+
         public abstract void OnUse(Sprite sprite, Sprite target);
         public abstract void OnFailed(Sprite sprite, Sprite target);
         public abstract void OnSuccess(Sprite sprite, Sprite target);

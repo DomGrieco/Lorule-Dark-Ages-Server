@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Darkages.Network.ServerFormats;
 using Darkages.Scripting;
 using Darkages.Types;
 
@@ -79,7 +80,6 @@ namespace Darkages.Storage.locales.Scripts.Skills
                         {
                             client.Aisling.X = targetPosition.X;
                             client.Aisling.Y = targetPosition.Y;
-                            client.Aisling.Map.Update(prev.X, prev.Y, TileContent.None);
 
 
                             if (!client.Aisling.Facing(target.X, target.Y, out var direction))
@@ -89,6 +89,9 @@ namespace Darkages.Storage.locales.Scripts.Skills
                                 if (client.Aisling.Position.IsNextTo(target.Position))
                                     client.Aisling.Turn();
                             }
+
+                            client.Aisling.Map.Update(prev.X, prev.Y, TileContent.None);
+                            client.Aisling.Map.Update(client.Aisling.X, client.Aisling.Y, TileContent.Aisling);
 
                             client.Refresh();
                             return;
@@ -104,6 +107,8 @@ namespace Darkages.Storage.locales.Scripts.Skills
                 var client = (sprite as Aisling).Client;
                 if (client.Aisling != null && !client.Aisling.Dead && Skill.Ready)
                 {
+                    client.Send(new ServerFormat3F((byte)Skill.Template.Pane, Skill.Slot, Skill.Template.Cooldown));
+
                     client.TrainSkill(Skill);
 
                     var success = Skill.RollDice(rand);

@@ -289,7 +289,7 @@ namespace Darkages
             spell.MaxLevel = 100;
             spell.Pane = Pane.Spells;
             spell.Sound = 8;
-            spell.Animation = 267;
+            spell.Animation = 342;
             spell.ScriptKey = "beag ioc";
             spell.TargetType = SpellTemplate.SpellUseType.ChooseTarget;
             spell.TierLevel = Tier.Tier1;
@@ -351,7 +351,7 @@ namespace Darkages
             npc.EnableWalking = false;
             npc.EnableTurning = true;
             npc.EnableCasting = true;
-            npc.Spells = new List<string>() { "deo saighead lamh", "ard cradh", "pramh", "ard sal", "ard srad", "mor dion", "beag ioc fein" };
+            npc.Spells = new List<string>() { "deo saighead lamh", "mor fas nadur", "mor strioch pian gar", "ard cradh", "pramh", "ard sal", "ard srad", "mor dion", "beag ioc fein" };
             GlobalMundaneTemplateCache["Sage Master"] = npc;
 
             var npc2 = new MundaneTemplate();
@@ -375,7 +375,7 @@ namespace Darkages
             npc2.EnableWalking = false;
             npc2.EnableTurning = true;
             npc2.EnableCasting = true;
-            npc2.Spells = new List<string>() { "deo saighead", "mor cradh", "pramh" };
+            npc2.Spells = new List<string>() { "deo saighead", "mor cradh", "pramh", "mor fas nadur" };
             GlobalMundaneTemplateCache["Arch Wizard"] = npc2;
 
 
@@ -393,7 +393,7 @@ namespace Darkages
             npc3.EnableWalking = false;
             npc3.EnableTurning = true;
             npc3.EnableCasting = true;
-            npc3.Spells = new List<string>() { "beag ioc", "armachd", "beag ioc", "mor strioch pian gar" };
+            npc3.Spells = new List<string>() { "mor fas nadur", "armachd", "beag ioc", "dia deo saighead" };
             GlobalMundaneTemplateCache["Ascended Priest"] = npc3;
 
             

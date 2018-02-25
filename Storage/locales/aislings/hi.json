@@ -2,31 +2,33 @@
   "$type": "Darkages.Aisling, Darkages.Server",
   "MonsterKillCounters": {
     "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
-    "Walkers": 3
+    "Walkers": 5,
+    "Undead": 58,
+    "Descent Worker": 2
   },
   "rnd": {
     "$type": "System.Random, mscorlib"
   },
   "CurrentWeight": 0,
-  "MaximumWeight": 13,
+  "MaximumWeight": 10,
   "Created": "2018-02-24T15:07:44.6838517Z",
-  "LastLogged": "2018-02-24T15:10:30.2813368Z",
+  "LastLogged": "2018-02-25T12:35:36.8089465Z",
   "Username": "hi",
   "Password": "hi",
   "AbpLevel": 0,
   "AbpTotal": 0,
   "AbpNext": 0,
-  "ExpLevel": 4,
-  "ExpTotal": 6853,
-  "ExpNext": 2309,
+  "ExpLevel": 12,
+  "ExpTotal": 821474,
+  "ExpNext": 170347,
   "Gender": 2,
   "Title": 0,
   "Flags": 0,
-  "AreaID": 101,
+  "AreaID": 99,
   "ClassID": 0,
   "GamePoints": 0,
-  "GoldPoints": 3500,
-  "StatPoints": 9,
+  "GoldPoints": 8864,
+  "StatPoints": 25,
   "Medal": 0,
   "LIcon": 0,
   "RIcon": 0,
@@ -81,7 +83,7 @@
         "Icon": 12,
         "Level": 100,
         "ID": 950189797,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -109,7 +111,7 @@
         "Icon": 1,
         "Level": 100,
         "ID": 1721602388,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:37:58.4163152Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -137,7 +139,7 @@
         "Icon": 0,
         "Level": 100,
         "ID": 2145313121,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:37:58.4173143Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -166,7 +168,7 @@
         "Icon": 21,
         "Level": 100,
         "ID": 1773761224,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -230,7 +232,7 @@
         "Icon": 4,
         "Level": 100,
         "ID": 187009080,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:37:58.4153147Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -258,7 +260,7 @@
         "Icon": 36,
         "Level": 100,
         "ID": 2144584060,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -286,7 +288,7 @@
         "Icon": 17,
         "Level": 100,
         "ID": 924922799,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -315,7 +317,7 @@
         "Icon": 15,
         "Level": 100,
         "ID": 240475852,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -350,7 +352,7 @@
         "Icon": 60,
         "Level": 100,
         "ID": 938405202,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -441,7 +443,7 @@
         "Icon": 0,
         "Level": 1,
         "ID": 1120509143,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -469,7 +471,7 @@
         "Icon": 32,
         "Level": 1,
         "ID": 1122160943,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -497,7 +499,7 @@
         "Icon": 35,
         "Level": 1,
         "ID": 1613398012,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -525,7 +527,7 @@
         "Icon": 51,
         "Level": 1,
         "ID": 1367828686,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -603,7 +605,7 @@
         },
         "Level": 100,
         "Slot": 1,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "2": {
@@ -632,7 +634,7 @@
         },
         "Level": 100,
         "Slot": 2,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "3": {
@@ -661,7 +663,7 @@
         },
         "Level": 100,
         "Slot": 3,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "4": {
@@ -702,7 +704,7 @@
         },
         "Level": 100,
         "Slot": 4,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "5": {
@@ -742,7 +744,7 @@
         },
         "Level": 100,
         "Slot": 5,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "6": {
@@ -771,7 +773,7 @@
         },
         "Level": 100,
         "Slot": 6,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "7": {
@@ -800,7 +802,7 @@
         },
         "Level": 100,
         "Slot": 7,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "8": {
@@ -829,7 +831,7 @@
         },
         "Level": 100,
         "Slot": 8,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "9": {
@@ -869,7 +871,7 @@
         },
         "Level": 100,
         "Slot": 9,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "10": {
@@ -928,7 +930,7 @@
         },
         "Level": 100,
         "Slot": 10,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "11": {
@@ -957,7 +959,7 @@
         },
         "Level": 100,
         "Slot": 11,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "12": {
@@ -993,7 +995,7 @@
         },
         "Level": 100,
         "Slot": 12,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "13": {
@@ -1033,7 +1035,7 @@
         },
         "Level": 100,
         "Slot": 13,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "14": {
@@ -1069,7 +1071,7 @@
         },
         "Level": 100,
         "Slot": 14,
-        "NextAvailableUse": "2018-02-24T15:10:30.2768368Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "15": {
@@ -1098,7 +1100,7 @@
         },
         "Level": 100,
         "Slot": 15,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "16": {
@@ -1127,7 +1129,7 @@
         },
         "Level": 100,
         "Slot": 16,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "17": {
@@ -1185,7 +1187,7 @@
         },
         "Level": 100,
         "Slot": 17,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "18": {
@@ -1220,7 +1222,7 @@
         },
         "Level": 100,
         "Slot": 18,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "19": {
@@ -1249,7 +1251,7 @@
         },
         "Level": 100,
         "Slot": 19,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "20": {
@@ -1278,7 +1280,7 @@
         },
         "Level": 100,
         "Slot": 20,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "21": {
@@ -1307,7 +1309,7 @@
         },
         "Level": 100,
         "Slot": 21,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "22": {
@@ -1342,7 +1344,7 @@
         },
         "Level": 100,
         "Slot": 22,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "23": null,
@@ -1421,7 +1423,7 @@
         },
         "Level": 0,
         "Slot": 73,
-        "NextAvailableUse": "2018-02-24T15:10:30.277336Z",
+        "NextAvailableUse": "2018-02-25T12:35:36.8014453Z",
         "InUse": false
       },
       "74": null,
@@ -1611,7 +1613,6 @@
           "_Wis": 0,
           "_Con": 0,
           "_Dex": 0,
-          "_Ac": 0,
           "_Mr": 0,
           "_Dmg": 0,
           "_Hit": 0
@@ -1689,7 +1690,6 @@
           "_Wis": 0,
           "_Con": 0,
           "_Dex": 0,
-          "_Ac": 0,
           "_Mr": 0,
           "_Dmg": 0,
           "_Hit": 0
@@ -1793,7 +1793,6 @@
         "_Wis": 0,
         "_Con": 0,
         "_Dex": 0,
-        "_Ac": 0,
         "_Mr": 0,
         "_Dmg": 0,
         "_Hit": 0
@@ -1871,7 +1870,6 @@
         "_Wis": 0,
         "_Con": 0,
         "_Dex": 0,
-        "_Ac": 0,
         "_Mr": 0,
         "_Dmg": 0,
         "_Hit": 0
@@ -2018,24 +2016,23 @@
   "Buffs": {
     "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
   },
-  "Serial": 1258835097,
-  "X": 36,
-  "Y": 20,
-  "Direction": 1,
-  "CurrentMapId": 101,
+  "Serial": 2889,
+  "X": 47,
+  "Y": 82,
+  "Direction": 2,
+  "CurrentMapId": 99,
   "OffenseElement": 0,
   "DefenseElement": 0,
   "Amplified": 0,
-  "CurrentHp": 354,
-  "CurrentMp": 69,
-  "_MaximumHp": 204,
-  "_MaximumMp": 69,
+  "CurrentHp": 424,
+  "CurrentMp": 117,
+  "_MaximumHp": 276,
+  "_MaximumMp": 117,
   "_Str": 3,
   "_Int": 3,
   "_Wis": 3,
   "_Con": 3,
   "_Dex": 3,
-  "_Ac": 70,
   "_Mr": 0,
   "_Dmg": 0,
   "_Hit": 0

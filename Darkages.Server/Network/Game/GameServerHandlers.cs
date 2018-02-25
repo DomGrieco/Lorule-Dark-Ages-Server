@@ -207,7 +207,10 @@ namespace Darkages.Network.Game
 
             if (client?.Aisling?.Map == null) return;
 
-            if (client.ShouldUpdateMap) SendMapData(client);
+            if (client.ShouldUpdateMap || client.Aisling.LastMapId == ServerContext.Config.TransitionZone)
+                SendMapData(client);
+
+            client.ShouldUpdateMap = false;
         }
 
         private static void SendMapData(GameClient client)
@@ -223,7 +226,6 @@ namespace Darkages.Network.Game
             }
 
             client.Aisling.Map.OnLoaded();
-            client.ShouldUpdateMap = false;
         }
 
         /// <summary>
@@ -324,11 +326,25 @@ namespace Darkages.Network.Game
             if (node == null)
                 return;
 
-            client.Aisling.PortalSession.TransitionToMap(client,
-                (short)node.Destination.Location.X,
-                (short)node.Destination.Location.Y, node.Destination.AreaID);
+            try
+            {
+                if (client.Aisling.PortalSession == null)
+                {
+                    client.Aisling.GoHome();
+                    return;
+                }
 
-            client.Aisling.PortalSession.IsMapOpen = false;
+                client.Aisling.PortalSession.TransitionToMap(client,
+                    (short)node.Destination.Location.X,
+                    (short)node.Destination.Location.Y, node.Destination.AreaID);
+
+
+                client.Aisling.PortalSession.IsMapOpen = false;
+            }
+            catch
+            {
+
+            }
         }
 
         /// <summary>

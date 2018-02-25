@@ -2,7 +2,7 @@
   "$type": "Darkages.Types.SkillTemplate, Darkages.Server",
   "ID": 6,
   "Status": 1,
-  "Icon": 12,
+  "Icon": 42,
   "Desciption": "Sway!",
   "ScriptName": "Ambush",
   "Exponent": 0.0,

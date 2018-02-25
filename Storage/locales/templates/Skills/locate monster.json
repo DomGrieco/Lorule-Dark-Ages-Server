@@ -2,7 +2,7 @@
   "$type": "Darkages.Types.SkillTemplate, Darkages.Server",
   "ID": 4,
   "Status": 0,
-  "Icon": 32,
+  "Icon": 31,
   "ScriptName": "Locate Monster",
   "Exponent": 0.0,
   "Coponent": 0.0,

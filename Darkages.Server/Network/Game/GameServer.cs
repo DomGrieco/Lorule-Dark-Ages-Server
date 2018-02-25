@@ -17,8 +17,6 @@ namespace Darkages.Network.Game
         DateTime lastClientUpdate = DateTime.UtcNow;
         TimeSpan ServerUpdateSpan, ClientUpdateSpan;
 
-        GameServerTimer ServerTimer;
-
 
         public ObjectService ObjectFactory;
         public Dictionary<Type, GameServerComponent> Components;
@@ -31,7 +29,7 @@ namespace Darkages.Network.Game
             Frames = ServerContext.Config.FRAMES;
 
             ServerUpdateSpan = TimeSpan.FromSeconds(1.0 / Frames);
-            ClientUpdateSpan = TimeSpan.FromSeconds(1.0 / Frames);
+            ClientUpdateSpan = TimeSpan.FromSeconds(1.0 / (Frames / 2));
 
             InitializeGameServer();
         }
@@ -78,7 +76,6 @@ namespace Darkages.Network.Game
 
         public void InitializeGameServer()
         {
-            ServerTimer = new GameServerTimer(TimeSpan.FromMilliseconds(ServerContext.Config.MinimalLatency));
             ObjectFactory = new ObjectService();
 
             Components = new Dictionary<Type, GameServerComponent>
@@ -92,23 +89,21 @@ namespace Darkages.Network.Game
                 [typeof(ServerCacheComponent)] = new ServerCacheComponent(this)
             };
 
+
+            ThreadPool.QueueUserWorkItem(UpdateConnectedClients);
+
             Console.WriteLine(Components.Count + " Server Components loaded.");
         }
 
         public void ExecuteClientWork(TimeSpan elapsedTime)
         {
-            UpdateClients(elapsedTime);
+            UpdateClients(elapsedTime);            
         }
 
         public void ExecuteServerWork(TimeSpan elapsedTime)
         {
-            ServerTimer.Update(elapsedTime);
-
-            if (ServerTimer.Elapsed)
-            {
-                UpdateAreas(elapsedTime);
-                UpdateComponents(elapsedTime);
-            }
+            UpdateAreas(elapsedTime);
+            UpdateComponents(elapsedTime);
         }
 
         private void UpdateComponents(TimeSpan elapsedTime)
@@ -131,7 +126,30 @@ namespace Darkages.Network.Game
         {
             foreach (var client in Clients)
                 if (client != null && client.Aisling != null)
+                {
                     client.Update(elapsedTime);
+                }
+        }
+
+        private void UpdateConnectedClients(object state)
+        {
+            while (true)
+            {
+                foreach (var client in Clients)
+                    if (client != null && client.Aisling != null)
+                    {
+                        if (client.Aisling.LoggedIn)
+                        {
+                            ServerContext.Game
+                                .ObjectPulseController?
+                                .OnObjectUpdate(client.Aisling);
+
+                            client.RefreshObjects();
+                        }
+                    }
+
+                Thread.Sleep(100);
+            }
         }
 
         public override void ClientConnected(GameClient client)

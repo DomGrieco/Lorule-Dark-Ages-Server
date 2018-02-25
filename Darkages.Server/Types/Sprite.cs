@@ -8,8 +8,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using static Darkages.Types.ElementManager;
 
 namespace Darkages.Types
@@ -48,8 +46,21 @@ namespace Darkages.Types
 
             Amplified = 0;
 
-            Buffs   = new ConcurrentDictionary<string, Buff>();
+            Buffs = new ConcurrentDictionary<string, Buff>();
             Debuffs = new ConcurrentDictionary<string, Debuff>();
+        }
+
+        public int PrimaryStat() { 
+            var sums = new List<int>();
+            {
+                sums.Add(Str);
+                sums.Add(Int);
+                sums.Add(Wis);
+                sums.Add(Con);
+                sums.Add(Dex);
+            }
+
+            return sums.Max();
         }
 
         [JsonIgnore] public GameClient Client { get; set; }
@@ -166,7 +177,7 @@ namespace Darkages.Types
             byte sound = 1,
             Action<int> dmgcb = null)
         {
-            if (!this.WithinRangeOf(Source))
+            if (!WithinRangeOf(Source))
                 return;
 
             if (!(this is Aisling))
@@ -199,7 +210,7 @@ namespace Darkages.Types
 
                     lock (rnd)
                     {
-                        dmg += rnd.Next(weapon.Template.DmgMin + 1, weapon.Template.DmgMax + 5) * client.BonusDmg;
+                        dmg += rnd.Next(weapon.Template.DmgMin + 1, weapon.Template.DmgMax + 5) + client.BonusDmg * 10 / 100;
                     }
                 }
             }
@@ -232,7 +243,7 @@ namespace Darkages.Types
                         Sound = sound
                     };
 
-                    Show(Scope.NearbyAislings, empty);
+                    Show(Scope.VeryNearbyAislings, empty);
                 }
                 else
                 {
@@ -350,7 +361,7 @@ namespace Darkages.Types
                 Sound = sound
             };
 
-            Show(Scope.NearbyAislings, hpbar);
+            Show(Scope.VeryNearbyAislings, hpbar);
             {
                 dmgcb?.Invoke(dealth);
             }
@@ -573,9 +584,9 @@ namespace Darkages.Types
 
         public List<Sprite> GetInfront(int tileCount = 1)
         {
-            if (this is Aisling)
-                return _GetInfront(tileCount).Intersect(
-                    (this as Aisling).ViewableObjects).ToList();
+            //if (this is Aisling)
+            //    return _GetInfront(tileCount).Intersect(
+            //        (this as Aisling).ViewableObjects).ToList();
 
             return _GetInfront(tileCount).ToList();
         }
@@ -605,68 +616,6 @@ namespace Darkages.Types
             }
 
             return results;
-        }
-
-
-        public void Attack(Sprite _obj)
-        {
-            if (!CanUpdate())
-                return;
-
-            //Formula: = H6 + I6 + J6 + K6 + L6 * 10
-            var dmg = 0;
-
-            if (this is Monster || this is Mundane)
-                if (this is Monster)
-                {
-                    var obj = this as Monster;
-
-                    _Str = (byte) (int) (obj.Template.Level * ServerContext.Config.MonsterDamageFactor);
-
-                    dmg = obj.Template.Level * _Str + 5;
-                    _obj.ApplyDamage(this, dmg, false, 1, applied => { });
-                }
-                else if (this is Mundane)
-                {
-                    var obj = this as Mundane;
-
-                    _Str = (byte) (int) (obj.Template.Level * ServerContext.Config.MonsterDamageFactor);
-
-                    dmg = obj.Template.Level * Str * ServerContext.Config.MonsterDamageMultipler;
-                    _obj.ApplyDamage(this, dmg, false, 1);
-                }
-
-            var target = _obj;
-
-            var action = new ServerFormat1A
-            {
-                Serial = Serial,
-                Number = 0x01,
-                Speed = 20
-            };
-
-            if (target.CurrentHp > 0)
-            {
-                var hpbar = new ServerFormat13
-                {
-                    Serial = target.Serial,
-                    Health = (ushort) (100 * target.CurrentHp / target.MaximumHp),
-                    Sound = 1,
-                    Source =  _obj.Serial,
-                };
-
-                var nearby = GetObjects<Aisling>(i => i.WithinRangeOf(this));
-
-                foreach (var aisling in nearby)
-                {
-                    aisling.Show(Scope.Self, action);
-                    aisling.Show(Scope.Self, hpbar);
-                }
-            }
-            else
-            {
-                target.RemoveBuffsAndDebuffs();
-            }
         }
 
         public void RemoveFrom(Aisling nearbyAisling)
@@ -967,9 +916,10 @@ namespace Darkages.Types
                 return false;
 
             if (this is Monster || this is Mundane)
+            {
                 if (CurrentHp == 0)
                     return false;
-
+            }
 
             return true;
         }

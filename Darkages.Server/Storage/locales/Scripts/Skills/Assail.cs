@@ -26,7 +26,7 @@ namespace Darkages.Scripting.Scripts.Skills
                 {
                     var client = (sprite as Aisling).Client;
                     client.Aisling.Show(Scope.NearbyAislings,
-                        new ServerFormat29(Skill.Template.MissAnimation, (ushort) Target.X, (ushort) Target.Y));
+                        new ServerFormat29(Skill.Template.MissAnimation, (ushort)Target.X, (ushort)Target.Y));
                 }
         }
 
@@ -48,8 +48,6 @@ namespace Darkages.Scripting.Scripts.Skills
 
                 if (enemy != null)
                 {
-                    client.Aisling.Show(Scope.VeryNearbyAislings, new ServerFormat13(0, 0, Skill.Template.Sound));
-
                     foreach (var i in enemy)
                     {
                         if (i == null)
@@ -78,14 +76,14 @@ namespace Darkages.Scripting.Scripts.Skills
                         if (i is Aisling)
                         {
                             (i as Aisling).Client.Aisling.Show(Scope.NearbyAislings,
-                                new ServerFormat29((uint) client.Aisling.Serial, (uint) i.Serial, byte.MinValue,
+                                new ServerFormat29((uint)client.Aisling.Serial, (uint)i.Serial, byte.MinValue,
                                     Skill.Template.TargetAnimation, 100));
                             (i as Aisling).Client.Send(new ServerFormat08(i as Aisling, StatusFlags.All));
                         }
 
                         if (i is Monster || i is Mundane || i is Aisling)
                             client.Aisling.Show(Scope.NearbyAislings,
-                                new ServerFormat29((uint) client.Aisling.Serial, (uint) i.Serial,
+                                new ServerFormat29((uint)client.Aisling.Serial, (uint)i.Serial,
                                     Skill.Template.TargetAnimation, 0, 100));
                     }
                 }
@@ -111,6 +109,62 @@ namespace Darkages.Scripting.Scripts.Skills
                     client.Send(new ServerFormat3F((byte)Skill.Template.Pane, Skill.Slot, Skill.Template.Cooldown));
 
                     OnSuccess(sprite);
+                }
+            }
+            else
+            {
+                var enemy = sprite.GetInfront();
+
+
+                var action = new ServerFormat1A
+                {
+                    Serial = sprite.Serial,
+                    Number = 0x01,
+                    Speed = 30
+                };
+
+                if (enemy != null)
+                {
+                    foreach (var i in enemy)
+                    {
+                        if (i == null)
+                            continue;
+
+                        if (sprite.Serial == i.Serial)
+                            continue;
+
+                        if (i is Money)
+                            continue;
+
+                        if (!i.Attackable)
+                            continue;
+
+                        Target = i;
+
+
+                        var imp = (Skill.Level * 10 / 100);
+                        var dmg = (sprite.Str * imp);
+
+                        dmg *= 3;
+
+                        i.ApplyDamage(sprite, dmg);
+
+                        if (i is Monster)
+                            (i as Monster).Target = sprite;
+
+                        if (i is Mundane)
+                            (i as Mundane).Target = sprite;
+
+                        if (Skill.Template.TargetAnimation > 0)
+                        {
+                            if (i is Monster || i is Mundane || i is Aisling)
+                                sprite.Show(Scope.NearbyAislings,
+                                    new ServerFormat29((uint)sprite.Serial, (uint)i.Serial,
+                                        Skill.Template.TargetAnimation, 0, 100));
+                        }
+
+                        sprite.Show(Scope.NearbyAislings, action);
+                    }
                 }
             }
         }

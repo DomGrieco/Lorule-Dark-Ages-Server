@@ -23,6 +23,31 @@ namespace Darkages.Types
         [JsonIgnore]
         public List<SpellScript> SpellScripts = new List<SpellScript>();
 
+        [JsonIgnore]
+        public SkillScript DefaultSkill => SkillScripts.Find(i => i.IsScriptDefault) ?? null;
+
+        [JsonIgnore]
+        public SpellScript DefaultSpell => SpellScripts.Find(i => i.IsScriptDefault) ?? null;
+
+
+        public void InitMundane()
+        {
+            if (Template.Spells != null)
+                foreach (var spellscriptstr in Template.Spells)
+                {
+                    LoadSpellScript(spellscriptstr);
+                }
+
+            if (Template.Skills != null)
+                foreach (var skillscriptstr in Template.Skills)
+                {
+                    LoadSkillScript(skillscriptstr);
+                }
+
+
+            LoadSkillScript("Assail", true);
+        }
+
         public static void Create(MundaneTemplate template)
         {
             if (template == null)
@@ -68,32 +93,34 @@ namespace Darkages.Types
             npc.Template.ChatTimer  = new GameServerTimer(TimeSpan.FromSeconds(Generator.Random.Next(10, 35)));
             npc.Template.TurnTimer  = new GameServerTimer(TimeSpan.FromSeconds(6));
             npc.Template.SpellTimer = new GameServerTimer(TimeSpan.FromSeconds(0.5));
-
-            if (npc.Template.Spells != null)
-                foreach (var spellscriptstr in npc.Template.Spells)
-                {
-                    if (!ServerContext.GlobalSpellTemplateCache.ContainsKey(spellscriptstr))
-                        continue;
-
-                    var script = ScriptManager.Load<SpellScript>(ServerContext.GlobalSpellTemplateCache[spellscriptstr].ScriptKey,
-                        Spell.Create(1, ServerContext.GlobalSpellTemplateCache[spellscriptstr]));
-
-                    if (script == null)
-                        continue; 
-
-                    npc.SpellScripts.Add(script);
-                }
-
-            if (npc.Template.Skills != null)
-                foreach (var skillscriptstr in npc.Template.Skills)
-                {
-                    var script = ScriptManager.Load<SkillScript>(skillscriptstr,
-                        Skill.Create(1, ServerContext.GlobalSkillTemplateCache[skillscriptstr]));
-
-                    npc.SkillScripts.Add(script);
-                }
-
+            npc.InitMundane();
             npc.AddObject(npc);
+        }
+
+        public void LoadSkillScript(string skillscriptstr, bool primary = false)
+        {
+            var script = ScriptManager.Load<SkillScript>(skillscriptstr,
+                Skill.Create(1, ServerContext.GlobalSkillTemplateCache[skillscriptstr]));
+
+
+            if (script != null)
+            {
+                script.IsScriptDefault = primary;
+                SkillScripts.Add(script);
+            }
+        }
+
+        private void LoadSpellScript(string spellscriptstr, bool primary = false)
+        {
+            var script = ScriptManager.Load<SpellScript>(spellscriptstr,
+                Spell.Create(1, ServerContext.GlobalSpellTemplateCache[spellscriptstr]));
+
+
+            if (script != null)
+            {
+                script.IsScriptDefault = primary;
+                SpellScripts.Add(script);
+            }
         }
 
         public void OnDeath()
@@ -243,7 +270,8 @@ namespace Darkages.Types
                             else
                             {
                                 target.Target = this;
-                                Attack(target);
+
+                                //attack here
                             }
                         }
                     }

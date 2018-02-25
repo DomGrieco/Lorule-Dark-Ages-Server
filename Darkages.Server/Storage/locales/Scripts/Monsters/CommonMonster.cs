@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Darkages.Network.Game;
 using Darkages.Scripting;
 using Darkages.Types;
@@ -13,28 +14,52 @@ namespace Darkages.Storage.locales.Scripts.Monsters
         public List<SkillScript> SkillScripts = new List<SkillScript>();
         public List<SpellScript> SpellScripts = new List<SpellScript>();
 
+        public SkillScript DefaultSkill => SkillScripts.Find(i => i.IsScriptDefault) ?? null;
+        public SpellScript DefaultSpell => SpellScripts.Find(i => i.IsScriptDefault) ?? null;
+
         public CommonMonster(Monster monster, Area map)
             : base(monster, map)
         {
+
+            LoadSkillScript("Assail", true);
+
             if (Monster.Template.SpellScripts != null)
                 foreach (var spellscriptstr in Monster.Template.SpellScripts)
                 {
-                    var script = ScriptManager.Load<SpellScript>(spellscriptstr,
-                        Spell.Create(1, ServerContext.GlobalSpellTemplateCache[spellscriptstr]));
-
-                    if (script != null)
-                        SpellScripts.Add(script);
+                    LoadSpellScript(spellscriptstr);
                 }
 
             if (Monster.Template.SkillScripts != null)
                 foreach (var skillscriptstr in Monster.Template.SkillScripts)
                 {
-                    var script = ScriptManager.Load<SkillScript>(skillscriptstr,
-                        Skill.Create(1, ServerContext.GlobalSkillTemplateCache[skillscriptstr]));
-
-                    if (script != null)
-                        SkillScripts.Add(script);
+                    LoadSkillScript(skillscriptstr);
                 }
+        }
+
+        private void LoadSkillScript(string skillscriptstr, bool primary = false)
+        {
+            var script = ScriptManager.Load<SkillScript>(skillscriptstr,
+                Skill.Create(1, ServerContext.GlobalSkillTemplateCache[skillscriptstr]));
+
+
+            if (script != null)
+            {
+                script.IsScriptDefault = primary;
+                SkillScripts.Add(script);
+            }
+        }
+
+        private void LoadSpellScript(string spellscriptstr, bool primary = false)
+        {
+            var script = ScriptManager.Load<SpellScript>(spellscriptstr,
+                Spell.Create(1, ServerContext.GlobalSpellTemplateCache[spellscriptstr]));
+
+
+            if (script != null)
+            {
+                script.IsScriptDefault = primary;
+                SpellScripts.Add(script);
+            }
         }
 
         public Sprite Target => Monster.Target;
@@ -46,13 +71,6 @@ namespace Darkages.Storage.locales.Scripts.Monsters
 
             if (client.Aisling.Invisible)
                 return;
-
-
-            if (Monster.Aggressive)
-            {
-                Monster.Target = client.Aisling;
-                Monster.WalkEnabled = true;
-            }
         }
 
         public override void OnAttacked(GameClient client)
@@ -143,6 +161,30 @@ namespace Darkages.Storage.locales.Scripts.Monsters
                 if (Monster.Target?.CurrentHp == 0)
                     ClearTarget();
             }
+            else
+            {
+                if (Monster.Aggressive)
+                {
+                    if (Monster.Target != null && Monster.Target is Monster || Monster.Target == null)
+                    {
+                        Monster.Target = GetObjects(i => i.Serial != Monster.Serial
+                        && i.WithinRangeOf(Monster) && i.CurrentHp > 0,
+                        Monster.Template.MoodType == MoodQualifer.VeryAggressive ? Get.Aislings : Get.Monsters | Get.Aislings)
+                                          .OrderBy(v => v.Position.DistanceFrom(Monster.Position)).FirstOrDefault();
+
+
+                        if (Monster.Target != null && Monster.Target is Monster && Monster.AislingsNearby().Length > 0)
+                        {
+                            Monster.Target = GetObjects(i => i.Serial != Monster.Serial
+                            && i.WithinRangeOf(Monster) && i.CurrentHp > 0, Get.Aislings)
+                                              .OrderBy(v => v.Position.DistanceFrom(Monster.Position)).FirstOrDefault();
+
+                        }
+                    }
+
+                    Monster.WalkEnabled = true;
+                }
+            }
         }
 
         private void CastSpell()
@@ -151,11 +193,18 @@ namespace Darkages.Storage.locales.Scripts.Monsters
                 return;
 
             if (Monster != null && Monster.Target != null && SpellScripts.Count > 0)
+            {
                 if (_random.Next(1, 101) < ServerContext.Config.MonsterSpellSuccessRate)
                 {
                     var spellidx = _random.Next(SpellScripts.Count);
                     SpellScripts[spellidx].OnUse(Monster, Target);
                 }
+            }
+
+            if (Monster != null && Monster.Target != null && Monster.Target.CurrentHp > 0)
+            {
+                DefaultSpell?.OnUse(Monster, Monster.Target);
+            }
         }
 
         private void Walk()
@@ -244,7 +293,11 @@ namespace Darkages.Storage.locales.Scripts.Monsters
                     SkillScripts[idx].OnUse(Monster);
             }
 
-            Monster?.Attack(Target);
+            if (Monster != null && DefaultSkill != null)
+            {
+                DefaultSkill.OnUse(Monster);
+            }
+
         }
 
         private void ClearTarget()
