@@ -118,6 +118,8 @@ namespace Darkages
 
         public Dictionary<string, int> MonsterKillCounters = new Dictionary<string, int>();
 
+        public bool TutorialCompleted { get; set; }
+
         public byte Blind { get; set; }
 
         public byte HeadAccessory1 { get; set; }
@@ -315,10 +317,11 @@ namespace Darkages
                 EquipmentManager = new EquipmentManager(null),
                 NameColor = 1,
                 BootColor = 0,
-                Amplified = 0
+                Amplified = 0,
+                TutorialCompleted = false
             };
 
-            //Skill.GiveTo(result, "Assail");
+           // Skill.GiveTo(result, "Assail");
 
             int idx = 1;
             foreach (var skill in ServerContext.GlobalSkillTemplateCache.Keys)

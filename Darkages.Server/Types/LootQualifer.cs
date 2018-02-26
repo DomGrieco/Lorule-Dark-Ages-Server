@@ -11,4 +11,5 @@ namespace Darkages.Types
         Gold   = 1 << 5,
         None   = 256
     }
+
 }

@@ -48,10 +48,8 @@ namespace Darkages.Storage.locales.Scripts.Global
                         {
                             if (!quest.Completed)
                             {
-                                var item = Item.Create(client.Aisling, ServerContext.GlobalItemTemplateCache["Dirk"]);
-                                item.GiveTo(client.Aisling, true);
-
-                                client.SendMessage(0x02, "You pick up some gear from the chest.");
+                                quest.OnCompleted(client.Aisling, true);
+                                client.SendMessage(0x02, "You pick up your gear from the chest, and begin putting it on.");
                             }
                         }
                     }
@@ -69,17 +67,12 @@ namespace Darkages.Storage.locales.Scripts.Global
                 Icon = (byte)LegendIcon.Community,
                 Value = "A Spiritual Awakening"
             });
-            quest.ExpRewards.Add(50);
-            quest.ExpRewards.Add(100);
-            quest.ExpRewards.Add(100);
-            quest.ExpRewards.Add(100);
-            quest.ExpRewards.Add(100);
-            quest.ExpRewards.Add(100);
-            quest.ExpRewards.Add(100);
-            quest.ExpRewards.Add(100);
-
-            quest.GoldReward = 2500;
+            quest.GoldReward = 1000;
             quest.ItemRewards.Add(ServerContext.GlobalItemTemplateCache[client.Aisling.Gender == Gender.Male ? "Shirt" : "Blouse"]);
+            quest.ItemRewards.Add(ServerContext.GlobalItemTemplateCache["Sea Belt"]);
+            quest.ItemRewards.Add(ServerContext.GlobalItemTemplateCache["Stick"]);
+            quest.ItemRewards.Add(ServerContext.GlobalItemTemplateCache["Small Emerald Ring"]);
+            quest.ItemRewards.Add(ServerContext.GlobalItemTemplateCache["Small Spinal Ring"]);
 
             client.Aisling.Quests.Add(quest);
             quest.QuestStages = new List<QuestStep<Template>>();

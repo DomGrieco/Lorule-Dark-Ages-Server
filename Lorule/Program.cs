@@ -1,4 +1,5 @@
 ﻿using Darkages;
+using Darkages.Types;
 using System;
 using System.Threading;
 
@@ -10,6 +11,8 @@ namespace Lorule
 
         static void Main(string[] args)
         {
+            var s = (short)MoodQualifer.Neutral;
+
             _Server = new Instance();
             _Server.Start();
             _Server.Report();

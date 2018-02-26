@@ -81,11 +81,6 @@ namespace Darkages.Network.Game.Components
                         (obj as Aisling).RemoveFromView(dObj);
                         dObj.RemoveFrom(obj as Aisling);
                     }
-
-                if (dObj is Item || dObj is Money)
-                {
-                    dObj.AbandonedDate = DateTime.UtcNow;
-                }
             }
         }
 
@@ -221,7 +216,7 @@ namespace Darkages.Network.Game.Components
                     removes++;
                 }
 
-            if (removes > 0 && ServerContext.Config.LogDestroyedObjects)
+            if (removes > 0)
                 Console.WriteLine("[ObjectComponent] {0} Objects Destroyed. (Abandoned Item, Money.) ", removes);
         }
     }

@@ -9,7 +9,7 @@
   "Coponent": 0.0,
   "Factor": 0.0,
   "LootType": 36,
-  "MoodTyle": 2,
+  "MoodTyle": 8,
   "SpawnType": 1,
   "ElementType": 0,
   "PathQualifer": 1,
@@ -29,7 +29,7 @@
   "AttackSpeed": 1600,
   "ImageVarience": 4,
   "SpawnOnlyOnActiveMaps": false,
-  "UpdateMapWide": true,
+  "UpdateMapWide": false,
   "Grow": false,
   "Name": "Walkers",
  "Drops": {

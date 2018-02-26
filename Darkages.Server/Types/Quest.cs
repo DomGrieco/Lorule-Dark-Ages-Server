@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Darkages.Network.Game;
+using Darkages.Scripting;
 using Newtonsoft.Json;
 
 namespace Darkages.Types
@@ -41,7 +42,7 @@ namespace Darkages.Types
         public QuestStep<Template> Current => QuestStages.Count > 0 ? QuestStages[StageIndex] : null;
 
 
-        public void OnCompleted(Aisling user)
+        public void OnCompleted(Aisling user, bool equipLoot = false)
         {
             Rewarded = true;
             Completed = true;
@@ -92,7 +93,7 @@ namespace Darkages.Types
 
 
             if (ExpRewards.Count > 0)
-                ExpRewards.ForEach(i => Monster.DistributeExperience(user, i, i, 0));
+                ExpRewards.ForEach(i => Monster.DistributeExperience(user, i));
 
 
             if (GoldReward > 0)
@@ -101,7 +102,41 @@ namespace Darkages.Types
                 user.Client.SendMessage(0x02, string.Format("You found {0} gold.", GoldReward));
             }
 
+            if (equipLoot)
+            {
+                EquipRewards(user);
+            }
+
             user.Client.SendStats(StatusFlags.All);
+        }
+
+        private static void EquipRewards(Aisling user)
+        {
+            var items = new List<Item>();
+
+            lock (user.Inventory)
+            {
+                items = new List<Item>(user
+                    .Inventory
+                    .Items
+                    .Select(i => i.Value).ToArray()
+                    );
+            }
+
+            foreach (var obj in items)
+            {
+                if (obj != null)
+                {
+                    user.EquipmentManager.Add
+                        (
+                            obj.Template.EquipmentSlot,
+                            obj
+                        );
+
+                    obj.Script = ScriptManager.Load<ItemScript>(obj.Template.ScriptName, obj);
+                    obj.Script?.Equipped(user, (byte)obj.Template.EquipmentSlot);
+                }
+            }
         }
 
         public void UpdateQuest(Aisling user)

@@ -141,13 +141,12 @@ namespace Darkages.Scripting.Scripts.Skills
 
                         Target = i;
 
-
-                        var imp = (Skill.Level * 10 / 100);
-                        var dmg = (sprite.Str * imp);
-
-                        dmg *= 3;
-
-                        i.ApplyDamage(sprite, dmg);
+                        var dmg = sprite.GetBaseDamage(Target);
+                        {
+                            i.ApplyDamage(sprite, dmg);
+                        }
+                        
+                        Console.WriteLine(dmg);
 
                         if (i is Monster)
                             (i as Monster).Target = sprite;

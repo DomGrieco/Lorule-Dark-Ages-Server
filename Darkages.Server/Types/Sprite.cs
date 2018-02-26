@@ -9,6 +9,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using static Darkages.Types.ElementManager;
+using static Darkages.Types.PrimaryStat;
 
 namespace Darkages.Types
 {
@@ -50,19 +51,6 @@ namespace Darkages.Types
             Debuffs = new ConcurrentDictionary<string, Debuff>();
         }
 
-        public int PrimaryStat() { 
-            var sums = new List<int>();
-            {
-                sums.Add(Str);
-                sums.Add(Int);
-                sums.Add(Wis);
-                sums.Add(Con);
-                sums.Add(Dex);
-            }
-
-            return sums.Max();
-        }
-
         [JsonIgnore] public GameClient Client { get; set; }
 
         [JsonIgnore] public Area Map => ServerContext.GlobalMapCache[CurrentMapId] ?? null;
@@ -89,6 +77,8 @@ namespace Darkages.Types
 
         public int Amplified { get; set; }
 
+        public PrimaryStat MajorAttribute { get; set; }
+
         [JsonIgnore] public Sprite Target { get; set; }
 
         [JsonIgnore] public Position Position => new Position(X, Y);
@@ -100,6 +90,39 @@ namespace Darkages.Types
         [JsonIgnore] public DateTime CreationDate { get; set; }
 
         [JsonIgnore] public DateTime LastUpdated { get; set; }
+
+        public bool IsPrimaryStat()
+        {
+            var sums = new List<int>();
+            {
+                sums.Add(Str);
+                sums.Add(Int);
+                sums.Add(Wis);
+                sums.Add(Con);
+                sums.Add(Dex);
+            }
+
+            return sums.Max() == GetPrimaryAttribute();
+        }
+
+        public int GetPrimaryAttribute()
+        {
+            switch (MajorAttribute)
+            {
+                case PrimaryStat.STR:
+                    return Str;
+                case PrimaryStat.INT:
+                    return Int;
+                case PrimaryStat.WIS:
+                    return Wis;
+                case PrimaryStat.CON:
+                    return Con;
+                case PrimaryStat.DEX:
+                    return Dex;
+                default:
+                    return 0;
+            }
+        }
 
         public bool HasBuff(string buff)
         {
@@ -141,6 +164,19 @@ namespace Darkages.Types
             }
 
             return false;
+        }
+
+        public int GetBaseDamage(Sprite target)
+        {
+            var formula = 0;
+
+            if (this is Monster)
+                formula = (int)((this as Monster).Template.Level * 3.58) * 4;
+
+            if (this is Mundane)
+                formula = (int)((this as Mundane).Template.Level * 3.58) * 4;
+
+            return Math.Abs(formula) + 1;
         }
 
         public void RemoveAllBuffs()
@@ -389,7 +425,6 @@ namespace Darkages.Types
         /// </summary>
         public void Show<T>(Scope op, T format, Sprite[] definer = null) where T : NetworkFormat
         {
-
             switch (op)
             {
                 case Scope.Self:
@@ -620,12 +655,37 @@ namespace Darkages.Types
 
         public void RemoveFrom(Aisling nearbyAisling)
         {
-            if (nearbyAisling != null) nearbyAisling.Show(Scope.Self, new ServerFormat0E(Serial));
+            if (nearbyAisling != null)
+            {
+                nearbyAisling.Show(Scope.Self, new ServerFormat0E(Serial));
+
+                if (this is Item || this is Money)
+                {
+                    if (AislingsNearby().Length == 0 && BelongsTo(nearbyAisling))
+                        AbandonedDate = DateTime.UtcNow;
+                }
+            }
+        }
+
+        public bool BelongsTo(Sprite subject)
+        {
+            if (this is Item)
+            {
+                if ((this as Item).AuthenticatedAislings.FirstOrDefault(i => i.Serial == subject.Serial) == null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void ShowTo(Aisling nearbyAisling)
         {
-            if (nearbyAisling != null) nearbyAisling.Show(Scope.Self, new ServerFormat07(new[] {this}));
+            if (nearbyAisling != null)
+            {
+                nearbyAisling.Show(Scope.Self, new ServerFormat07(new[] { this }));
+            }
         }
 
         public bool WithinRangeOf(int x, int y, int distance)

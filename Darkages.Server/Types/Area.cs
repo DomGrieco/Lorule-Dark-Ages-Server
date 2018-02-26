@@ -156,7 +156,6 @@ namespace Darkages
 
         public void Update(TimeSpan elapsedTime)
         {
-
             if (Has<Monster>())
                 UpdateMonsters(elapsedTime);
 
@@ -168,6 +167,7 @@ namespace Darkages
 
             if (Has<Item>() || Has<Money>())
                 UpdateItems(elapsedTime);
+
 
             WarpTimer.Update(elapsedTime);
             if (WarpTimer.Elapsed)
@@ -251,8 +251,11 @@ namespace Darkages
                     {
                         if ((DateTime.UtcNow - obj.CreationDate).TotalMinutes > 3)
                         {
-                            (obj as Item).AuthenticatedAislings = null;
-                            (obj as Item).Cursed = false;
+                            if ((obj as Item).Cursed)
+                            {
+                                (obj as Item).AuthenticatedAislings = null;
+                                (obj as Item).Cursed = false;
+                            }
                         }
                     }
                 }

@@ -1521,6 +1521,12 @@ namespace Darkages.Network.Game
             if (client.Aisling.IsSleeping || client.Aisling.IsFrozen)
                 return;
 
+            //if (!client.Aisling.TutorialCompleted)
+            //{
+            //    client.SendMessage(0x02, "{=sYou are not ready. You must understand more first.");
+            //    return;
+            //}
+
             var attribute = (Stat) format.Stat;
 
             if (client.Aisling.StatPoints == 0)

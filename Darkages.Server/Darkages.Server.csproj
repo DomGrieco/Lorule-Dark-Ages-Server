@@ -465,6 +465,7 @@
     <Compile Include="Types\Popup.cs" />
     <Compile Include="Types\PortalSession.cs" />
     <Compile Include="Types\PostQualifer.cs" />
+    <Compile Include="Types\PrimaryStat.cs" />
     <Compile Include="Types\Quest.cs" />
     <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="Scripting\SkillScript.cs" />

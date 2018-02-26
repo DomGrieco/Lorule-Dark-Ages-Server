@@ -1,0 +1,36 @@
+{
+  "$type": "Darkages.Types.ItemTemplate, Darkages.Server",
+  "ID": 0,
+  "CanStack": false,
+  "MaxStack": 0,
+  "Image": 213,
+  "DisplayImage": 32981,
+  "ScriptName": "Generic",
+  "Gender": 255,
+  "HealthModifer": {
+    "$type": "Darkages.Types.StatusOperator, Darkages.Server",
+    "Option": 0,
+    "Value": 300
+  },
+  "DmgModifer": {
+    "$type": "Darkages.Types.StatusOperator, Darkages.Server",
+    "Option": 0,
+    "Value": 2
+  },
+  "OffenseElement": 0,
+  "DefenseElement": 0,
+  "CarryWeight": 2,
+  "Flags": 95,
+  "MaxDurability": 2000,
+  "Value": 1500,
+  "EquipmentSlot": 7,
+  "Class": 0,
+  "LevelRequired": 1,
+  "DmgMin": 0,
+  "DmgMax": 0,
+  "DropRate": 0.0,
+  "StageRequired": 0,
+  "HasPants": false,
+  "Color": 0,
+  "Name": "Small Emerald Ring"
+}

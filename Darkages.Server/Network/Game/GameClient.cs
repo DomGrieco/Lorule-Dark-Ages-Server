@@ -185,12 +185,23 @@ namespace Darkages.Network.Game
             if (area == null)
                 return;
 
-            LeaveArea(true);
-            Aisling.X = position.X;
-            Aisling.Y = position.Y;
-            Aisling.CurrentMapId = area.ID;
-            Aisling.AreaID = Aisling.CurrentMapId;
-            EnterArea();
+            if (area.ID != Aisling.CurrentMapId)
+            {
+                LeaveArea(true);
+                Aisling.X = position.X;
+                Aisling.Y = position.Y;
+                Aisling.CurrentMapId = area.ID;
+                Aisling.AreaID = Aisling.CurrentMapId;
+                EnterArea();
+            }
+            else
+            {
+                LeaveArea(true, false);
+                Aisling.X = position.X;
+                Aisling.Y = position.Y;
+                EnterArea();
+            }
+
             Aisling.Client.CloseDialog();
         }
 
@@ -386,8 +397,8 @@ namespace Darkages.Network.Game
 
         private void SetupRegenTimers()
         {
-            var HpregenRate = Aisling.Con * ServerContext.Config.RegenRate * 100 / 100 * 1000;
-            var MpregenRate = Aisling.Wis * ServerContext.Config.RegenRate * 100 / 100 * 1000;
+            var HpregenRate = 150 * ServerContext.Config.RegenRate * 100 / 100 * 1000;
+            var MpregenRate = 100 * ServerContext.Config.RegenRate * 100 / 100 * 1000;
 
             HpRegenTimer = new GameServerTimer(
                 TimeSpan.FromMilliseconds(1000 + HpregenRate));

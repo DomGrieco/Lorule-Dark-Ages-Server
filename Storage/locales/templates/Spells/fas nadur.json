@@ -1,0 +1,26 @@
+{
+  "$type": "Darkages.Types.SpellTemplate, Darkages.Server",
+  "Icon": 119,
+  "MaxLevel": 70,
+  "ScriptKey": "fas nadur",
+  "MinLines": 0,
+  "MaxLines": 0,
+  "ManaCost": 10,
+  "Text": "\u0000",
+  "Debuff": {
+    "$type": "Darkages.Storage.locales.debuffs.debuff_fasnadur, Darkages.Server",
+    "Name": "fas nadur",
+    "Icon": 119,
+    "Length": 90
+  },
+  "TargetType": 2,
+  "BaseLines": 4,
+  "LevelRate": 0.01,
+  "Sound": 20,
+  "Animation": 126,
+  "DamageExponent": 0.0,
+  "Pane": 1,
+  "ElementalProperty": 0,
+  "TierLevel": 9,
+  "Name": "fas nadur"
+}

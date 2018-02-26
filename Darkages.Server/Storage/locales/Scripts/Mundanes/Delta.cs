@@ -144,6 +144,7 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
             else if (quest.Completed)
             {
                 client.SendOptionsDialog(Mundane, "Please, Don't ever come back here.....");
+                client.TransitionToMap(client.Aisling.Map, new Position(56, 42));
             }
             else
             {
@@ -213,6 +214,10 @@ namespace Darkages.Storage.locales.Scripts.Mundanes
                         if (quest != null && !quest.Rewarded && !quest.Completed)
                         {
                             quest.OnCompleted(client.Aisling);
+
+                            client.TransitionToMap(client.Aisling.Map, new Position(56, 42));
+
+
                             if (SequenceMenu.CanMoveNext)
                             {
                                 SequenceMenu.MoveNext(client);

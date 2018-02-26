@@ -1,10 +1,14 @@
-﻿namespace Darkages.Types
+﻿using System;
+
+namespace Darkages.Types
 {
+    [Flags]
     public enum MoodQualifer
     {
-        Aggressive,
-        Unpredicable,
-        Neutral,
-        VeryAggressive
+        Idle           = 1,
+        Aggressive     = 2,
+        Unpredicable   = 4,
+        Neutral        = 8,
+        VeryAggressive = 16
     }
 }

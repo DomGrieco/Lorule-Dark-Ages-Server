@@ -114,59 +114,38 @@ namespace Darkages.Types
 
         private void GenerateExperience(Aisling player)
         {
-            var percent = 0.3;
-            var poly    = 9;
-
-            var coponent   = poly + player.ExpLevel / Template.Level + 99 * 2;
-            var expToAward = Math.Round(coponent / percent * (player.ExpLevel * 0.30));
-            var expGained  = Math.Round(player.ExpLevel * expToAward);
+            var exp = 0;
+            var seed = (Template.Level * 0.1) + 1.5;
+            {
+                exp = (int)(Template.Level * seed * 300);
+            }
 
             unchecked
             {
-                expGained = (expGained / player.GroupParty.Length);
+                exp = (exp / player.GroupParty.Length);
             }
 
-            var p = player.ExpLevel - Template.Level;
-
-            if (p / 10 > 0)
-            { 
-                expGained  /= 10;
-                expToAward /= 10;
-            }
-
-            DistributeExperience(player, expGained, expToAward, p);
+            DistributeExperience(player, exp);
 
             foreach (var party in player.PartyMembers.Where(i => i.Serial != player.Serial))
             {
-                p = player.ExpLevel - Template.Level;
-
-                if (p / 10 > 0)
-                {
-                    expGained  /= 10;
-                    expToAward /= 10;
-                }
-
                 if (party.WithinRangeOf(player))
-                    DistributeExperience(party, expGained, expToAward, p);
+                    DistributeExperience(party, exp);
             }
         }
 
-        public static void DistributeExperience(Aisling player, double expGained, double expToAward, double p)
+        public static void DistributeExperience(Aisling player, double exp)
         {
+            player.ExpTotal += (int)exp;
+            player.ExpNext  -= (int)exp;
 
+            player.Client.SendMessage(0x02, string.Format("You received {0} Experience!.", (int)exp));
 
-            if (p < 0)
-                expGained = expToAward * (Math.Abs(p) + 3);
-
-
-            player.ExpTotal += (int)expGained;
-            player.ExpNext -= (int)expGained;
-
-            player.Client.SendMessage(0x02, string.Format("You received {0} Experience!.", (int)expGained));
+            var seed = (player.ExpLevel * 0.1) + 0.5;
 
             while (player.ExpNext <= 0)
             {
-                player.ExpNext = (int)(player.ExpLevel * (1 + (player.ExpLevel * (3 + 2 * player.ExpLevel)) / 6 + expGained));
+                player.ExpNext = (int)(player.ExpLevel * seed * 5000);
 
                 Levelup(player);
             }
@@ -399,15 +378,20 @@ namespace Darkages.Types
             else if ((template.PathQualifer & PathQualifer.Patrol) == PathQualifer.Patrol)
                 obj.WalkEnabled = true;
 
+            Console.WriteLine(template.MoodType);
 
-            if (template.MoodType == MoodQualifer.Aggressive)
+            if (template.MoodType.HasFlag(MoodQualifer.Aggressive))
                 obj.Aggressive = true;
-            else if (template.MoodType == MoodQualifer.Unpredicable)
+            else if (template.MoodType.HasFlag(MoodQualifer.Unpredicable))
                 lock (Generator.Random)
                 {
                     //this monster has a 50% chance of being aggressive.
                     obj.Aggressive = Generator.Random.Next(1, 101) > 50;
                 }
+            else
+            {
+                obj.Aggressive = false;
+            }
 
             if ((template.SpawnType & SpawnQualifer.Random) == SpawnQualifer.Random)
             {

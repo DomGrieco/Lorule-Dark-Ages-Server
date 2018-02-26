@@ -58,6 +58,9 @@ namespace Darkages.Systems.Loot
         public static long GlobalRolls = 0;
         public ILootDefinition Drop(ILootTable lootTable)
         {
+            if (lootTable == null || lootTable.Children.Count == 0)
+                return null;
+
             var item = Pick(lootTable.Children);
             if (item == null)
                 return null;
