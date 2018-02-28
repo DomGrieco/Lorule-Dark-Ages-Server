@@ -51,14 +51,11 @@ namespace Darkages.Storage.locales.Scripts.Skills
                         if (i == null)
                             continue;
 
-
                         if (client.Aisling.Serial == i.Serial)
                             continue;
 
                         if (i is Money)
                             continue;
-
-                        Target = i;
 
                         var dmg = Convert.ToInt32(client.Aisling.CurrentHp / 3);
                         i.ApplyDamage(sprite, dmg, true, Skill.Template.Sound);
@@ -66,8 +63,6 @@ namespace Darkages.Storage.locales.Scripts.Skills
                         sprite.CurrentHp -= dmg * 2;
                         ((Aisling) sprite).Client.SendStats(StatusFlags.StructB);
 
-
-                        if (i is Monster) (i as Monster).Target = client.Aisling;
 
                         if (i is Aisling)
                         {

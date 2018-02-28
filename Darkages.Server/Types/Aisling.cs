@@ -329,7 +329,7 @@ namespace Darkages
                 if (ServerContext.GlobalSkillTemplateCache[skill].Pane == Pane.Tools)
                     continue;
 
-                Skill.GiveTo(result, skill);
+                Skill.GiveTo(result, skill, 1);
             }
 
 
@@ -347,7 +347,7 @@ namespace Darkages
                 if (ServerContext.GlobalSpellTemplateCache[spell].Pane == Pane.Tools)
                     continue;
 
-                Spell.GiveTo(result, spell);
+                Spell.GiveTo(result, spell, 1);
             }
 
             idx = 1;

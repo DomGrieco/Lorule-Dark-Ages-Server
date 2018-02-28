@@ -160,12 +160,10 @@ namespace Darkages.Storage.locales.Scripts.Spells
                         continue;
 
 
-                    var dmg = (int)(sprite.Int * Spell.Template.DamageExponent) * (5 + Spell.Level * 10 / 100);
+                    var dmg = sprite.GetBaseDamage(t);
 
                     t.ApplyDamage(sprite, dmg, Spell.Template.ElementalProperty, Spell.Template.Sound);
                     t.SendAnimation(Spell.Template.Animation, t, sprite);
-                    t.Target = sprite;
-
 
                     var action = new ServerFormat1A
                     {

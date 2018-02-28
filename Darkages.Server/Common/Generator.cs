@@ -21,6 +21,15 @@ namespace Darkages.Common
         public static Collection<string> GeneratedStrings { get; }
 
 
+        public static T RandomEnumValue<T>()
+        {
+            lock (Random)
+            {
+                var v = Enum.GetValues(typeof(T));
+                return (T)v.GetValue(Random.Next(1, v.Length));
+            }
+        }
+
         public static int GenerateNumber()
         {
             uint id = 0;

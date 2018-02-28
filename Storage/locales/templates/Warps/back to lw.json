@@ -9,37 +9,7 @@
         "$type": "Darkages.Types.Warp, Darkages.Server",
         "Location": {
           "$type": "Darkages.Types.Position, Darkages.Server",
-          "X": 16,
-          "Y": 34
-        },
-        "AreaID": 80,
-        "PortalKey": 0
-      },
-      {
-        "$type": "Darkages.Types.Warp, Darkages.Server",
-        "Location": {
-          "$type": "Darkages.Types.Position, Darkages.Server",
           "X": 17,
-          "Y": 34
-        },
-        "AreaID": 80,
-        "PortalKey": 0
-      },
-      {
-        "$type": "Darkages.Types.Warp, Darkages.Server",
-        "Location": {
-          "$type": "Darkages.Types.Position, Darkages.Server",
-          "X": 18,
-          "Y": 34
-        },
-        "AreaID": 80,
-        "PortalKey": 0
-      },
-      {
-        "$type": "Darkages.Types.Warp, Darkages.Server",
-        "Location": {
-          "$type": "Darkages.Types.Position, Darkages.Server",
-          "X": 19,
           "Y": 34
         },
         "AreaID": 80,

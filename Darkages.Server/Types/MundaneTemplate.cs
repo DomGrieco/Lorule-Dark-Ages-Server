@@ -8,6 +8,10 @@ namespace Darkages.Types
 {
     public class MundaneTemplate : Template
     {
+        public int WalkRate { get; set; }
+        public int TurnRate { get; set; }
+        public int CastRate { get; set; }
+
         public bool EnableCasting { get; set; }
         public List<string> Spells { get; set; }
         public List<string> Skills { get; set; }
@@ -18,7 +22,7 @@ namespace Darkages.Types
         }
 
         public short  Image { get; set; }
-        public byte   Level { get; set; }
+        public int   Level { get; set; }
         public string ScriptKey { get; set; }
 
         public bool EnableWalking { get; set; }

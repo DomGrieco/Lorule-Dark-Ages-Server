@@ -14,14 +14,17 @@ namespace Darkages.Types
 
         public void GiveTo(int amount, Aisling aisling)
         {
-            aisling.GoldPoints += amount;
+            if (aisling.GoldPoints + amount < ServerContext.Config.MaxCarryGold)
+            {
+                aisling.GoldPoints += amount;
 
-            if (aisling.GoldPoints > ServerContext.Config.MaxCarryGold)
-                aisling.GoldPoints = int.MaxValue;
+                if (aisling.GoldPoints > ServerContext.Config.MaxCarryGold)
+                    aisling.GoldPoints = int.MaxValue;
 
-            aisling.Client.Send(new ServerFormat08(aisling, StatusFlags.StructC));
+                aisling.Client.Send(new ServerFormat08(aisling, StatusFlags.StructC));
 
-            Remove<Money>();
+                Remove<Money>();
+            }
         }
 
         public static void Create(Sprite Parent, int ammount, Position location)

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using static Darkages.ServerContext;
+using static Darkages.Common.Generator;
 
 namespace Darkages.Types
 {
@@ -286,27 +287,23 @@ namespace Darkages.Types
                 var aisling = target as Aisling;
 
                 if (!TaggedAislings.ContainsKey(aisling.Serial))
+                {
                     TaggedAislings.TryAdd(aisling.Serial, aisling);
+                }
 
                 if (aisling.GroupParty.LengthExcludingSelf > 0)
                 {
                     foreach (var member in aisling.GroupParty.MembersExcludingSelf)
                     {
                         if (!TaggedAislings.ContainsKey(member.Serial))
+                        {
                             TaggedAislings.TryAdd(member.Serial, member);
+                        }
                     }
                 }
             }
         }
 
-        private static T RandomEnumValue<T>()
-        {
-            lock (Generator.Random)
-            {
-                var v = Enum.GetValues(typeof(T));
-                return (T)v.GetValue(Generator.Random.Next(1, v.Length));
-            }
-        }
 
         public static Monster Create(MonsterTemplate template, Area map)
         {
@@ -319,7 +316,7 @@ namespace Darkages.Types
             if (template.MovementSpeed == 0)
                 template.MovementSpeed = 2000;
 
-            if (template.Level == 0)
+            if (template.Level <= 0)
                 template.Level = 1;
 
             var obj = new Monster();
@@ -333,13 +330,10 @@ namespace Darkages.Types
             if (obj.Template.Grow)
                 obj.Template.Level++;
 
-            if (obj.Template.Level > 99)
-                obj.Template.Level = 1;
-
 
             //=E4 / 0.1 * E6 
-            obj.Template.MaximumHP = (int)(obj.Template.Level / 0.1 * 35);
-            obj.Template.MaximumMP = (int)(obj.Template.Level / 0.1 * 25);
+            obj.Template.MaximumHP = (int)(obj.Template.Level / 0.1 * 15);
+            obj.Template.MaximumMP = (int)(obj.Template.Level / 0.1 * 5);
 
             //calculate what ac to give depending on level.
             obj.BonusAc = (sbyte)(70 - 101 / 70 * template.Level);
@@ -350,6 +344,10 @@ namespace Darkages.Types
             obj.DefenseElement = ElementManager.Element.None;
             obj.OffenseElement = ElementManager.Element.None;
 
+            if (template.Name == "Broken")
+            {
+
+            }
 
             if (obj.Template.ElementType == ElementQualifer.Random)
             {
@@ -378,8 +376,6 @@ namespace Darkages.Types
             else if ((template.PathQualifer & PathQualifer.Patrol) == PathQualifer.Patrol)
                 obj.WalkEnabled = true;
 
-            Console.WriteLine(template.MoodType);
-
             if (template.MoodType.HasFlag(MoodQualifer.Aggressive))
                 obj.Aggressive = true;
             else if (template.MoodType.HasFlag(MoodQualifer.Unpredicable))
@@ -393,7 +389,7 @@ namespace Darkages.Types
                 obj.Aggressive = false;
             }
 
-            if ((template.SpawnType & SpawnQualifer.Random) == SpawnQualifer.Random)
+            if (template.SpawnType == SpawnQualifer.Random)
             {
                 var x = Generator.Random.Next(1, map.Cols);
                 var y = Generator.Random.Next(1, map.Rows);
@@ -430,7 +426,7 @@ namespace Darkages.Types
                 obj.X = x;
                 obj.Y = y;
             }
-            else if ((template.SpawnType & SpawnQualifer.Defined) == SpawnQualifer.Defined)
+            else if (template.SpawnType == SpawnQualifer.Defined)
             {
                 obj.X = template.DefinedX;
                 obj.Y = template.DefinedY;

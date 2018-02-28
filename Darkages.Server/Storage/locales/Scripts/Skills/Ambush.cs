@@ -35,7 +35,7 @@ namespace Darkages.Storage.locales.Scripts.Skills
             {
                 var client = (sprite as Aisling).Client;
 
-                var targets = client.Aisling.GetInfront(3).ToList();
+                var targets = client.Aisling.GetInfront(3, true).ToList();
                 var prev = client.Aisling.Position;
                 Position targetPosition = null;
 

@@ -41,8 +41,8 @@
     "$type": "Darkages.Types.Warp, Darkages.Server",
     "Location": {
       "$type": "Darkages.Types.Position, Darkages.Server",
-      "X": 8,
-      "Y": 19
+      "X": 17,
+      "Y": 34
     },
     "AreaID": 83,
     "PortalKey": 0

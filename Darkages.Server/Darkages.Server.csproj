@@ -205,6 +205,7 @@
     <Compile Include="Systems\Loot\Modifiers\BaseModifier.cs" />
     <Compile Include="Systems\Loot\Modifiers\NumericModifier.cs" />
     <Compile Include="Systems\Loot\Modifiers\StringModifier.cs" />
+    <Compile Include="Types\AttackModifier.cs" />
     <Compile Include="Types\Board.cs" />
     <Compile Include="Network\ServerFormats\ServerFormat31.cs" />
     <Compile Include="ServerConstants.cs" />

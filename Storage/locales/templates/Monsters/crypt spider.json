@@ -2,19 +2,19 @@
   "$type": "Darkages.Types.MonsterTemplate, Darkages.Server",
   "Drops": {
     "$type": "System.Collections.ObjectModel.Collection`1[[System.String, mscorlib]], mscorlib",
-    "$values": []
+    "$values": [
+      "Holy Diana",
+      "Magus Diana"
+    ]
   },
   "ID": 152,
-  "Image": 0x4098,
+  "Image": 16536,
   "ScriptName": "Common Monster",
   "DefinedX": 33,
   "DefinedY": 13,
-  "Exponent": 0.0,
-  "Coponent": 0.0,
-  "Factor": 0.0,
   "LootType": 36,
-  "MoodTyle": 1,
-  "SpawnType": 1,
+  "MoodType": 0,
+  "SpawnType": 2,
   "ElementType": 2,
   "PathQualifer": 1,
   "Level": 6,
@@ -22,11 +22,9 @@
   "MaximumMP": 0,
   "SpawnerID": 0,
   "AreaID": 152,
-  "RegenSpeed": 0,
   "MovementSpeed": 2000,
   "CastSpeed": 4000,
-  "ArmorClass": 0,
-  "MagicResist": 0,
+  "IsBoss": false,
   "SpawnMax": 1000,
   "SpawnRate": 5,
   "SpawnSize": 10,
@@ -34,23 +32,16 @@
   "IgnoreCollision": false,
   "ImageVarience": 0,
   "SpawnOnlyOnActiveMaps": false,
-  "UpdateMapWide": false,
   "Grow": false,
   "SpellScripts": {
     "$type": "System.Collections.ObjectModel.Collection`1[[System.String, mscorlib]], mscorlib",
     "$values": [
       "beag cradh",
-      "deo saighead",
+      "deo saighead"
     ]
   },
   "DefenseElement": 1,
   "OffenseElement": 0,
-  "Name": "Crypt Spider",
- "Drops": {
-    "$type": "System.Collections.ObjectModel.Collection`1[[System.String, mscorlib]], mscorlib",
-    "$values": [
-	"Holy Diana",
-	"Magus Diana",
-    ]
-  },
+  "UpdateMapWide": false,
+  "Name": "Crypt Spider"
 }

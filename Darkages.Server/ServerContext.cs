@@ -1,24 +1,22 @@
-﻿using System;
+﻿using Darkages.Network.Game;
+using Darkages.Network.Login;
+using Darkages.Network.Object;
+using Darkages.Storage;
+using Darkages.Types;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Darkages.Common;
-using Darkages.Network.Game;
-using Darkages.Network.Login;
-using Darkages.Network.Object;
-using Darkages.Storage;
-using Darkages.Storage.locales.debuffs;
-using Darkages.Types;
 
 namespace Darkages
 {
     public class ServerContext : ObjectManager
     {
-        public static int Errors;
-        public static int DefaultPort;
+        public static int Errors, DefaultPort;
         public static bool Running;
+
         public static GameServer Game;
         public static LoginServer Lobby;
         public static ServerConstants Config;
@@ -111,26 +109,36 @@ namespace Darkages
 
         private static void StartServers()
         {
+#if DEBUG
+            ServerContext.Config.DebugMode = true;
+#endif
+
             Running = false;
 
             redo:
-            if (Errors > Config.ERRORCAP)
-                Process.GetCurrentProcess().Kill();
-
-            try
             {
-                Lobby = new LoginServer(Config.ConnectionCapacity);
-                Lobby.Start(Config.LOGIN_PORT);
-                Game = new GameServer(Config.ConnectionCapacity);
-                Game.Start(DefaultPort);
+                if (Errors > Config.ERRORCAP)
+                    Process.GetCurrentProcess().Kill();
 
-                Running = true;
-            }
-            catch (Exception)
-            {
-                ++DefaultPort;
-                Errors++;
-                goto redo;
+                try
+                {
+                    {
+                        Lobby = new LoginServer(Config.ConnectionCapacity);
+                        Lobby.Start(Config.LOGIN_PORT);
+                    }
+
+                    {
+                        Game = new GameServer(Config.ConnectionCapacity);
+                        Game.Start(DefaultPort);
+                    }
+
+                    Running = true;
+                }
+                catch (Exception)
+                {
+                    { ++DefaultPort; Errors++; }
+                    goto redo;
+                }
             }
         }
 
@@ -160,15 +168,15 @@ namespace Darkages
 
         private static void EmptyCacheCollectors()
         {
-            GlobalItemTemplateCache = new Dictionary<string, ItemTemplate>();
-            GlobalMapCache = new Dictionary<int, Area>();
-            GlobalMetaCache = new List<Metafile>();
-            GlobalMonsterTemplateCache = new Dictionary<string, MonsterTemplate>();
-            GlobalMundaneTemplateCache = new Dictionary<string, MundaneTemplate>();
-            GlobalRedirects = new List<Redirect>();
-            GlobalSkillTemplateCache = new Dictionary<string, SkillTemplate>();
-            GlobalSpellTemplateCache = new Dictionary<string, SpellTemplate>();
-            GlobalWarpTemplateCache = new List<WarpTemplate>();
+            GlobalItemTemplateCache     = new Dictionary<string, ItemTemplate>();
+            GlobalMapCache              = new Dictionary<int, Area>();
+            GlobalMetaCache             = new List<Metafile>();
+            GlobalMonsterTemplateCache  = new Dictionary<string, MonsterTemplate>();
+            GlobalMundaneTemplateCache  = new Dictionary<string, MundaneTemplate>();
+            GlobalRedirects             = new List<Redirect>();
+            GlobalSkillTemplateCache    = new Dictionary<string, SkillTemplate>();
+            GlobalSpellTemplateCache    = new Dictionary<string, SpellTemplate>();
+            GlobalWarpTemplateCache     = new List<WarpTemplate>();
             GlobalWorldMapTemplateCache = new Dictionary<int, WorldMapTemplate>();
         }
 
@@ -193,15 +201,18 @@ namespace Darkages
         public static void InitFromConfig()
         {
             DefaultPort = Config.SERVER_PORT;
-
-            if (!Directory.Exists(StoragePath))
-                Directory.CreateDirectory(StoragePath);
+            {
+                if (!Directory.Exists(StoragePath))
+                    Directory.CreateDirectory(StoragePath);
+            }
         }
 
         public static void LoadMetaDatabase()
         {
             Console.WriteLine("\n----- Loading Meta Database -----");
-            GlobalMetaCache.AddRange(MetafileManager.GetMetafiles());
+            {
+                GlobalMetaCache.AddRange(MetafileManager.GetMetafiles());
+            }
             Console.WriteLine(" -> Building Meta Cache: {0} loaded.", GlobalMetaCache.Count);
         }
 
@@ -222,8 +233,11 @@ namespace Darkages
 
         public static void CacheCommunityAssets()
         {
-            Community = 
-                Board.CacheFromStorage().OrderBy(i => i.Index).ToArray();
+            if (Community != null)
+            {
+                Community =
+                    Board.CacheFromStorage().OrderBy(i => i.Index).ToArray();
+            }
         }
 
         public static void LoadAndCacheStorage()
@@ -241,6 +255,7 @@ namespace Darkages
                 LoadWorldMapTemplates();
                 CacheCommunityAssets();
             }
+
 
             Console.WriteLine("\n");
         }

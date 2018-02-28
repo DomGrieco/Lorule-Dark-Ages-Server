@@ -3,10 +3,9 @@
 namespace Darkages.Types
 {
     [Flags]
-    public enum SpawnQualifer
+    public enum SpawnQualifer 
     {
-        Random = 1,
-        Defined = 2,
-        NearPlayers = 3
+        Random  = 1 << 1,
+        Defined = 1 << 2,
     }
 }

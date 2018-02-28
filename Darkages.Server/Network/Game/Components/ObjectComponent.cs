@@ -210,13 +210,16 @@ namespace Darkages.Network.Game.Components
 
             var removes = 0;
             foreach (var obj in objects)
-                if ((DateTime.UtcNow - obj.AbandonedDate).TotalSeconds > ServerContext.Config.DropDecayInSeconds)
+                if (obj.AislingsNearby().Length == 0)
                 {
-                    obj.Remove();
-                    removes++;
+                    if ((DateTime.UtcNow - obj.AbandonedDate).TotalSeconds > ServerContext.Config.DropDecayInSeconds)
+                    {
+                        obj.Remove();
+                        removes++;
+                    }
                 }
 
-            if (removes > 0)
+            if (removes > 0 && ServerContext.Config.DebugMode)
                 Console.WriteLine("[ObjectComponent] {0} Objects Destroyed. (Abandoned Item, Money.) ", removes);
         }
     }

@@ -10,7 +10,7 @@
   "CurrentWeight": 7,
   "MaximumWeight": 10,
   "Created": "2018-02-26T12:35:33.9932715Z",
-  "LastLogged": "2018-02-26T12:35:39.5026203Z",
+  "LastLogged": "2018-02-28T03:06:58.2060369Z",
   "Username": "hi",
   "Password": "hi",
   "AbpLevel": 0,
@@ -22,7 +22,7 @@
   "Gender": 1,
   "Title": 0,
   "Flags": 0,
-  "AreaID": 99,
+  "AreaID": 101,
   "ClassID": 0,
   "GamePoints": 0,
   "GoldPoints": 3559,
@@ -48,7 +48,7 @@
     "$value": ""
   },
   "ProfileMessage": "",
-  "LoggedIn": false,
+  "LoggedIn": true,
   "Nation": 3,
   "Clan": "",
   "Resting": 0,
@@ -80,7 +80,7 @@
         "Icon": 1,
         "Level": 100,
         "ID": 651,
-        "NextAvailableUse": "2018-02-26T12:40:02.9883281Z",
+        "NextAvailableUse": "2018-02-28T03:07:20.6893301Z",
         "Ready": true,
         "InUse": false,
         "Uses": 0
@@ -222,7 +222,7 @@
         },
         "Level": 100,
         "Slot": 1,
-        "NextAvailableUse": "0001-01-01T00:00:00",
+        "NextAvailableUse": "2018-02-28T03:06:58.1965142Z",
         "InUse": false
       },
       "2": null,
@@ -387,21 +387,22 @@
         "Durability": 3184,
         "Color": 13,
         "Upgrades": 0,
+        "AttackType": 0,
+        "DamageType": 0,
+        "DefinedDamage": 0,
+        "DefinedPercentage": 0,
         "Debuffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
         },
         "Buffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
         },
+        "TargetPool": {
+          "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+        },
         "Serial": 2116,
         "X": 47,
         "Y": 76,
-        "Direction": 0,
-        "CurrentMapId": 99,
-        "OffenseElement": 0,
-        "DefenseElement": 0,
-        "Amplified": 0,
-        "MajorAttribute": 0,
         "CurrentHp": 0,
         "CurrentMp": 0,
         "_MaximumHp": 0,
@@ -413,7 +414,13 @@
         "_Dex": 0,
         "_Mr": 0,
         "_Dmg": 0,
-        "_Hit": 0
+        "_Hit": 0,
+        "Direction": 0,
+        "CurrentMapId": 99,
+        "OffenseElement": 0,
+        "DefenseElement": 0,
+        "Amplified": 0,
+        "MajorAttribute": 0
       },
       "2": null,
       "3": null,
@@ -530,24 +537,25 @@
           "DisplayImage": 32854,
           "Stacks": 0,
           "Slot": 3,
-          "Durability": 972,
+          "Durability": 969,
           "Color": 13,
           "Upgrades": 0,
+          "AttackType": 0,
+          "DamageType": 0,
+          "DefinedDamage": 0,
+          "DefinedPercentage": 0,
           "Debuffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
           },
           "Buffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
           },
+          "TargetPool": {
+            "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+          },
           "Serial": 721,
           "X": 3,
           "Y": 2,
-          "Direction": 0,
-          "CurrentMapId": 100,
-          "OffenseElement": 0,
-          "DefenseElement": 0,
-          "Amplified": 0,
-          "MajorAttribute": 0,
           "CurrentHp": 0,
           "CurrentMp": 0,
           "_MaximumHp": 0,
@@ -559,7 +567,13 @@
           "_Dex": 0,
           "_Mr": 0,
           "_Dmg": 0,
-          "_Hit": 0
+          "_Hit": 0,
+          "Direction": 0,
+          "CurrentMapId": 100,
+          "OffenseElement": 0,
+          "DefenseElement": 0,
+          "Amplified": 0,
+          "MajorAttribute": 0
         }
       },
       "2": {
@@ -608,24 +622,25 @@
           "DisplayImage": 32864,
           "Stacks": 0,
           "Slot": 1,
-          "Durability": 972,
+          "Durability": 969,
           "Color": 13,
           "Upgrades": 0,
+          "AttackType": 0,
+          "DamageType": 0,
+          "DefinedDamage": 0,
+          "DefinedPercentage": 0,
           "Debuffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
           },
           "Buffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
           },
+          "TargetPool": {
+            "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+          },
           "Serial": 719,
           "X": 3,
           "Y": 2,
-          "Direction": 0,
-          "CurrentMapId": 100,
-          "OffenseElement": 0,
-          "DefenseElement": 0,
-          "Amplified": 0,
-          "MajorAttribute": 0,
           "CurrentHp": 0,
           "CurrentMp": 0,
           "_MaximumHp": 0,
@@ -637,7 +652,13 @@
           "_Dex": 0,
           "_Mr": 0,
           "_Dmg": 0,
-          "_Hit": 0
+          "_Hit": 0,
+          "Direction": 0,
+          "CurrentMapId": 100,
+          "OffenseElement": 0,
+          "DefenseElement": 0,
+          "Amplified": 0,
+          "MajorAttribute": 0
         }
       },
       "3": null,
@@ -694,24 +715,25 @@
           "DisplayImage": 32981,
           "Stacks": 0,
           "Slot": 4,
-          "Durability": 1972,
+          "Durability": 1969,
           "Color": 13,
           "Upgrades": 0,
+          "AttackType": 0,
+          "DamageType": 0,
+          "DefinedDamage": 0,
+          "DefinedPercentage": 0,
           "Debuffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
           },
           "Buffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
           },
+          "TargetPool": {
+            "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+          },
           "Serial": 722,
           "X": 3,
           "Y": 2,
-          "Direction": 0,
-          "CurrentMapId": 100,
-          "OffenseElement": 0,
-          "DefenseElement": 0,
-          "Amplified": 0,
-          "MajorAttribute": 0,
           "CurrentHp": 0,
           "CurrentMp": 0,
           "_MaximumHp": 0,
@@ -723,7 +745,13 @@
           "_Dex": 0,
           "_Mr": 0,
           "_Dmg": 0,
-          "_Hit": 0
+          "_Hit": 0,
+          "Direction": 0,
+          "CurrentMapId": 100,
+          "OffenseElement": 0,
+          "DefenseElement": 0,
+          "Amplified": 0,
+          "MajorAttribute": 0
         }
       },
       "8": {
@@ -776,24 +804,25 @@
           "DisplayImage": 32978,
           "Stacks": 0,
           "Slot": 5,
-          "Durability": 1972,
+          "Durability": 1969,
           "Color": 13,
           "Upgrades": 0,
+          "AttackType": 0,
+          "DamageType": 0,
+          "DefinedDamage": 0,
+          "DefinedPercentage": 0,
           "Debuffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
           },
           "Buffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
           },
+          "TargetPool": {
+            "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+          },
           "Serial": 723,
           "X": 3,
           "Y": 2,
-          "Direction": 0,
-          "CurrentMapId": 100,
-          "OffenseElement": 0,
-          "DefenseElement": 0,
-          "Amplified": 0,
-          "MajorAttribute": 0,
           "CurrentHp": 0,
           "CurrentMp": 0,
           "_MaximumHp": 0,
@@ -805,7 +834,13 @@
           "_Dex": 0,
           "_Mr": 0,
           "_Dmg": 0,
-          "_Hit": 0
+          "_Hit": 0,
+          "Direction": 0,
+          "CurrentMapId": 100,
+          "OffenseElement": 0,
+          "DefenseElement": 0,
+          "Amplified": 0,
+          "MajorAttribute": 0
         }
       },
       "9": null,
@@ -850,24 +885,25 @@
           "DisplayImage": 33009,
           "Stacks": 0,
           "Slot": 2,
-          "Durability": 49972,
+          "Durability": 49969,
           "Color": 13,
           "Upgrades": 0,
+          "AttackType": 0,
+          "DamageType": 0,
+          "DefinedDamage": 0,
+          "DefinedPercentage": 0,
           "Debuffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
           },
           "Buffs": {
             "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
           },
+          "TargetPool": {
+            "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+          },
           "Serial": 720,
           "X": 3,
           "Y": 2,
-          "Direction": 0,
-          "CurrentMapId": 100,
-          "OffenseElement": 0,
-          "DefenseElement": 2,
-          "Amplified": 0,
-          "MajorAttribute": 0,
           "CurrentHp": 0,
           "CurrentMp": 0,
           "_MaximumHp": 0,
@@ -879,7 +915,13 @@
           "_Dex": 0,
           "_Mr": 0,
           "_Dmg": 0,
-          "_Hit": 0
+          "_Hit": 0,
+          "Direction": 0,
+          "CurrentMapId": 100,
+          "OffenseElement": 0,
+          "DefenseElement": 2,
+          "Amplified": 0,
+          "MajorAttribute": 0
         }
       },
       "12": null,
@@ -939,24 +981,25 @@
         "DisplayImage": 32854,
         "Stacks": 0,
         "Slot": 3,
-        "Durability": 972,
+        "Durability": 969,
         "Color": 13,
         "Upgrades": 0,
+        "AttackType": 0,
+        "DamageType": 0,
+        "DefinedDamage": 0,
+        "DefinedPercentage": 0,
         "Debuffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
         },
         "Buffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
         },
+        "TargetPool": {
+          "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+        },
         "Serial": 721,
         "X": 3,
         "Y": 2,
-        "Direction": 0,
-        "CurrentMapId": 100,
-        "OffenseElement": 0,
-        "DefenseElement": 0,
-        "Amplified": 0,
-        "MajorAttribute": 0,
         "CurrentHp": 0,
         "CurrentMp": 0,
         "_MaximumHp": 0,
@@ -968,7 +1011,13 @@
         "_Dex": 0,
         "_Mr": 0,
         "_Dmg": 0,
-        "_Hit": 0
+        "_Hit": 0,
+        "Direction": 0,
+        "CurrentMapId": 100,
+        "OffenseElement": 0,
+        "DefenseElement": 0,
+        "Amplified": 0,
+        "MajorAttribute": 0
       }
     },
     "Armor": {
@@ -1017,24 +1066,25 @@
         "DisplayImage": 32864,
         "Stacks": 0,
         "Slot": 1,
-        "Durability": 972,
+        "Durability": 969,
         "Color": 13,
         "Upgrades": 0,
+        "AttackType": 0,
+        "DamageType": 0,
+        "DefinedDamage": 0,
+        "DefinedPercentage": 0,
         "Debuffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
         },
         "Buffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
         },
+        "TargetPool": {
+          "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+        },
         "Serial": 719,
         "X": 3,
         "Y": 2,
-        "Direction": 0,
-        "CurrentMapId": 100,
-        "OffenseElement": 0,
-        "DefenseElement": 0,
-        "Amplified": 0,
-        "MajorAttribute": 0,
         "CurrentHp": 0,
         "CurrentMp": 0,
         "_MaximumHp": 0,
@@ -1046,7 +1096,13 @@
         "_Dex": 0,
         "_Mr": 0,
         "_Dmg": 0,
-        "_Hit": 0
+        "_Hit": 0,
+        "Direction": 0,
+        "CurrentMapId": 100,
+        "OffenseElement": 0,
+        "DefenseElement": 0,
+        "Amplified": 0,
+        "MajorAttribute": 0
       }
     },
     "LRing": {
@@ -1099,24 +1155,25 @@
         "DisplayImage": 32981,
         "Stacks": 0,
         "Slot": 4,
-        "Durability": 1972,
+        "Durability": 1969,
         "Color": 13,
         "Upgrades": 0,
+        "AttackType": 0,
+        "DamageType": 0,
+        "DefinedDamage": 0,
+        "DefinedPercentage": 0,
         "Debuffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
         },
         "Buffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
         },
+        "TargetPool": {
+          "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+        },
         "Serial": 722,
         "X": 3,
         "Y": 2,
-        "Direction": 0,
-        "CurrentMapId": 100,
-        "OffenseElement": 0,
-        "DefenseElement": 0,
-        "Amplified": 0,
-        "MajorAttribute": 0,
         "CurrentHp": 0,
         "CurrentMp": 0,
         "_MaximumHp": 0,
@@ -1128,7 +1185,13 @@
         "_Dex": 0,
         "_Mr": 0,
         "_Dmg": 0,
-        "_Hit": 0
+        "_Hit": 0,
+        "Direction": 0,
+        "CurrentMapId": 100,
+        "OffenseElement": 0,
+        "DefenseElement": 0,
+        "Amplified": 0,
+        "MajorAttribute": 0
       }
     },
     "RRing": {
@@ -1181,24 +1244,25 @@
         "DisplayImage": 32978,
         "Stacks": 0,
         "Slot": 5,
-        "Durability": 1972,
+        "Durability": 1969,
         "Color": 13,
         "Upgrades": 0,
+        "AttackType": 0,
+        "DamageType": 0,
+        "DefinedDamage": 0,
+        "DefinedPercentage": 0,
         "Debuffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
         },
         "Buffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
         },
+        "TargetPool": {
+          "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+        },
         "Serial": 723,
         "X": 3,
         "Y": 2,
-        "Direction": 0,
-        "CurrentMapId": 100,
-        "OffenseElement": 0,
-        "DefenseElement": 0,
-        "Amplified": 0,
-        "MajorAttribute": 0,
         "CurrentHp": 0,
         "CurrentMp": 0,
         "_MaximumHp": 0,
@@ -1210,7 +1274,13 @@
         "_Dex": 0,
         "_Mr": 0,
         "_Dmg": 0,
-        "_Hit": 0
+        "_Hit": 0,
+        "Direction": 0,
+        "CurrentMapId": 100,
+        "OffenseElement": 0,
+        "DefenseElement": 0,
+        "Amplified": 0,
+        "MajorAttribute": 0
       }
     },
     "Belt": {
@@ -1253,24 +1323,25 @@
         "DisplayImage": 33009,
         "Stacks": 0,
         "Slot": 2,
-        "Durability": 49972,
+        "Durability": 49969,
         "Color": 13,
         "Upgrades": 0,
+        "AttackType": 0,
+        "DamageType": 0,
+        "DefinedDamage": 0,
+        "DefinedPercentage": 0,
         "Debuffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
         },
         "Buffs": {
           "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
         },
+        "TargetPool": {
+          "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+        },
         "Serial": 720,
         "X": 3,
         "Y": 2,
-        "Direction": 0,
-        "CurrentMapId": 100,
-        "OffenseElement": 0,
-        "DefenseElement": 2,
-        "Amplified": 0,
-        "MajorAttribute": 0,
         "CurrentHp": 0,
         "CurrentMp": 0,
         "_MaximumHp": 0,
@@ -1282,7 +1353,13 @@
         "_Dex": 0,
         "_Mr": 0,
         "_Dmg": 0,
-        "_Hit": 0
+        "_Hit": 0,
+        "Direction": 0,
+        "CurrentMapId": 100,
+        "OffenseElement": 0,
+        "DefenseElement": 2,
+        "Amplified": 0,
+        "MajorAttribute": 0
       }
     }
   },
@@ -1643,21 +1720,22 @@
   },
   "BootColor": 0,
   "NameColor": 1,
+  "AttackType": 0,
+  "DamageType": 0,
+  "DefinedDamage": 0,
+  "DefinedPercentage": 0,
   "Debuffs": {
     "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Debuff, Darkages.Server]], mscorlib"
   },
   "Buffs": {
     "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.String, mscorlib],[Darkages.Types.Buff, Darkages.Server]], mscorlib"
   },
-  "Serial": 690,
-  "X": 53,
-  "Y": 43,
-  "Direction": 2,
-  "CurrentMapId": 99,
-  "OffenseElement": 0,
-  "DefenseElement": 2,
-  "Amplified": 0,
-  "MajorAttribute": 0,
+  "TargetPool": {
+    "$type": "System.Collections.Concurrent.ConcurrentDictionary`2[[System.UInt32, mscorlib],[System.TimeSpan, mscorlib]], mscorlib"
+  },
+  "Serial": 506,
+  "X": 27,
+  "Y": 27,
   "CurrentHp": 705,
   "CurrentMp": 60,
   "_MaximumHp": 105,
@@ -1669,5 +1747,11 @@
   "_Dex": 3,
   "_Mr": 0,
   "_Dmg": 0,
-  "_Hit": 0
+  "_Hit": 0,
+  "Direction": 0,
+  "CurrentMapId": 101,
+  "OffenseElement": 0,
+  "DefenseElement": 2,
+  "Amplified": 0,
+  "MajorAttribute": 0
 }

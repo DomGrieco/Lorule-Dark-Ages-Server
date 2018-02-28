@@ -44,7 +44,6 @@ namespace Darkages.Types
                     LoadSkillScript(skillscriptstr);
                 }
 
-
             LoadSkillScript("Assail", true);
         }
 
@@ -66,6 +65,16 @@ namespace Darkages.Types
             var npc = new Mundane();
             npc.Template = template;
 
+            if (npc.Template.TurnRate == 0)
+                npc.Template.TurnRate = 5;
+
+            if (npc.Template.CastRate == 0)
+                npc.Template.CastRate = 2;
+
+            if (npc.Template.WalkRate == 0)
+                npc.Template.WalkRate = 2;
+
+
             npc.CurrentMapId = npc.Template.AreaID;
             lock (Generator.Random)
             {
@@ -74,25 +83,33 @@ namespace Darkages.Types
 
             npc.X = template.X;
             npc.Y = template.Y;
-            npc._MaximumHp = (int) (npc.Template.Level / 0.1 * 32);
-            npc._MaximumMp = (int) (npc.Template.Level / 0.1 * 16);
+            npc._MaximumHp = (int)(template.Level / 0.1 * 15);
+            npc._MaximumMp = (int)(template.Level / 0.1 * 5);
             npc.Template.MaximumHp = npc.MaximumHp;
             npc.Template.MaximumMp = npc.MaximumMp;
 
             npc.CurrentHp = npc.Template.MaximumHp;
             npc.CurrentMp = npc.Template.MaximumMp;
             npc.Direction = npc.Template.Direction;
-            npc._Int = 255;
             npc.CurrentMapId = npc.Template.AreaID;
+
+            //calculate what ac to give depending on level.
+            npc.BonusAc = (sbyte)(70 - 101 / 70 * template.Level);
+
+            if (npc.BonusAc > ServerContext.Config.BaseAC)
+                npc.BonusAc = ServerContext.Config.BaseAC;
+
+            npc.DefenseElement = Generator.RandomEnumValue<ElementManager.Element>();
+            npc.OffenseElement = Generator.RandomEnumValue<ElementManager.Element>();
 
             npc.Script = ScriptManager.Load<MundaneScript>(template.ScriptKey, ServerContext.Game, npc);
 
             npc.Template.AttackTimer = new GameServerTimer(TimeSpan.FromMilliseconds(450));
             npc.Template.EnableTurning = false;
-            npc.Template.WalkTimer  = new GameServerTimer(TimeSpan.FromSeconds(1));
-            npc.Template.ChatTimer  = new GameServerTimer(TimeSpan.FromSeconds(Generator.Random.Next(10, 35)));
-            npc.Template.TurnTimer  = new GameServerTimer(TimeSpan.FromSeconds(6));
-            npc.Template.SpellTimer = new GameServerTimer(TimeSpan.FromSeconds(0.5));
+            npc.Template.WalkTimer  = new GameServerTimer(TimeSpan.FromSeconds(npc.Template.WalkRate));
+            npc.Template.ChatTimer  = new GameServerTimer(TimeSpan.FromSeconds(Generator.Random.Next(20, 45)));
+            npc.Template.TurnTimer  = new GameServerTimer(TimeSpan.FromSeconds(npc.Template.TurnRate));
+            npc.Template.SpellTimer = new GameServerTimer(TimeSpan.FromSeconds(npc.Template.CastRate));
             npc.InitMundane();
             npc.AddObject(npc);
         }
@@ -207,20 +224,25 @@ namespace Darkages.Types
 
                 if (Template.SpellTimer.Elapsed)
                 {
-                    var targets = GetObjects<Monster>(i => i.WithinRangeOf(this))
-                           .OrderBy(i => i.Position.DistanceFrom(Position));
 
-                    foreach (var t in targets) t.Target = this;
+                    if (Target == null || Target.CurrentHp == 0 || !Target.WithinRangeOf(this))
+                    {
 
-                    var target = Target == null ? targets.FirstOrDefault() : Target;
+                        var targets = GetObjects<Monster>(i => i.WithinRangeOf(this))
+                               .OrderBy(i => i.Position.DistanceFrom(Position));
 
-                    if (target?.CurrentHp == 0)
-                        target = null;
+                        foreach (var t in targets) t.Target = this;
 
-                    if (IsFrozen || IsSleeping || IsBlind || IsConfused)
-                        return;
+                        var target = Target == null ? targets.FirstOrDefault() : Target;
 
-                    Target = target;
+                        if (target?.CurrentHp == 0)
+                            target = null;
+
+                        if (IsFrozen || IsSleeping || IsBlind || IsConfused)
+                            return;
+
+                        Target = target;
+                    }
 
                     if (Target != null && Target != null && SpellScripts.Count > 0)
                     {
@@ -235,6 +257,7 @@ namespace Darkages.Types
 
                     Template.SpellTimer.Reset();
                 }
+
             }
 
             if (Template.AttackTimer != null && Template.EnableWalking)
@@ -270,8 +293,19 @@ namespace Darkages.Types
                             else
                             {
                                 target.Target = this;
+                                DefaultSkill?.OnUse(this);
 
-                                //attack here
+
+                                if (SkillScripts.Count > 0 && target.Target != null)
+                                {
+                                    var idx = 0;
+                                    lock (Generator.Random)
+                                    {
+                                        idx = Generator.Random.Next(SkillScripts.Count);
+                                    }
+
+                                    SkillScripts[idx]?.OnUse(this);
+                                }
                             }
                         }
                     }

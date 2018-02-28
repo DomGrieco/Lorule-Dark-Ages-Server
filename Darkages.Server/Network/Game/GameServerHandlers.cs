@@ -365,20 +365,22 @@ namespace Darkages.Network.Game
 
             #endregion
 
-            if (format.PickupType == 1 && format.Position.IsNextTo(client.Aisling.Position))
+            if (format.PickupType == 1)
             {
                 //get any item in front of user.
-                var objectsInfront = client.Aisling.GetInfront(ServerContext.Config.AutoLootPickupDistance).ToArray();
+                var objectsInfront = GetObjects(i => format.Position.DistanceFrom(client.Aisling.Position)
+                    <= ServerContext.Config.ClickLootDistance, Get.Items | Get.Money);
 
                 foreach (var obj in objectsInfront.Reverse())
                 {
-                    if (obj?.CurrentMapId != client.Aisling.CurrentMapId)
+                    if (!client.Aisling.WithinRangeOf(obj))
                         continue;
 
 
-
                     if (obj is Money)
+                    {
                         (obj as Money).GiveTo((obj as Money).Amount, client.Aisling);
+                    }
 
                     if (obj is Item)
                     {
@@ -400,23 +402,23 @@ namespace Darkages.Network.Game
             }
             else
             {
-                var objs = GetObjects(i => i.X == format.Position.X
-                                           && i.Y == format.Position.Y, Get.Items | Get.Money);
+                var objs = GetObjects(i => i.X == format.Position.X && i.Y == format.Position.Y, Get.Items | Get.Money);
 
                 if (objs.Length <= 0)
                     return;
-
 
                 foreach (var obj in objs.Reverse())
                 {
                     if (obj?.CurrentMapId != client.Aisling.CurrentMapId)
                         continue;
 
-                    if (!client.Aisling.WithinRangeOf(obj, ServerContext.Config.ClickLootDistance))
+                    if (!(client.Aisling.Position.DistanceFrom(obj.Position) <= ServerContext.Config.ClickLootDistance))
                         continue;
 
                     if (obj is Money)
+                    {
                         (obj as Money).GiveTo((obj as Money).Amount, client.Aisling);
+                    }
 
                     if (obj is Item)
                     {
@@ -428,6 +430,7 @@ namespace Darkages.Network.Game
                                 continue;
                             }
                         }
+
                         if ((obj as Item).GiveTo(client.Aisling))
                             obj.Remove<Item>();
                     }

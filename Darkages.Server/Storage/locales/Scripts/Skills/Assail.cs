@@ -71,7 +71,6 @@ namespace Darkages.Scripting.Scripts.Skills
 
                         i.ApplyDamage(sprite, dmg);
 
-                        if (i is Monster) (i as Monster).Target = client.Aisling;
 
                         if (i is Aisling)
                         {
@@ -145,14 +144,6 @@ namespace Darkages.Scripting.Scripts.Skills
                         {
                             i.ApplyDamage(sprite, dmg);
                         }
-                        
-                        Console.WriteLine(dmg);
-
-                        if (i is Monster)
-                            (i as Monster).Target = sprite;
-
-                        if (i is Mundane)
-                            (i as Mundane).Target = sprite;
 
                         if (Skill.Template.TargetAnimation > 0)
                         {

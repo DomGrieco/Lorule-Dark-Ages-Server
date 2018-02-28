@@ -72,7 +72,8 @@ namespace Darkages.Storage.locales.Scripts.Monsters
 
         public override void Update(TimeSpan elapsedTime)
         {
-            if (!Monster.IsAlive) return;
+            if (!Monster.IsAlive)
+                return;
 
             Monster.WalkTimer.Update(elapsedTime);
 

@@ -73,8 +73,6 @@ namespace Darkages.Scripting.Scripts.Skills
 
                         i.ApplyDamage(sprite, dmg, false, Skill.Template.Sound);
 
-                        if (i is Monster) (i as Monster).Target = client.Aisling;
-
                         if (i is Aisling)
                         {
                             (i as Aisling).Client.Aisling.Show(Scope.NearbyAislings,

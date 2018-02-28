@@ -9,7 +9,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using static Darkages.Types.ElementManager;
-using static Darkages.Types.PrimaryStat;
 
 namespace Darkages.Types
 {
@@ -17,7 +16,8 @@ namespace Darkages.Types
     {
         public readonly Random rnd = new Random();
 
-        [JsonIgnore] public int[][] Directions =
+        [JsonIgnore]
+        private readonly int[][] directions =
         {
             new[] {+0, -1},
             new[] {+1, +0},
@@ -25,31 +25,13 @@ namespace Darkages.Types
             new[] {-1, +0}
         };
 
-        [JsonIgnore] public int[][] facingTable =
+        [JsonIgnore]
+        private readonly int[][] directionTable =
         {
             new[] {-1, +3, -1},
             new[] {+0, -1, +2},
             new[] {-1, +1, -1}
         };
-
-        public Sprite()
-        {
-            if (this is Aisling)
-                Content = TileContent.Aisling;
-            if (this is Monster)
-                Content = TileContent.Monster;
-            if (this is Mundane)
-                Content = TileContent.Mundane;
-            if (this is Money)
-                Content = TileContent.None;
-            if (this is Item)
-                Content = TileContent.None;
-
-            Amplified = 0;
-
-            Buffs = new ConcurrentDictionary<string, Buff>();
-            Debuffs = new ConcurrentDictionary<string, Debuff>();
-        }
 
         [JsonIgnore] public GameClient Client { get; set; }
 
@@ -57,15 +39,118 @@ namespace Darkages.Types
 
         [JsonIgnore] public TileContent Content { get; set; }
 
+        public AttackModifier AttackType { get; set; }
+
+        public DamageModifier DamageType { get; set; }
+
+        public int DefinedDamage { get; set; }
+
+        public int DefinedPercentage { get; set; }
+
         public ConcurrentDictionary<string, Debuff> Debuffs { get; set; }
 
         public ConcurrentDictionary<string, Buff> Buffs { get; set; }
+
+        public ConcurrentDictionary<uint, TimeSpan> TargetPool { get; set; }
 
         public int Serial { get; set; }
 
         public int X { get; set; }
 
         public int Y { get; set; }
+
+        #region Attributes
+        public int CurrentHp { get; set; }
+
+        public int CurrentMp { get; set; }
+
+        public int _MaximumHp { get; set; }
+
+        public int _MaximumMp { get; set; }
+
+        [JsonIgnore] public int MaximumHp => _MaximumHp + BonusHp;
+
+        [JsonIgnore] public int MaximumMp => _MaximumMp + BonusMp;
+
+        public byte _Str { get; set; }
+
+        public byte _Int { get; set; }
+
+        public byte _Wis { get; set; }
+
+        public byte _Con { get; set; }
+
+        public byte _Dex { get; set; }
+
+        public byte _Mr { get; set; }
+
+        public byte _Dmg { get; set; }
+
+        public byte _Hit { get; set; }
+
+        [JsonIgnore] public byte Str => (byte)(_Str + BonusStr);
+
+        [JsonIgnore] public byte Int => (byte)(_Int + BonusInt);
+
+        [JsonIgnore] public byte Wis => (byte)(_Wis + BonusWis);
+
+        [JsonIgnore] public byte Con => (byte)(_Con + BonusCon);
+
+        [JsonIgnore] public byte Dex => (byte)(_Dex + BonusDex);
+
+        [JsonIgnore] public int Ac => BonusAc;
+
+        [JsonIgnore] public byte Mr => (byte)(_Mr + BonusMr);
+
+        [JsonIgnore] public byte Dmg => (byte)(_Dmg + BonusDmg);
+
+        [JsonIgnore] public byte Hit => (byte)(_Hit + BonusHit);
+
+        [JsonIgnore] public byte BonusStr { get; set; }
+
+        [JsonIgnore] public byte BonusInt { get; set; }
+
+        [JsonIgnore] public byte BonusWis { get; set; }
+
+        [JsonIgnore] public byte BonusCon { get; set; }
+
+        [JsonIgnore] public byte BonusDex { get; set; }
+
+        [JsonIgnore] public byte BonusMr { get; set; }
+
+        [JsonIgnore] public int BonusAc { get; set; }
+
+        [JsonIgnore] public byte BonusHit { get; set; }
+
+        [JsonIgnore] public byte BonusDmg { get; set; }
+
+        [JsonIgnore] public int BonusHp { get; set; }
+
+        [JsonIgnore] public int BonusMp { get; set; }
+
+        #endregion
+
+        #region Status
+
+        [JsonIgnore] public bool IsSleeping => HasDebuff("sleep");
+
+        [JsonIgnore] public bool IsFrozen => HasDebuff("frozen");
+
+        [JsonIgnore] public bool IsPoisoned => HasDebuff("poison");
+
+        [JsonIgnore] public bool IsBleeding => HasDebuff("bleeding");
+
+        [JsonIgnore] public bool IsBlind => HasDebuff("blind");
+
+        [JsonIgnore] public bool IsConfused => HasDebuff("confused");
+
+        [JsonIgnore]
+        public int[][] Directions => directions;
+
+        [JsonIgnore]
+        public int[][] DirectionTable => directionTable;
+
+        #endregion
 
         public byte Direction { get; set; }
 
@@ -90,6 +175,36 @@ namespace Darkages.Types
         [JsonIgnore] public DateTime CreationDate { get; set; }
 
         [JsonIgnore] public DateTime LastUpdated { get; set; }
+
+        [JsonIgnore] public DateTime LastTargetAcquired { get; set; }
+
+        [JsonIgnore] public DateTime LastMovementChanged { get; set; }
+
+
+        public Sprite()
+        {
+            if (this is Aisling)
+                Content = TileContent.Aisling;
+            if (this is Monster)
+                Content = TileContent.Monster;
+            if (this is Mundane)
+                Content = TileContent.Mundane;
+            if (this is Money)
+                Content = TileContent.None;
+            if (this is Item)
+                Content = TileContent.None;
+
+            Amplified = 0;
+            Target    = null;
+
+
+            Buffs      = new ConcurrentDictionary<string, Buff>();
+            Debuffs    = new ConcurrentDictionary<string, Debuff>();
+            TargetPool = new ConcurrentDictionary<uint, TimeSpan>();
+
+            LastTargetAcquired  = DateTime.UtcNow;
+            LastMovementChanged = DateTime.UtcNow;
+        }
 
         public bool IsPrimaryStat()
         {
@@ -171,10 +286,14 @@ namespace Darkages.Types
             var formula = 0;
 
             if (this is Monster)
-                formula = (int)((this as Monster).Template.Level * 3.58) * 4;
+                formula = (int)((this as Monster)
+                    .Template.Level * ServerContext.Config.MonsterDamageFactor)
+                    * ServerContext.Config.MonsterDamageMultipler;
 
             if (this is Mundane)
-                formula = (int)((this as Mundane).Template.Level * 3.58) * 4;
+                formula = (int)((this as Mundane)
+                    .Template.Level * ServerContext.Config.MonsterDamageFactor)
+                    * ServerContext.Config.MonsterDamageMultipler;
 
             return Math.Abs(formula) + 1;
         }
@@ -211,7 +330,7 @@ namespace Darkages.Types
         public void ApplyDamage(Sprite Source, int dmg,
             bool truedamage = false,
             byte sound = 1,
-            Action<int> dmgcb = null)
+            Action<int> dmgcb = null, bool forceTarget = false)
         {
             if (!WithinRangeOf(Source))
                 return;
@@ -228,6 +347,28 @@ namespace Darkages.Types
 
             if (!CanBeAttackedHere(Source))
                 return;
+
+            if (!CanAcceptTarget(Source))
+            {
+                if (Source is Aisling)
+                {
+                    (Source as Aisling)
+                        .Client?
+                        .SendMessage(0x02, ServerContext.Config.CantAttack);
+                }
+
+                if (!forceTarget)
+                    return;
+            }
+
+            if (forceTarget)
+                Target = Source;
+            else
+            {
+                if (Target == null)
+                    Target = Source;
+            }
+
 
             if (this is Monster)
             {
@@ -268,8 +409,6 @@ namespace Darkages.Types
             }
             else
             {
-                Target = Source;
-
                 if (HasBuff("dion") || HasBuff("mor dion"))
                 {
                     var empty = new ServerFormat13
@@ -303,6 +442,71 @@ namespace Darkages.Types
 
             (this as Aisling)?.Client.SendStats(StatusFlags.StructB);
             (Source as Aisling)?.Client.SendStats(StatusFlags.StructB);
+        }
+
+        public bool CanAcceptTarget(Sprite source)
+        {
+            if (source == null ||
+                !WithinRangeOf(source) ||
+                !source.WithinRangeOf(this))
+            {
+                return false;
+            }
+
+            if (this is Monster)
+            {
+                if (source is Aisling)
+                {
+                    var monster = (this as Monster);
+                    var aisling = (source as Aisling);
+
+                    if (monster.TaggedAislings.Count > 0)
+                    {
+                        var taggedalready = false;
+                        foreach (var obj in monster.TaggedAislings)
+                        {
+                            //check if the user attacking is in the tagged list.
+                            if (obj.Key == source.Serial)
+                            {
+                                taggedalready = true;
+                                break;
+                            }
+                        }
+
+                        //monster has been attacked by this user before.
+                        if (taggedalready)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            //check if any tagged users are in the same group as this user.
+                            foreach (var tagg in monster.TaggedAislings)
+                            {
+                                if (tagg.Value is Aisling obj)
+                                {
+                                    if (obj.GroupParty.Has(aisling)
+                                        && obj.WithinRangeOf(aisling)
+                                        && monster.WithinRangeOf(monster))
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
+
+                }
+            }
+            
+
+            return true;
         }
 
         private double CalcaluteElementalAmplifier(Element element, double amplifier)
@@ -590,13 +794,40 @@ namespace Darkages.Types
 
         private int ComputeDmgFromAc(int dmg)
         {
-            var before = dmg;
+            var startingDmg = dmg;
 
-            var hi = Ac + 95 - 100;
-            var lo = Ac - 95 - 100;
+            if (dmg <= 0)
+            {
+                return 1;
+            }
 
-            var accumulator = Math.Abs(hi) + Math.Abs(lo) / 10;
-            dmg = dmg * accumulator / 100;
+            var factor = 0;
+
+            if (Ac >= 0)
+            {
+                factor = Math.Abs(Ac - 110);
+            }
+            else
+            {
+                factor = Math.Abs(Ac + 70);
+            }
+
+            var mod = (int)(Ac > 0 ? dmg + startingDmg / (factor * 0.5) : dmg + startingDmg * (factor * 0.5));
+
+
+            if (Ac < 0)
+            {
+                dmg = (int)(dmg / (1 + 70 * 0.1));
+            }
+            else
+            {
+                dmg = (int)(dmg * (1 + Ac * 0.1));
+            }
+
+            if (dmg <= 0)
+                dmg = 1;
+
+            dmg = dmg + startingDmg;
 
             return dmg;
         }
@@ -617,13 +848,15 @@ namespace Darkages.Types
             return _GetInfront(tileCount).Where(i => i != null && i.Serial != sprite.Serial).ToList();
         }
 
-        public List<Sprite> GetInfront(int tileCount = 1)
+        public List<Sprite> GetInfront(int tileCount = 1, bool intersect = false)
         {
-            //if (this is Aisling)
-            //    return _GetInfront(tileCount).Intersect(
-            //        (this as Aisling).ViewableObjects).ToList();
-
-            return _GetInfront(tileCount).ToList();
+            if (this is Aisling && intersect)
+                return _GetInfront(tileCount).Intersect(
+                    (this as Aisling).ViewableObjects).ToList();
+            else
+            {
+                return _GetInfront(tileCount).ToList();
+            }
         }
 
 
@@ -655,15 +888,22 @@ namespace Darkages.Types
 
         public void RemoveFrom(Aisling nearbyAisling)
         {
-            if (nearbyAisling != null)
+            try
             {
-                nearbyAisling.Show(Scope.Self, new ServerFormat0E(Serial));
-
-                if (this is Item || this is Money)
+                if (nearbyAisling != null && nearbyAisling.LoggedIn)
                 {
-                    if (AislingsNearby().Length == 0 && BelongsTo(nearbyAisling))
-                        AbandonedDate = DateTime.UtcNow;
+                    nearbyAisling.Show(Scope.Self, new ServerFormat0E(Serial));
+
+                    if (this is Item || this is Money)
+                    {
+                        if (AislingsNearby().Length == 0 && BelongsTo(nearbyAisling))
+                            AbandonedDate = DateTime.UtcNow;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                //ignore
             }
         }
 
@@ -768,7 +1008,7 @@ namespace Darkages.Types
             var xDist = (x - X).Clamp(-1, +1);
             var yDist = (y - Y).Clamp(-1, +1);
 
-            direction = facingTable[xDist + 1][yDist + 1];
+            direction = DirectionTable[xDist + 1][yDist + 1];
             return Direction == direction;
         }
 
@@ -1174,94 +1414,6 @@ namespace Darkages.Types
                     : Scope.NearbyAislings, response);
             }
         }
-
-        #region Attributes
-
-        public int CurrentHp { get; set; }
-
-        public int CurrentMp { get; set; }
-
-        public int _MaximumHp { get; set; }
-
-        public int _MaximumMp { get; set; }
-
-        [JsonIgnore] public int MaximumHp => _MaximumHp + BonusHp;
-
-        [JsonIgnore] public int MaximumMp => _MaximumMp + BonusMp;
-
-        public byte _Str { get; set; }
-
-        public byte _Int { get; set; }
-
-        public byte _Wis { get; set; }
-
-        public byte _Con { get; set; }
-
-        public byte _Dex { get; set; }
-
-        public byte _Mr { get; set; }
-
-        public byte _Dmg { get; set; }
-
-        public byte _Hit { get; set; }
-
-        [JsonIgnore] public byte Str => (byte) (_Str + BonusStr);
-
-        [JsonIgnore] public byte Int => (byte) (_Int + BonusInt);
-
-        [JsonIgnore] public byte Wis => (byte) (_Wis + BonusWis);
-
-        [JsonIgnore] public byte Con => (byte) (_Con + BonusCon);
-
-        [JsonIgnore] public byte Dex => (byte) (_Dex + BonusDex);
-
-        [JsonIgnore] public int  Ac => BonusAc;
-
-        [JsonIgnore] public byte Mr => (byte) (_Mr + BonusMr);
-
-        [JsonIgnore] public byte Dmg => (byte) (_Dmg + BonusDmg);
-
-        [JsonIgnore] public byte Hit => (byte) (_Hit + BonusHit);
-
-        [JsonIgnore] public byte BonusStr { get; set; }
-
-        [JsonIgnore] public byte BonusInt { get; set; }
-
-        [JsonIgnore] public byte BonusWis { get; set; }
-
-        [JsonIgnore] public byte BonusCon { get; set; }
-
-        [JsonIgnore] public byte BonusDex { get; set; }
-
-        [JsonIgnore] public byte BonusMr { get; set; }
-
-        [JsonIgnore] public int BonusAc { get; set; }
-
-        [JsonIgnore] public byte BonusHit { get; set; }
-
-        [JsonIgnore] public byte BonusDmg { get; set; }
-
-        [JsonIgnore] public int BonusHp { get; set; }
-
-        [JsonIgnore] public int BonusMp { get; set; }
-
-        #endregion
-
-        #region Status
-
-        [JsonIgnore] public bool IsSleeping => HasDebuff("sleep");
-
-        [JsonIgnore] public bool IsFrozen => HasDebuff("frozen");
-
-        [JsonIgnore] public bool IsPoisoned => HasDebuff("poison");
-
-        [JsonIgnore] public bool IsBleeding => HasDebuff("bleeding");
-
-        [JsonIgnore] public bool IsBlind => HasDebuff("blind");
-
-        [JsonIgnore] public bool IsConfused => HasDebuff("confused");
-
-        #endregion
 
         public void SendAnimation(ushort Animation, Sprite To, Sprite From, byte speed = 100)
         {

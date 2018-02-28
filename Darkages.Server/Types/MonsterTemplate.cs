@@ -39,7 +39,7 @@ namespace Darkages.Types
 
         public PathQualifer PathQualifer { get; set; }
 
-        public byte Level { get; set; }
+        public int Level { get; set; }
 
         public int MaximumHP { get; set; }
 

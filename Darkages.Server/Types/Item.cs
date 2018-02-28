@@ -214,8 +214,6 @@ namespace Darkages.Types
                     (sprite as Aisling).Inventory.Assign(this);
                     var format = new ServerFormat0F(this);
                     (sprite as Aisling).Show(Scope.Self, format);
-                    (sprite as Aisling).Client.SendMessage(Scope.Self, 0x02,
-                        string.Format("{0} Received.", DisplayName));
                     (sprite as Aisling).Client.SendStats(StatusFlags.All);
 
                     return true;
